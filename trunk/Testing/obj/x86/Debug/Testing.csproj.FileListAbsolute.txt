@@ -1,0 +1,9 @@
+E:\PROYECTOS_JFP_VS\DOTNET\CDGS\CdgNetPersistenciaV3\Testing\obj\x86\Debug\ResolveAssemblyReference.cache
+E:\PROYECTOS_JFP_VS\DOTNET\CDGS\CdgNetPersistenciaV3\Testing\bin\Debug\Testing.exe
+E:\PROYECTOS_JFP_VS\DOTNET\CDGS\CdgNetPersistenciaV3\Testing\bin\Debug\Testing.pdb
+E:\PROYECTOS_JFP_VS\DOTNET\CDGS\CdgNetPersistenciaV3\Testing\bin\Debug\CdgNetPersistenciaV3.dll
+E:\PROYECTOS_JFP_VS\DOTNET\CDGS\CdgNetPersistenciaV3\Testing\bin\Debug\CdgNetPersistenciaV3.pdb
+E:\PROYECTOS_JFP_VS\DOTNET\CDGS\CdgNetPersistenciaV3\Testing\obj\x86\Debug\Testing.exe
+E:\PROYECTOS_JFP_VS\DOTNET\CDGS\CdgNetPersistenciaV3\Testing\obj\x86\Debug\Testing.pdb
+C:\Users\cgaray\Dropbox\proyectos\vs_net\CdgNetPersistenciaV3\Testing\obj\x86\Debug\Testing.exe
+C:\Users\cgaray\Dropbox\proyectos\vs_net\CdgNetPersistenciaV3\Testing\obj\x86\Debug\Testing.pdb
