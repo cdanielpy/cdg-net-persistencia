@@ -12,7 +12,7 @@ Esta clase extiende de la clase _System.Attribute_ y mediante su uso lo que se h
 
 
 = Campos =
-== Privadas ==
+== Privados ==
 
   * *`__`cNombre:* ({{{System.String}}}) Almacena el nombre del Campo fisico de la tabla.-
   
