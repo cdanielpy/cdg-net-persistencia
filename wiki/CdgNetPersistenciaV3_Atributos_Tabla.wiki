@@ -1,0 +1,20 @@
+#summary Describe la clase Tabla y su uso.
+
+= La clase Campo =
+
+Esta clase extiende de la clase _System.Attribute_ y mediante su uso lo que se hace es indicar, a la clase derivada de de la clase _OTDbase_ donde se aplica, el nombre físico de la tabla en el SGBD y el nombre del mismo, a fin seguir las notaciones de comandos especificos del sistema, como ser los nombres de parametros de procedimientos almacenados.
+
+`  `_*Obs.:*_ Dependiendo del SGBD y el SO, los nombres deben respetar mayúsculas y minúsculas.- 
+
+
+= Constructores =
+`  `*Tabla(*_{{{cNombreTabla, eNombreSGBD}}}_*):*
+  * _cNombreTabla:_ ({{{System.String}}}) Nombre de la tabla física a la que referencia la instancia.-
+  * _eNombreSGBD:_ ({{{SGBD}}}) Indicador del nombre del SGBD, que es a su vez una enumeración.-
+
+= Propiedades =
+(o Fields en terminología .NET) 
+
+=== Privadas ===
+  * *__cNombre:*
+  * *__eTipo:*
