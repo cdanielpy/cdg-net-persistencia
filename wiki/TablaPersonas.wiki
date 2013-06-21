@@ -11,7 +11,7 @@ Estos son los datos de campos de esta tabla:
   * _*ID:*_ Campo _PK_ de la tabla, de tipo {{{ENTERO}}} y _autonumérico_.
   * _*NOMBRE_COMPLETO:*_ Campo de tipo {{{VARCHAR}}}, no nulable. Almacena el nombre completo de una persona.-
   * _*EDAD:*_ Campo de tipo {{{ENTERO}}}, nulable. Almacena la edad de la persona en años.-
-  * _*ACTIVO:*_ Campo de tipo {{{NUMERIC(1, 0)}}}, no nulable. Indica si la persona a la que corresponde el registro esta activa o no.-
+  * _*ACTIVO:*_ Campo de tipo {{{BIT (sql server)}}}, no nulable. Indica si la persona a la que corresponde el registro esta activa o no.-
 
 || *ID* || *NOMBRE_COMPLETO* || *EDAD* || *ACTIVO* ||
 || 1900 || Víctor Loaiziga || _NULL_ || 1 ||
