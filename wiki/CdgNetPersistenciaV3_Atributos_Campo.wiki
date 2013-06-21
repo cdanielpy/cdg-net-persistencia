@@ -7,7 +7,7 @@ Esta clase extiende de la clase _System.Attribute_ y mediante su uso lo que se h
 
 = Constructores =
 `  `*Campo(*_{{{cNombreCampo}}}_*):*
-  * _cNombreCampo:_ ({{{System.String}}}) nombre del campo físico de la tabla al cual hace referencia el accesor al que se aplica.
+  * _cNombreCampo:_ ({{{System.String}}}) nombre del campo físico de la tabla al cual hace referencia el accesor al que se aplica.-
   _*Obs:*_ Dependiendo del SGBD y el SO, los nombres deben respetar mayúsculas y minúsculas_.-
 
 = Propiedades =
