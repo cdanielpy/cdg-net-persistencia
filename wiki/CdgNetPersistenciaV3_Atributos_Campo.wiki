@@ -34,46 +34,46 @@ Tomando como ejemplo la tabla de ejemplo [https://code.google.com/p/cdg-net-pers
 
 {{{
 [CdgNetPersistenciaV3.Atributos.Tabla("PERSONAS", CdgNetPersistenciaV3.Atributos.Tabla.SGBD.SQL_SERVER)]
-    public class PersonaOTD : CdgNetPersistenciaV3.ClasesBases.OTDbase
+public class PersonaOTD : CdgNetPersistenciaV3.ClasesBases.OTDbase
+{
+
+    public PersonaOTD()
+        : base(0, string.Empty)
     {
-
-        public PersonaOTD()
-            : base(0, string.Empty)
-        {
-            _Set_campos<PersonaOTD>();
-        }
-
-        public PersonaOTD(long nId, string cNombreCompleto)
-            : base(nId, cNombreCompleto)
-        {
-            _Set_campos<PersonaOTD>();
-        }
-
-        [CdgNetPersistenciaV3.Atributos.Campo("ID", AutoGenerado=true)]
-        public override long Id
-        {
-            get { return _nId;  }
-            set { _nId = value; }
-        }
-
-        [CdgNetPersistenciaV3.Atributos.Campo("NOMBRE_COMPLETO", Nulable=false)]
-        public string NombreCompleto
-        {
-            get { return _cDescripcion; }
-            set { _cDescripcion = value; }
-        }
-
-        [CdgNetPersistenciaV3.Atributos.Campo("EDAD")]
-        public int Edad
-        {
-            get; set;
-        }
-
-        [CdgNetPersistenciaV3.Atributos.Campo("ACTIVO")]
-        public bool Activo
-        {
-            get; set;
-        }
-
+        _Set_campos<PersonaOTD>();
     }
+
+    public PersonaOTD(long nId, string cNombreCompleto)
+        : base(nId, cNombreCompleto)
+    {
+        _Set_campos<PersonaOTD>();
+    }
+
+    [CdgNetPersistenciaV3.Atributos.Campo("ID", AutoGenerado=true)]
+    public override long Id
+    {
+        get { return _nId;  }
+        set { _nId = value; }
+    }
+
+    [CdgNetPersistenciaV3.Atributos.Campo("NOMBRE_COMPLETO", Nulable=false)]
+    public string NombreCompleto
+    {
+        get { return _cDescripcion; }
+        set { _cDescripcion = value; }
+    }
+
+    [CdgNetPersistenciaV3.Atributos.Campo("EDAD")]
+    public int Edad
+    {
+        get; set;
+    }
+
+    [CdgNetPersistenciaV3.Atributos.Campo("ACTIVO")]
+    public bool Activo
+    {
+        get; set;
+    }
+
+}
 }}}
