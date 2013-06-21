@@ -16,7 +16,7 @@ Esta clase extiende de la clase _System.Attribute_ y mediante su uso lo que se h
   * *`__`cNombre:* ({{{System.String}}}) Almacena el nombre del Campo fisico de la tabla.
   
 == Públicas ==
-  * *Identificador:* ({{{System.Boolean}}}) Devuelve o establece el marcador de campo _PK_ o _Clave Primaria_, . Valor por defecto: {{{ false}}}.
+  * *Identificador:* ({{{System.Boolean}}}) Devuelve o establece el marcador de campo _PK_ o _Clave Primaria_ . Valor por defecto: {{{ false}}}.
   * *Indice:* ({{{System.Int32}}}) Devuelve o establece la posición del campo respecto de los demas campos. Si no se indica, se considera la posición de declaración del accesor dentro del _OTD_. Valor por defecto: {{{0}}}.
   * *Nulable:* ({{{System.Boolean}}}) Devuelve o establece el marcador de permisión de valores _NULL_ para el campo. Valor por defecto: {{{true}}}.
   _*Obs:*__ Si se establece la propiedad _Identificador_ como {{{true}}}, se asume que no acepta valores nulos.
