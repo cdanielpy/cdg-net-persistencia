@@ -29,12 +29,4 @@ Esta clase extiende de la clase _System.Attribute_ y mediante su uso lo que se h
   * *ToString():* ({{{System.String}}}) Sobreescrito. Devuelve la representacion de de cadena de la instancia.
 
 = Ejemplos =
-Tomando como ejemplo la siguiente tabla:
-|| PERSONAS ||
-
-|| *ID* || *NOMBRE_COMPLETO* || *ACTIVO* ||
-|| 1900 || Víctor Loaiziga || 1 ||
-|| 1910 || Lourdes Fernández|| 1 ||
-|| 1920 || Mauricio Duarte || 0 ||
-
-Considerando que el campo _*ID*_ autonumérico y _clave primaria_, la declaracion del _VO_ (o DTO) que lo representará sería como sigue:
+Tomando como ejemplo la tabla de ejemplo [https://code.google.com/p/cdg-net-persistencia/wiki/TablaPersonas Personas], su declaracion del _VO_ (o DTO) que lo representará sería como sigue:
