@@ -98,7 +98,7 @@ namespace CdgNetPersistenciaV3.Extras
                     foreach (DataRow dr in dtResultado.Rows)
                     {
                         //si el parametro no esta cargado aun
-                        if (!__dicParametros.Keys.Contains(dr[0].ToString()))
+                        if (!__dicParametros.ContainsKey(dr[0].ToString()))
                             //cargamos el par al diccionario
                             __dicParametros.Add(dr[0].ToString(), dr[1].ToString());
                         else //si ya, lo actualizamos
@@ -157,7 +157,7 @@ namespace CdgNetPersistenciaV3.Extras
                                                              );
 
                 //acualizamos el valor del parametro en el diccionario actual
-                if (__dicParametros.Keys.Contains(cParametroParam)) __dicParametros[cParametroParam] = cValorNuevoParam;
+                if (__dicParametros.ContainsKey(cParametroParam)) __dicParametros[cParametroParam] = cValorNuevoParam;
 
                 //cerramos la conexion
                 __oConexion.lDesconectar(NOMBRE_METODO);

@@ -677,8 +677,8 @@ namespace CdgNetPersistenciaV3
                 _Mostrar_SQL(oComandoSQL.CommandText);
 
                 //si se paso la instancia de la tabla y su dataset
-                if (dicParametros.Keys.Contains(PARAM_ESPECIALES.ADM_BASE.ToString())
-                        && dicParametros.Keys.Contains(PARAM_ESPECIALES.DATASET.ToString()))
+                if (dicParametros.ContainsKey(PARAM_ESPECIALES.ADM_BASE.ToString())
+                        && dicParametros.ContainsKey(PARAM_ESPECIALES.DATASET.ToString()))
                 {
                     //tomamos la instancia TBL parametro
                     ADMbase oADMbase = (ADMbase)dicParametros[PARAM_ESPECIALES.ADM_BASE.ToString()];
