@@ -33,7 +33,7 @@ namespace CdgNetPersistenciaV3.Atributos
         const string NOMBRE_CLASE = "Campo";
 
         /// <summary>
-        /// Devuelve o establece el nombre del Campo
+        /// Almacena el nombre del Campo fisico de la tabla
         /// </summary>
         private string __cNombre;
 
@@ -43,12 +43,16 @@ namespace CdgNetPersistenciaV3.Atributos
         public bool Identificador = false;
 
         /// <summary>
-        /// Devuelve o establece la posicion del campo
+        /// Devuelve o establece la posicion del campo respecto
+        /// de los demas campos. Si no se indica, se considera
+        /// la posicion de declaracion del accesor dentro del
+        /// OTD
         /// </summary>
         public int Indice = 0;
 
         /// <summary>
-        /// Devuelve o establece el marcador de permision de valores NULL 
+        /// Devuelve o establece el marcador de permision de valores NULL
+        /// para el campo
         /// </summary>
         public bool Nulable = false;
 
@@ -58,7 +62,9 @@ namespace CdgNetPersistenciaV3.Atributos
         public Type Tipo;
 
         /// <summary>
-        /// Devuelve o establece el marcador de campo autogenerado por el SGBD
+        /// Devuelve o establece el marcador de campo autogenerado por el SGBD,
+        /// es decir, valores de campo autoincrementales o calculados y que 
+        /// no aceptan valores asignados
         /// </summary>
         public bool AutoGenerado = false;
 
@@ -100,9 +106,9 @@ namespace CdgNetPersistenciaV3.Atributos
         #region SOBREESCRITOS
 
         /// <summary>
-        /// Devuelve la representacion de la instancia
+        /// Devuelve la representacion de de cadena de la instancia
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Cadena de representacion de la instancia de esta clase</returns>
         public override string ToString()
         {
             return string.Format("<{0} - [{1}({2})]>", NOMBRE_CLASE, __cNombre, Tipo);

@@ -29,12 +29,12 @@ namespace Testing
             System.Console.WriteLine("");
             System.Console.WriteLine("");
 
-            List<TipoClienteOTD> lista = new List<TipoClienteOTD>();
+            List<PersonaOTD> lista = new List<PersonaOTD>();
 
             System.Diagnostics.Stopwatch stopWatch = new System.Diagnostics.Stopwatch();
             stopWatch.Start();
 
-            for (int i = 0; i < 1000; i++) lista.Add(new TipoClienteOTD(i, ""));
+            for (int i = 0; i < 1000; i++) lista.Add(new PersonaOTD(i, ""));
 
             stopWatch.Stop();
 
@@ -59,19 +59,19 @@ namespace Testing
             System.Console.WriteLine("");
 
             List<TiposClientesADM> lista = new List<TiposClientesADM>();
-            List<TipoClienteOTD> listaOTD = new List<TipoClienteOTD>();
+            List<PersonaOTD> listaOTD = new List<PersonaOTD>();
 
             System.Diagnostics.Stopwatch stopWatch = new System.Diagnostics.Stopwatch();
             stopWatch.Start();
 
-            var oConexion = new CdgNetPersistenciaV3.SQLServerUtiles("10.75.1.1", "mcc", 120);
+            var oConexion = new CdgNetPersistenciaV3.SQLServerUtiles(".\\SQLEXPRESS", "TEST_PERSISTENCIA", 120);
             oConexion.lConectar();
 
             for (int i = 0; i < 1000; i++) lista.Add(new TiposClientesADM(oConexion));
 
             foreach (TiposClientesADM oADM in lista)
             {
-                listaOTD.AddRange(oADM.lGet_elementos(string.Empty, new Dictionary<string, object>())[1] as List<TipoClienteOTD>);
+                listaOTD.AddRange(oADM.lGet_elementos(string.Empty, new Dictionary<string, object>())[1] as List<PersonaOTD>);
             }
 
             stopWatch.Stop();
@@ -90,39 +90,6 @@ namespace Testing
 
     }
 
-    [CdgNetPersistenciaV3.Atributos.Tabla("STKTIPOSCLIENTE", CdgNetPersistenciaV3.Atributos.Tabla.SGBD.SQL_SERVER)]
-    public class TipoClienteOTD : CdgNetPersistenciaV3.ClasesBases.OTDbase
-    {
-
-        public TipoClienteOTD()
-            : base(0, string.Empty)
-        {
-            _Set_campos<TipoClienteOTD>();
-        }
-
-        public TipoClienteOTD(long nId, string cDescripcion)
-            : base(nId, cDescripcion)
-        {
-            _Set_campos<TipoClienteOTD>();
-        }
-
-        [CdgNetPersistenciaV3.Atributos.Campo("TIPOCLIENTE", AutoGenerado=true)]
-        public long Id
-        {
-            get { return _nId;  }
-            set { _nId = value; }
-        }
-
-        [CdgNetPersistenciaV3.Atributos.Campo("DESCRIP")]
-        public string Descripcion
-        {
-            get { return _cDescripcion; }
-            set { _cDescripcion = value; }
-        }
-
-    }
-
-
     public class TiposClientesADM : CdgNetPersistenciaV3.ClasesBases.ADMbase
     {
 
@@ -131,7 +98,7 @@ namespace Testing
         {
             
             //establecemos la instancia de la clase de tabla a administrar
-            _Set_tabla<TipoClienteOTD>();
+            _Set_tabla<PersonaOTD>();
 
         }
 
@@ -157,8 +124,53 @@ namespace Testing
 
         public override List<object>  lGet_elementos(string cFiltroWhere, Dictionary<string,object> dicParametros)
         {
-            return this.lGet_elementos<TipoClienteOTD>(cFiltroWhere, dicParametros);
+            return this.lGet_elementos<PersonaOTD>(cFiltroWhere, dicParametros);
         }
+    }
+
+
+    [CdgNetPersistenciaV3.Atributos.Tabla("PERSONAS", CdgNetPersistenciaV3.Atributos.Tabla.SGBD.SQL_SERVER)]
+    public class PersonaOTD : CdgNetPersistenciaV3.ClasesBases.OTDbase
+    {
+
+        public PersonaOTD()
+            : base(0, string.Empty)
+        {
+            _Set_campos<PersonaOTD>();
+        }
+
+        public PersonaOTD(long nId, string cNombreCompleto)
+            : base(nId, cNombreCompleto)
+        {
+            _Set_campos<PersonaOTD>();
+        }
+
+        [CdgNetPersistenciaV3.Atributos.Campo("ID", AutoGenerado=true)]
+        public override long Id
+        {
+            get { return _nId;  }
+            set { _nId = value; }
+        }
+
+        [CdgNetPersistenciaV3.Atributos.Campo("NOMBRE_COMPLETO", Nulable=false)]
+        public string NombreCompleto
+        {
+            get { return _cDescripcion; }
+            set { _cDescripcion = value; }
+        }
+
+        [CdgNetPersistenciaV3.Atributos.Campo("EDAD")]
+        public int Edad
+        {
+            get; set;
+        }
+
+        [CdgNetPersistenciaV3.Atributos.Campo("ACTIVO")]
+        public bool Activo
+        {
+            get; set;
+        }
+
     }
 
 }
