@@ -13,15 +13,17 @@ Esta clase extiende de la clase _System.Attribute_ y mediante su uso lo que se h
   * _eNombreSGBD:_ ({{{SGBD}}}) Nombre del SGBD para establecer los tipos de consultas parametrizadas.-
 
 
-= Propiedades =
-(o Fields en terminología .NET) 
-
-== Privadas ==
+= Campos =
+== Privados ==
   * *__cNombre:* ({{{System.String}}}) Almacena el nombre de la Tabla física de la tabla.-
   * *__eTipo:* ({{{SGBD}}}) Almacena el enumerador que identifica al SGBD.-
 
-== Públicas ==
+== Públicos ==
   * *SGBD:* ({{{enum}}}) Enumerador que almacena los identificadores de los diferentes SGBD a con los que se puede implementar la libreria proyecto.-
+
+
+= Propiedades =
+== Públicos ==
   * *Nombre:* ({{{System.String}}}) Devuelve el nombre de la tabla física.-
   * *TipoSGBD:* ({{{SGBD}}}) Devuelve el tipo de SGBD donde se aloja la tabla.-
 
