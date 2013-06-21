@@ -28,11 +28,20 @@ namespace CdgNetPersistenciaV3.Atributos
 
         const string NOMBRE_CLASE = "Tabla";
 
-        
+        /// <summary>
+        /// Almacena el nombre de la Tabla física de la tabla
+        /// </summary>
         private string __cNombre;
 
+        /// <summary>
+        /// Enumerador que almacena los identificadores de los diferentes
+        /// SGBD a con los que se puede implementar la libreria proyecto
+        /// </summary>
         public enum SGBD { SQL_SERVER = 0, ORACLE, SQLITE };
 
+        /// <summary>
+        /// Almacena el enumerador que identifica al SGBD
+        /// </summary>
         private SGBD __eTipo;
 
 
@@ -45,7 +54,7 @@ namespace CdgNetPersistenciaV3.Atributos
         /// <summary>
         /// Contructor de la Clase
         /// </summary>
-        /// <param name="cNombreTabla">Nombre de la Tabla al que hace referencia la Clase</param>
+        /// <param name="cNombreTabla">Nombre de la tabla física a la que referencia la instancia</param>
         /// <param name="eNombreSGBD">Nombre del SGBD para establecer los tipos de consultas parametrizadas</param>
         public Tabla(string cNombreTabla, SGBD eNombreSGBD)
         {
@@ -62,7 +71,7 @@ namespace CdgNetPersistenciaV3.Atributos
         #region GETTERS Y SETTERS
 
         /// <summary>
-        /// Devuelve el nombre del campo de la tabla
+        /// Devuelve el nombre de la tabla física
         /// </summary>
         public string Nombre
         {

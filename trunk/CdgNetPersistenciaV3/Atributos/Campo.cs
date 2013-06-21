@@ -91,7 +91,7 @@ namespace CdgNetPersistenciaV3.Atributos
         #region GETTERS Y SETTERS
 
         /// <summary>
-        /// Devuelve el nombre del campo de la tabla
+        /// Devuelve el nombre del campo físico de la tabla
         /// </summary>
         public string Nombre
         {

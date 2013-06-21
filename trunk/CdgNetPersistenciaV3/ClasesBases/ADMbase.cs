@@ -8,13 +8,13 @@ using CdgNetPersistenciaV3.Atributos;
 using System.Text;
 
 /**
-    * Autor :  Cristian Daniel Garay Sosa
-    * Fecha :  15/10/2012 (v3)
-    * Comentarios:
-    *          clase base de administracion de interaccion de la aplicacion 
-    *          con los datos de una tabla y sus relaciones
-    * 
-    * **/
+* Autor :  Cristian Daniel Garay Sosa
+* Fecha :  15/10/2012 (v3)
+* Comentarios:
+*          clase base de administracion de interaccion de la aplicacion 
+*          con los datos de una tabla y sus relaciones
+* 
+* **/
 
 namespace CdgNetPersistenciaV3.ClasesBases
 {
@@ -522,7 +522,7 @@ namespace CdgNetPersistenciaV3.ClasesBases
                                                                 );
                             }
 
-                        //etiqueta para saltarse la adicion de elementos a lacondicion de filtrado
+                        //etiqueta para saltarse la adicion de elementos a la condicion de filtrado
                         salto:
                             var i = 0;
                         }
