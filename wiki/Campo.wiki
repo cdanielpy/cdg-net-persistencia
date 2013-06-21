@@ -30,3 +30,7 @@ Esta clase extiende de la clase _System.Attribute_ y mediante su uso lo que se h
 
 = Ejemplos =
 Tomando como ejemplo la tabla de ejemplo [https://code.google.com/p/cdg-net-persistencia/wiki/TablaPersonas Personas], su declaracion del _VO_ (o DTO) que lo representará sería como sigue:
+
+{{{
+
+}}}
