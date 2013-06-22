@@ -21,8 +21,8 @@ Esta es una clase abstracta que debe ser extendida por los _VOs_ (o _DTOs_), que
   * *NOMBRE_CLASE:* ({{{System.String}}}) Estático. Almacena el nombre de la clase en forma de simple cadena.-
 
 == Protegigas ==
-  * *_nId:* ({{{System.Int64}}}) Almacena el valor del identificador de la instancia. Normalmente debería ser el valor del campo PK de la tabla.-
-  * *_cDescripcion:* ({{{System.String}}}) Almacena la descripción de la instancia.-
+  * *`_`nId:* ({{{System.Int64}}}) Almacena el valor del identificador de la instancia. Normalmente debería ser el valor del campo PK de la tabla.-
+  * *`_`cDescripcion:* ({{{System.String}}}) Almacena la descripción de la instancia.-
 
 = Propiedades =
 == Públicas ==
