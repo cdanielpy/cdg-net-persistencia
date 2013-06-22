@@ -32,8 +32,8 @@ Esta es una clase abstracta que debe ser extendida por los _VOs_ (o _DTOs_), que
 
 = Métodos =
 == Públicos ==
-  * *Get_clon<T>():* ({{{T}}}) Crea y devuelve un clon de la instancia actual. _T_ es la clase destino de la instancia creada.-
-
+  * *Get_clon`<`T`>`():* ({{{T}}}) Crea y devuelve un clon de la instancia actual. _T_ es la clase destino de la instancia creada.-
+`  `*Obs:* _T_ siempre debería ser del mismo tipo que la clase del _VO_ (o _DTO_) porque sino sólo se clonarán los valores de Prodiedades que sean comunes a ambas clases.-
   * *ToString():* ({{{System.String}}}) Sobreescrito. Devuelve la representacion de de cadena de la instancia.-
 
 = Ejemplos =
