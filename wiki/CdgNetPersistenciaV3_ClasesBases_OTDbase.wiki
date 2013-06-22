@@ -1,0 +1,40 @@
+#summary Describe la clase OTDbase y su uso.
+
+= La clase OTDbase =
+
+Esta es una clase abstracta que debe ser extendida por los _VOs_ (o _DTOs_), que funcionan de un modo parecido a los _Java Beans_.-
+
+= Constructores =
+`  `*OTDbase():*
+  * Constructor por defecto.-
+`  `*OTDbase(*{{{nIdParam, cDescripcionParam}}}*):*
+  * _nIdParam:_ ({{{System.Int64}}}) Identificador de la instancia. Normalmente este es el valor del campo _PK_ del registro.-
+  * _cDescripcionParam:_ ({{{Syste.String}}}) Descripción de la instancia. Puede ser cualquier valor de cadena, puede ser muy útil para realizar consultas cuando no se tiene el valor del identificador de la instacia.-
+
+
+= Campos =
+== Privados ==
+  * *__dicCampos:* ({{{Dictionary<System.String, Campo>}}}) Dicionario para relacionar los campos de la instancia a los Campos de la tabla.-
+  * *__dicPropiedades:* ({{{Dictionary<System.String, PropertyInfo>}}}) Diccionario para relacionar campos de tabla física y las Propiedades referenciando a los mismos por medio de Campos.-
+
+== Públicos ==
+  * *NOMBRE_CLASE:* ({{{System.String}}}) Estático. Almacena el nombre de la clase en forma de simple cadena.-
+
+== Protegigas ==
+  * *_nId:* ({{{System.Int64}}}) Almacena el valor del identificador de la instancia. Normalmente debería ser el valor del campo PK de la tabla.-
+  * *_cDescripcion:* ({{{System.String}}}) Almacena la descripción de la instancia.-
+
+= Propiedades =
+== Públicas ==
+  * *Id:* ({{{System.Int64}}}) Devuelve o establece el valor del identificador de la clase.-
+  * *Descripcion:* ({{{System.String}}}) Devuelve o establece la descripción de la instancia.-
+
+
+= Métodos =
+== Públicos ==
+  * *Get_clon<T>():* ({{{T}}}) Crea y devuelve un clon de la instancia actual. _T_ es la clase destino de la instancia creada.-
+
+  * *ToString():* ({{{System.String}}}) Sobreescrito. Devuelve la representacion de de cadena de la instancia.-
+
+= Ejemplos =
+Ver definición de _VO_ de [http://code.google.com/p/cdg-net-persistencia/wiki/CdgNetPersistenciaV3_Atributos_Campo Personas]:
