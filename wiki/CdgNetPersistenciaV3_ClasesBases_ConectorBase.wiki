@@ -1,0 +1,39 @@
+#summary Describe la clase ConectorBase y su uso.
+
+= La clase ConectorBase =
+
+Esta es una clase abstracta que debe ser extendida por las clases de _Utilerias_ de conexiones a los SGBD. Se encarga de establecer las operaciones básicas que deben ser implementadas, así como administrar los parámetros de conexión al SGBD y la instancia de conexión creada.-
+
+= Constructores =
+
+`  `*ConectorBase(*{{{cCadenaConexionParam}}}*):*
+  * _cCadenaConexionParam:_ ({{{System.String}}}) Cadena de conexión para acceder a la base de datos. Ver [http://www.connectionstrings.com/ ejemplos] de cadenas.-
+`  `*ConectorBase(*{{{cUsuarioParam, cContrasenaParam, cServidorParam, cCatalogoParam, nPuertoParam, cServicioParam}}}*):* 
+  * _cUsuarioParam:_ ({{{System.String}}}) Id de Usuario de SGBD.-
+  * _cContrasenaParam:_ ({{{System.String}}}) Contrasena del Usuario.-
+  * _cServidorParam:_ ({{{System.String}}}) Nombre o direccion del Servidor SGBD.-
+  * _cCatalogoParam:_ ({{{System.String}}}) Nombre del Catalogo/Esquema de BDD.-
+  * _nPuertoParam:_ ({{{System.Int32}}}) Puerto de escucha del servicio SGBD.-
+  * _cServicioParam:_ ({{{System.String}}}) Nombre del Servicio de SGBD.-
+
+= Campos =
+== Públicos ==
+  * *ERROR_NO_HAY_FILAS:* ({{{System.String}}}) Constante de mensaje de consulta sin filas devueltas como resultado.-
+  * *MARCADOR_PARAMETRO:* ({{{System.Char}}}) Estatico. Marca de nombre de parametros de comandos SQL. Valor por defecto '_:_' (dos puntos).-
+  * *oConexion:* ({{{System.Data.Common.DbConnection}}}) Almacena la instancia de la conexión establecida hacia el SGBD.-
+
+
+= Propiedades =
+== Protegidas ==
+  * *`_`cServidor:* ({{{System.String}}}) Devuelve o establece el nombre o la direccion del servidor del SBGD.-
+  * *`_`nPuerto:* ({{{System.Int32}}}) Devuelve o establece el puerto de escucha del servicio.-
+  * *`_`cServicio:* ({{{System.String}}}) Devuelve o establece el nombre del servicio del SBGD.-
+  * *`_`cUsuario:* ({{{System.String}}}) Devuelve o establece el nombre del usuario del SBGD.-
+  * *`_`cContrasena:* ({{{System.String}}}) Devuelve o establece la contraseña del usuario.-
+  * *`_`cCatalogo:* ({{{System.String}}}) Devuelve o establece el nombre del Catálogo/Esquema de Base de Datos.-
+  * *`_`bConectado:* ({{{System.Boolean}}}) Devuelve o establece el marcador de la conexión abierta.-
+  * *`_`cCadenaConexion:* ({{{System.String}}}) Devuelve o establece la cadena de conxión utilizada.-
+
+== Públicas ==
+  * *bMostrarSQL:* ({{{System.Boolean}}}) Devuelve o establece el valor de marcador para desplegar las cadenas de los comandos ejecutados en el servidor.-
+  * *nTiempoComandos:* ({{{System.Int32}}}) Devuelve o establece el tiempo de espera para ejecución de comandos.-
