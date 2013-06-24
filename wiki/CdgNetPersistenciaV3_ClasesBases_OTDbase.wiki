@@ -38,7 +38,7 @@ Esta es una clase abstracta que debe ser extendida por los _VOs_ (o _DTOs_). Se 
   * *Get_dic_propiedades():* ({{{Dictionary<System.String, PropertyInfo>}}}) Devuelve el diccionario de pares Nombre campo físico - Propiedad de la instancia.-
   * *Get_dic_campos():* ({{{Dictionary<System.String, Campo>}}}) Devuelve el diccionario de pares Nombre campo físico - Campo de la instancia.-
   * *Equals(*{{{obj}}}*):* ({{{System.Boolean}}}) Sobreescrito. Metodo de comparacion de instancias. En este caso evalúa si son iguales por el valor del campo _Id_.-
-  * _obj_: ({{{System.Object}}}) Instancia contra la cual se desea realizar la comparación.-
+    * _obj_: ({{{System.Object}}}) Instancia contra la cual se desea realizar la comparación.-
 
 = Ejemplos =
 Ver definición de _VO_ de [http://code.google.com/p/cdg-net-persistencia/wiki/CdgNetPersistenciaV3_Atributos_Campo Personas]:
