@@ -4,6 +4,8 @@
 
 Esta es una clase abstracta que debe ser extendida por las clases de _Utilerias_ de conexiones a los SGBD. Se encarga de establecer las operaciones básicas que deben ser implementadas, así como administrar los parámetros de conexión al SGBD y la instancia de conexión creada.-
 
+Implementa la interfaz System.IDisposable, lo que permite que la instancia creada pueda ser utilizada en un ámbito de comando _using_.-
+
 = Constructores =
 
 `  `*ConectorBase(*{{{cCadenaConexionParam}}}*):*
@@ -37,3 +39,36 @@ Esta es una clase abstracta que debe ser extendida por las clases de _Utilerias_
 == Públicas ==
   * *bMostrarSQL:* ({{{System.Boolean}}}) Devuelve o establece el valor de marcador para desplegar las cadenas de los comandos ejecutados en el servidor.-
   * *nTiempoComandos:* ({{{System.Int32}}}) Devuelve o establece el tiempo de espera para ejecución de comandos.-
+
+
+= Métodos =
+== Protegidos ==
+  * *`_`Mostrar_SQL(*{{{cSentenciaSQL}}}*):* ({{{System.Void}}}) Muestra la cadena parametro en la consola. Sólo si {{{bMostrarSQL = true}}}.-
+    * _cSentenciaSQL_: ({{{System.String}}}) Sentencia sql a desplegar.-
+  * *`_`Mostrar_SQL(*{{{oComando}}}*):* ({{{System.Void}}}) Muestra la cadena del comando sql parametro. Sólo si {{{bMostrarSQL = true}}}.-
+    * _oComando_: ({{{System.Data.Common.DbCommand}}}) Instancia de _DbCommand_ que contiene la sentencia sql a desplegar.-
+
+
+== Públicos ==
+  * *lConectar():* ({{{List<System.Object>}}}) Abstracto. Abre la conexion a la base de datos y devuelve el resultado de la operacion en una lista de objetos.-
+  * *lDesconectar(*{{{sender}}}*):* ({{{List<System.Object>}}}) Abstracto. Cierra la conexión activa y devuelve el resultado de la operacion en una lista de objetos.-
+    * _sender_: ({{{System.Object}}}) Objeto que efectúa la llamada al metodo.-
+  * *lEjecutar_sentencia(*{{{cSentenciaSQL, dicValores}}}*):* ({{{List<System.Object>}}}) Abstracto. Ejecuta la sentencia sql parámetro y devuelve el resultado de la operacion en una lista de objetos.-
+    * _cSentenciaSQL_: ({{{System.String}}}) Sentencia SQL a ejecutar.-
+    * _dicValores_:  ({{{Dictionary<string, object>}}}) Diccionario de claves y valores parametros de la sentencia.-
+  * *lEjecutar_consulta(*{{{cConsultaSQL, dicValores}}}*):* ({{{List<System.Object>}}}) Abstracto. Ejecuta la consulta sql y devuelve un DataTable como segundo elemento de la lista de resultados.-
+    * _cConsultaSQL_: ({{{System.String}}}) Consulta SQL a ejecutar.-
+    * _dicValores_:  ({{{Dictionary<string, object>}}}) Diccionario de claves y valores parametros de la consulta.-
+  * *lEjecutar_escalar(*{{{cConsultaSQL, dicValores}}}*):* ({{{List<System.Object>}}}) Abstracto. Ejecuta la consulta sql y devuelve un unico objeto, que representa al valor de la primera columna de la primera fila devuelta por la consulta, como segundo elemento de la lista de resultados.-
+    * _cConsultaSQL_: ({{{System.String}}}) Consulta SQL a ejecutar.-
+    * _dicValores_:  ({{{Dictionary<string, object>}}}) Diccionario de claves y valores parametros de la consulta.-
+  * *lEjecutar_procedimiento(*{{{cProcedimiento, dicValores}}}*):* ({{{List<System.Object>}}}) Abstracto. Ejecuta el procedimiento almacenado y devuelve el resultado de la operacion en una lista de objetos.-
+    * _cProcedimiento_: ({{{System.String}}}) Procedimiento almacenado a ejecutar.-
+    * _dicValores_:  ({{{Dictionary<string, object>}}}) Diccionario de claves y valores parámetros del procedimiento.-
+  * *Set_autocommit(*{{{bParam}}}*):* ({{{System.Void}}}) Abstracto. Establece el método de Autoconfirmación de transacciones.-
+    * _bParam_: ({{{System.Boolean}}}) Valor a asignar. Si es {{{true}}} todos los comandos se confirmarán apenas hayan terminados su ejecución en forma exitosa, sino, se ejecutará un _rollback_ automático.-
+  * *lIniciar_transaccion():* ({{{List<System.Object>}}}) Abstracto. Inicia una transacción de base de datos y devuelve el resultado de la operacion en una lista de objetos.-
+  * *lConfirmar_transaccion():* ({{{List<System.Object>}}}) Abstracto. Confirma una transaccion activa y devuelve el resultado de la operacion en una lista de objetos.-
+  * *lRevertir_transaccion():* ({{{List<System.Object>}}}) Abstracto. Revierte una transaccion activa y devuelve el resultado de la operacion en una lista de objetos.-
+  * *ToString():* ({{{System.String}}}) Sobreescrito. Devuelve la representación de de cadena de la instancia.-
+  * *Dispose():* ({{{System.Void}}}) Sobreescrito. Ejecuta la liberacion de todos los recursos creados por la instancia.-
