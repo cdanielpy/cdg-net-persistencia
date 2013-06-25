@@ -34,7 +34,7 @@ Esta es una clase abstracta que debe ser extendida por los _VOs_ (o _DTOs_). Se 
 == Públicos ==
   * *Get_clon`<`T`>`():* ({{{T}}}) Crea y devuelve un clon de la instancia actual. _T_ es la clase destino de la instancia creada.-
 `  ` *Obs:* _T_ siempre debería ser del mismo tipo que la clase del _VO_ (o _DTO_) porque sino sólo se clonarán los valores de prodiedades que sean comunes a ambas clases.-
-  * *ToString():* ({{{System.String}}}) Sobreescrito. Devuelve la representacion de de cadena de la instancia.-
+  * *ToString():* ({{{System.String}}}) Sobreescrito. Devuelve la representación de de cadena de la instancia.-
   * *Get_dic_propiedades():* ({{{Dictionary<System.String, PropertyInfo>}}}) Devuelve el diccionario de pares Nombre campo físico - Propiedad de la instancia.-
   * *Get_dic_campos():* ({{{Dictionary<System.String, Campo>}}}) Devuelve el diccionario de pares Nombre campo físico - Campo de la instancia.-
   * *Equals(*{{{obj}}}*):* ({{{System.Boolean}}}) Sobreescrito. Metodo de comparacion de instancias. En este caso evalúa si son iguales por el valor del campo _Id_.-
