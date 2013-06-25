@@ -29,27 +29,41 @@ namespace CdgNetPersistenciaV3.ClasesBases
         public static string NOMBRE_CLASE = "ADMbase";
 
         /// <summary>
-        /// Instancia de la clase de utileria de conexion a la base de datos
+        /// Marcador estándar de nombres de parámetros de comandos SQL
+        /// </summary>
+        public const char MARCADOR_PARAMETRO_ESTANDAR = '?';
+
+        /// <summary>
+        /// Fecha de marca para valores de campos nulos del tipo DateTime
+        /// Deprecado
+        /// </summary>
+        public static DateTime FECHA_MARCA_NULA = DateTime.ParseExact("01/01/1753", "dd/MM/yyyy", null);
+
+        /// <summary>
+        /// Almacena el marcador de parámetros SQL
+        /// </summary>
+        public char cMarcaParametro = MARCADOR_PARAMETRO_ESTANDAR;
+
+        /// <summary>
+        /// Almacena la instancia de utilería de conexión a la base de datos
         /// </summary>
         protected ConectorBase _oConector;
 
         /// <summary>
-        /// tipo de la clase extendida de OTDbase
+        /// Almacena la lista de nombres de campos físicos de la tabla
+        /// en una lista separada por comas
+        /// </summary>
+        protected string _cListaCamposTabla;
+
+        /// <summary>
+        /// Almacena el tipo de de la clase extendida de OTDbase
         /// </summary>
         private Type __tTipoOTD;
 
         /// <summary>
-        /// Para instancia modelo de generacion de codigos DML con retrasos
+        /// Almacena la instancia modelo de generación de codigos DML
         /// </summary>
         private OTDbase __oInstanciaOTD;
-
-        // cadenas para DML
-        protected string _cListaCamposTabla;
-        private string __cSelect_sql;
-        private string __cInsert_sql;
-        private string __cUpdate_sql;
-        private string __cDelete_sql;
-        private string __cWhereSugerido;
 
         // cadenas de sentencias bases
         private const string __SELECT_SQL = "SELECT {0} FROM {1}";
@@ -57,22 +71,19 @@ namespace CdgNetPersistenciaV3.ClasesBases
         private const string __UPDATE_SQL = "UPDATE {0} SET {1} WHERE {2}";
         private const string __DELETE_SQL = "DELETE FROM {0} WHERE {1}";
 
+        /// Almacen de cadenas DML básicas
+        private string __cSelect_sql;
+        private string __cInsert_sql;
+        private string __cUpdate_sql;
+        private string __cDelete_sql;
+        private string __cWhereSugerido;
+
         /// <summary>
         /// Nombre de la tabla administrada
         /// </summary>
         private string __cNombreTabla;
 
-        /// <summary>
-        /// Marcador estandar de parametros de comandos SQL
-        /// </summary>
-        public const char MARCADOR_PARAMETRO_ESTANDAR = '?';
 
-        /// <summary>
-        /// Marcador de parametros SQL estandar
-        /// </summary>
-        public char cMarcaParametro = MARCADOR_PARAMETRO_ESTANDAR;
-
-        public static DateTime FECHA_MARCA_NULA = DateTime.ParseExact("01/01/1753", "dd/MM/yyyy", null);
 
         #endregion
 
@@ -83,7 +94,7 @@ namespace CdgNetPersistenciaV3.ClasesBases
         /// <summary>
         /// Contructor de la clase
         /// </summary>
-        /// <param name="oConectorBase">Instancia de utileria de interaccion con la base de datos</param>
+        /// <param name="oConectorBase">Instancia de utilería de interacción con la base de datos</param>
         public ADMbase(ConectorBase oConectorBase)
         {
             _oConector = oConectorBase;
@@ -97,72 +108,7 @@ namespace CdgNetPersistenciaV3.ClasesBases
         #region GETTERS Y SETTERS
 
         /// <summary>
-        /// Instancia relacionada de la clase TBLbase
-        /// </summary>
-        protected void _Set_tabla<T>()
-        {
-            //si aun no esta instanciado
-            if (__cNombreTabla == null)
-            {
-                //tomamos el tipo de la instancia
-                __tTipoOTD = typeof(T);
-
-                //recorremos sus atributos
-                //http://msdn.microsoft.com/es-es/library/z919e8tw%28v=vs.80%29.aspx
-                foreach (var oAtributo in __tTipoOTD.GetCustomAttributes(true))
-                {
-                    //si es del tipo Tabla
-                    if (oAtributo is Tabla)
-                    {
-                        //tomamos el nombre de la tabla asignada
-                        __cNombreTabla = (oAtributo as Tabla).Nombre;
-
-                        //evaluamos el tipo de marcador de parametro segun el SGBD
-                        switch ((oAtributo as Tabla).TipoSGBD)
-                        {
-                            case Tabla.SGBD.SQL_SERVER:
-                                this.cMarcaParametro = SQLServerUtiles.MARCADOR_PARAMETRO;
-                                break;
-                            /*
-                            case Tabla.SGBD.ORACLE:
-                                this.cMarcaParametro = OracleUtiles.MARCADOR_PARAMETRO;
-                                break;
-
-                            case Tabla.SGBD.SQLITE:
-                                this.cMarcaParametro = SQLiteUtiles.MARCADOR_PARAMETRO;
-                                break;
-                            */
-                        }
-
-                        //salimos del bucle
-                        break;
-
-                    }
-                }
-
-                //creamos una instancia
-                __oInstanciaOTD = (Activator.CreateInstance<T>() as OTDbase);
-
-                //invocamos a los metodos generadores de DML
-                _SetListaCamposTabla();
-
-                /**
-                 * comentado para posponer la generacion de codigos DML hasta que sean solicitados
-                 * **/
-
-                /*
-                _SetWhereSugerido<T>();
-                _SetInsertSql<T>();
-                _SetUpdateSql<T>();
-                */
-
-
-            }
-
-        }
-
-        /// <summary>
-        /// Devuelveel nombre de la tabla administrada
+        /// Devuelve el nombre de la tabla administrada
         /// </summary>
         public string NombreTabla
         {
@@ -186,7 +132,7 @@ namespace CdgNetPersistenciaV3.ClasesBases
         }
 
         /// <summary>
-        /// Devuelve  o establece el comando de insercion de datos a la tabla
+        /// Devuelve o establece el comando de inserción de datos a la tabla
         /// </summary>
         public virtual string Insert_sql
         {
@@ -200,9 +146,9 @@ namespace CdgNetPersistenciaV3.ClasesBases
         }
 
         /// <summary>
-        /// Devuelve  o establece el comando de actualizacion de datos de la tabla
+        /// Devuelve o establece el comando de actualización de datos de la tabla
         /// </summary>
-        public string Update_sql
+        public virtual string Update_sql
         {
             get
             {
@@ -214,9 +160,9 @@ namespace CdgNetPersistenciaV3.ClasesBases
         }
 
         /// <summary>
-        /// Devuelve o establece el comando de aliminacion de datos de la tabla
+        /// Devuelve o establece el comando de eliminación de datos de la tabla
         /// </summary>
-        public string Delete_sql
+        public virtual string Delete_sql
         {
             get
             {
@@ -232,7 +178,7 @@ namespace CdgNetPersistenciaV3.ClasesBases
         /// Devuelve las condiciones de filtrado de registros sugerida
         /// en base a la estructura especificada de la tabla
         /// </summary>
-        public string WhereSugerido
+        public virtual string WhereSugerido
         {
             get
             {
@@ -242,7 +188,6 @@ namespace CdgNetPersistenciaV3.ClasesBases
             }
             set { __cWhereSugerido = value; }
         }
-
 
 
         #endregion
@@ -561,7 +506,7 @@ namespace CdgNetPersistenciaV3.ClasesBases
         /// la condicion de filtrado desde la base de datos
         /// </summary>
         /// <param name="cFiltroWhere">Condicion de filtrado de registros</param>
-        /// <param name="dicParametros">Diccionario de claves y valores de parametros de la sentencia</param>
+        /// <param name="dicParametros">Diccionario de claves y valores de parámetros de la sentencia</param>
         /// <returns>Lista de resultado [entero, object]</returns>
         public abstract List<object> lGet_elementos(string cFiltroWhere, Dictionary<string, object> dicParametros);
 
@@ -572,7 +517,7 @@ namespace CdgNetPersistenciaV3.ClasesBases
         /// <typeparam name="T">Clase extendida de OTDbase a la cual se transfieren los datos 
         /// de registros</typeparam>
         /// <param name="cFiltroWhere">Condicion de filtrado de registros</param>
-        /// <param name="dicParametros">Diccionario de claves y valores de parametros de la sentencia</param>
+        /// <param name="dicParametros">Diccionario de claves y valores de parámetros de la sentencia</param>
         /// <returns></returns>
         public virtual List<object> lGet_elementos<T>(string cFiltroWhere, Dictionary<string, object> dicParametros)
         {
@@ -727,6 +672,72 @@ namespace CdgNetPersistenciaV3.ClasesBases
 
 
         #region GENERADORES DE CODIGO DML
+
+        /// <summary>
+        /// Instancia relacionada de la clase TBLbase
+        /// </summary>
+        protected void _Set_tabla<T>()
+        {
+            //si aun no esta instanciado
+            if (__cNombreTabla == null)
+            {
+                //tomamos el tipo de la instancia
+                __tTipoOTD = typeof(T);
+
+                //recorremos sus atributos
+                //http://msdn.microsoft.com/es-es/library/z919e8tw%28v=vs.80%29.aspx
+                foreach (var oAtributo in __tTipoOTD.GetCustomAttributes(true))
+                {
+                    //si es del tipo Tabla
+                    if (oAtributo is Tabla)
+                    {
+                        //tomamos el nombre de la tabla asignada
+                        __cNombreTabla = (oAtributo as Tabla).Nombre;
+
+                        //evaluamos el tipo de marcador de parametro segun el SGBD
+                        switch ((oAtributo as Tabla).TipoSGBD)
+                        {
+                            case Tabla.SGBD.SQL_SERVER:
+                                this.cMarcaParametro = SQLServerUtiles.MARCADOR_PARAMETRO;
+                                break;
+                            /*
+                            case Tabla.SGBD.ORACLE:
+                                this.cMarcaParametro = OracleUtiles.MARCADOR_PARAMETRO;
+                                break;
+
+                            case Tabla.SGBD.SQLITE:
+                                this.cMarcaParametro = SQLiteUtiles.MARCADOR_PARAMETRO;
+                                break;
+                            */
+                        }
+
+                        //salimos del bucle
+                        break;
+
+                    }
+                }
+
+                //creamos una instancia
+                __oInstanciaOTD = (Activator.CreateInstance<T>() as OTDbase);
+
+                //invocamos a los metodos generadores de DML
+                _SetListaCamposTabla();
+
+                /**
+                 * comentado para posponer la generacion de codigos DML hasta que sean solicitados
+                 * **/
+
+                /*
+                _SetWhereSugerido<T>();
+                _SetInsertSql<T>();
+                _SetUpdateSql<T>();
+                */
+
+
+            }
+
+        }
+
 
         /**
          * GENERADORES PARA SOBREESCRIBIR LOS ACTUALES DESDE LA CLASE EXTENDIDA
