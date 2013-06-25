@@ -1,0 +1,45 @@
+#summary Describe la clase _ADMbase_ y su uso.
+
+= La clase ADMbase =
+
+Esta es una clase abstracta que debe ser extendida por las clases que harán el trabajo de centralizar las acciones de manipulación de datos de cada tabla física del SGBD, es decir, un _DAO_. Se encarga de establecer las operaciones básicas de tipo _CRUD_, así como administrar los nombres de campos, las sentencias a ejecutar y los métodos de paso de valores de resultados a propiedades de instancias de sus _VOs_ (o _DTOs_).-
+
+`  `*Ésta es la clase central de toda la librería ya que aquí es donde se centran los métodos de 'automatización' de comandos DML y el tratamiento de los resultados*.
+
+
+= Constructores =
+`  `*ADMbase(*{{{oConectorBase}}}*):* 
+  * _oConectorBase:_ (_[http://code.google.com/p/cdg-net-persistencia/wiki/CdgNetPersistenciaV3_ClasesBases_ConectorBase ConectorBase]_) Instancia de extendida de _ConectorBase_, que sería la útileria de interacción con el SGBD espécifico.-
+
+= Campos =
+== Privados ==
+  * *__SELECT_SQL:* ({{{System.String}}}) Constante. Contiene la cadena base de selección de registros.-
+  * *__INSERT_SQL:* ({{{System.String}}}) Constante. Contiene la cadena base de inserción de registros.-
+  * *__UPDATE_SQL:* ({{{System.String}}}) Constante. Contiene la cadena base de actualización de registros.-
+  * *__DELETE_SQL:* ({{{System.String}}}) Constante. Contiene la cadena base de eliminación de registros.-
+  * *__cSelect_sql:* ({{{System.String}}}) Almacena la cadena de selección de registros de la tabla.-
+  * *__cInsert_sql:* ({{{System.String}}}) Almacena la cadena de inserción de registros de la tabla.- 
+  * *__cUpdate_sql:* ({{{System.String}}}) Almacena la cadena de actualizacion de registros de la tabla.-
+  * *__cDelete_sql:* ({{{System.String}}}) Almacena la cadena de eliminación de registros de la tabla.-
+  * *__cWhereSugerido:* ({{{System.String}}}) Almacena la cadena base sugerida para filtrado de registros de la tabla.-
+  * *__cNombreTabla:* ({{{System.String}}}) Almacena el nombre físico de la tabla.-
+
+
+== Protegidos ==
+  * *__tTipoOTD:* ({{{System.Type}}}) Almacena el tipo de de la clase extendida de OTDbase.-
+  * *`_`cListaCamposTabla:* ({{{System.String}}}) Almacena la lista de nombres de campos físicos de la tabla en una lista separada por comas.-
+
+== Públicos ==
+  * *NOMBRE_CLASE:* ({{{System.String}}}) Estático. Almacena el nombre de la clase en forma de simple cadena.-
+  * *MARCADOR_PARAMETRO_ESTANDAR:* ({{{System.Char}}}) Constante. Marcador estándar de nombres de parámetros de comandos SQL.-
+  * *cMarcaParametro:* ({{{System.Char}}}) Almacena el marcador de parámetros SQL.-
+  * *`_`oConector:* (_[http://code.google.com/p/cdg-net-persistencia/wiki/CdgNetPersistenciaV3_ClasesBases_ConectorBase ConectorBase]_) Almacena la instancia de utilería de conexión a la base de datos.-
+
+= Propiedades =
+== Públicas ==
+  * *NombreTabla:* ({{{System.String}}}) Devuelve el nombre de la tabla administrada.-
+  * *Select_sql:* ({{{System.String}}}) Virtual. Devuelve o establece el comando de selección de datos de la tabla.-
+  * *Insert_sql:* ({{{System.String}}}) Virtual. Devuelve o establece el comando de inserción de datos a la tabla.-
+  * *Update_sql:* ({{{System.String}}}) Virtual. Devuelve o establece el comando de actualización de datos de la tabla.-
+  * *Delete_sql:* ({{{System.String}}}) Virtual. Devuelve o establece el comando de aliminación de datos de la tabla
+  * *WhereSugerido:* ({{{System.String}}}) Virtual. Devuelve las condiciones de filtrado de registros sugerida en base a la estructura especificada de la tabla.-
