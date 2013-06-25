@@ -23,6 +23,7 @@ Implementa la interfaz System.IDisposable, lo que permite que la instancia cread
   * *ERROR_NO_HAY_FILAS:* ({{{System.String}}}) Constante de mensaje de consulta sin filas devueltas como resultado.-
   * *MARCADOR_PARAMETRO:* ({{{System.Char}}}) Estatico. Marca de nombre de parametros de comandos SQL. Valor por defecto '_:_' (dos puntos).-
   * *oConexion:* ({{{System.Data.Common.DbConnection}}}) Almacena la instancia de la conexión establecida hacia el SGBD.-
+  * *FECHA_MARCA_NULA:* ({{{System.DateTime}}}) Estatico. Fecha de marca para valores de campos nulos del tipo _DateTime_.-
 
 
 = Propiedades =
