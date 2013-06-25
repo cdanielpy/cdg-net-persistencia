@@ -19,6 +19,7 @@ Esta clase extiende de la clase _System.Attribute_ y mediante su uso lo que se h
   * *__eTipo:* ({{{Tabla.SGBD}}}) Almacena el enumerador que identifica al SGBD.-
 
 == Públicos ==
+  * *NOMBRE_CLASE:* ({{{System.String}}}) Estático. Almacena el nombre de la clase en forma de simple cadena.-
   * *SGBD:* ({{{enum}}}) Enumerador que almacena los identificadores de los diferentes SGBD a con los que se puede implementar la libreria proyecto.-
 
 
