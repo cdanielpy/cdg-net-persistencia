@@ -71,4 +71,4 @@ Implementa la interfaz System.IDisposable, lo que permite que la instancia cread
   * *lConfirmar_transaccion():* ({{{List<System.Object>}}}) Abstracto. Confirma una transaccion activa y devuelve el resultado de la operacion en una lista de objetos.-
   * *lRevertir_transaccion():* ({{{List<System.Object>}}}) Abstracto. Revierte una transaccion activa y devuelve el resultado de la operacion en una lista de objetos.-
   * *ToString():* ({{{System.String}}}) Sobreescrito. Devuelve la representación de de cadena de la instancia.-
-  * *Dispose():* ({{{System.Void}}}) Sobreescrito. Ejecuta la liberacion de todos los recursos creados por la instancia.-
+  * *Dispose():* ({{{System.Void}}}) Sobreescrito. Ejecuta la liberación de todos los recursos creados por la instancia.-
