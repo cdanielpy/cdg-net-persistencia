@@ -21,6 +21,11 @@ namespace CdgNetPersistenciaV3.ClasesBases
         public const string ERROR_NO_HAY_FILAS = "NO HAY FILAS DEVUELTAS";
 
         /// <summary>
+        /// Fecha de marca para valores de campos nulos del tipo DateTime
+        /// </summary>
+        public static DateTime FECHA_MARCA_NULA = DateTime.ParseExact("01/01/1753", "dd/MM/yyyy", null);
+
+        /// <summary>
         /// Caracter de marca de parámetros de comandos SQL
         /// </summary>
         public static char MARCADOR_PARAMETRO = ':';
