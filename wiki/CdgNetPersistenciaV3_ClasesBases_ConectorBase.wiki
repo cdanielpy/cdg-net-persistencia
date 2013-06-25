@@ -20,6 +20,7 @@ Implementa la interfaz System.IDisposable, lo que permite que la instancia cread
 
 = Campos =
 == Públicos ==
+  * *NOMBRE_CLASE:* ({{{System.String}}}) Estático. Almacena el nombre de la clase en forma de simple cadena.-
   * *ERROR_NO_HAY_FILAS:* ({{{System.String}}}) Constante de mensaje de consulta sin filas devueltas como resultado.-
   * *MARCADOR_PARAMETRO:* ({{{System.Char}}}) Estatico. Marca de nombre de parametros de comandos SQL. Valor por defecto '_:_' (dos puntos).-
   * *oConexion:* ({{{System.Data.Common.DbConnection}}}) Almacena la instancia de la conexión establecida hacia el SGBD.-
