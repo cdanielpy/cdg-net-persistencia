@@ -12,66 +12,36 @@ namespace CdgNetPersistenciaV3.ClasesBases
     public abstract class ConectorBase : IDisposable
     {
 
-        //PROPIEDADES DE LA CLASE
-        protected string _cServidor { get; set; }
-        protected int _nPuerto { get; set; }
-        protected string _cServicio { get; set; }
-
-        protected string _cUsuario { get; set; }
-        protected string _cContrasena { get; set; }
-        protected string _cCatalogo { get; set; }
-
-        protected bool _bConectado { get; set; }
-        public bool bMostrarSQL { get; set; }
-
-        protected string _cCadenaConexion { get; set; }
+        #region ATRIBUTOS
 
         /// <summary>
-        /// Devuelve o establece el tiempo de espera para ejecución de comandos
+        /// Constante de mensaje de consulta sin filas devueltas como
+        /// resultado
         /// </summary>
-        public int nTiempoComandos { get; set; }
-
         public const string ERROR_NO_HAY_FILAS = "NO HAY FILAS DEVUELTAS";
 
         /// <summary>
-        /// Caracter de marca de parametros de comandos SQL
+        /// Caracter de marca de parámetros de comandos SQL
         /// </summary>
         public static char MARCADOR_PARAMETRO = ':';
 
+        /// <summary>
+        /// Almacena la instancia de la conexión establecida hacia el SGBD
+        /// </summary>
         public System.Data.Common.DbConnection oConexion;
 
-        /// <summary>
-        /// Constructor de la clase
-        /// </summary>
-        /// <param name="cUsuarioParam">Id de Usuario de SGBD</param>
-        /// <param name="cContrasenaParam">Contrasena del Usuario</param>
-        /// <param name="cServidorParam">Nombre o direccion del Servidor SGBD</param>
-        /// <param name="cCatalogoParam">Nombre del Catalogo de BDD</param>
-        /// <param name="nPuertoParam">Puerto de escucha del servicio SGBD</param>
-        /// <param name="cServicioParam">Nombre del Servicio de SGBD</param>
-        public ConectorBase(string cUsuarioParam, string cContrasenaParam, string cServidorParam
-                            , string cCatalogoParam, int nPuertoParam, string cServicioParam)
-        {
-            //asignamos los valores de los PROPIEDADES
-            this._cServidor = cServidorParam;
-            this._nPuerto = nPuertoParam;
-            this._cServicio = cServicioParam;
 
-            this._cUsuario = cUsuarioParam;
-            this._cContrasena = cContrasenaParam;
-            this._cCatalogo = cCatalogoParam;
+        #endregion
 
-        }
+
+
+        #region CONSTRUCTORES
 
         /// <summary>
         /// Constructor de la clase
         /// </summary>
-        /// <param name="cUsuarioParam">Id de Usuario de SGBD</param>
-        /// <param name="cContrasenaParam">Contrasena del Usuario</param>
-        /// <param name="cServidorParam">Nombre o direccion del Servidor SGBD</param>
-        /// <param name="cCatalogoParam">Nombre del Catalogo de BDD</param>
-        /// <param name="nPuertoParam">Puerto de escucha del servicio SGBD</param>
-        /// <param name="cServicioParam">Nombre del Servicio de SGBD</param>
+        /// <param name="cCadenaConexionParam">Cadena, completa, de conexion al sistema de base de datos</param>
+        /// <see cref="http://www.connectionstrings.com/"/>
         public ConectorBase(string cCadenaConexionParam)
         {
             //asignamos los valores de los PROPIEDADES
@@ -89,17 +59,92 @@ namespace CdgNetPersistenciaV3.ClasesBases
         }
 
         /// <summary>
-        /// Devuelve la representacion de la clase
+        /// Constructor de la clase
         /// </summary>
-        /// <returns></returns>
-        public override string ToString()
+        /// <param name="cUsuarioParam">Id de Usuario de SGBD</param>
+        /// <param name="cContrasenaParam">Contrasena del Usuario</param>
+        /// <param name="cServidorParam">Nombre o direccion del Servidor SGBD</param>
+        /// <param name="cCatalogoParam">Nombre del Catálogo/Esquema de Base de Datos</param>
+        /// <param name="nPuertoParam">Puerto de escucha del servicio SGBD</param>
+        /// <param name="cServicioParam">Nombre del Servicio de SGBD</param>
+        public ConectorBase(string cUsuarioParam, string cContrasenaParam, string cServidorParam
+                            , string cCatalogoParam, int nPuertoParam, string cServicioParam)
         {
-            return string.Format("<Acceso a BD: {0}@{1}:{2} >"
-                                    , this._cCatalogo
-                                    , this._cServidor
-                                    , this._nPuerto
-                                    );
+            //asignamos los valores de los PROPIEDADES
+            this._cServidor = cServidorParam;
+            this._nPuerto = nPuertoParam;
+            this._cServicio = cServicioParam;
+
+            this._cUsuario = cUsuarioParam;
+            this._cContrasena = cContrasenaParam;
+            this._cCatalogo = cCatalogoParam;
+
         }
+
+
+        #endregion
+
+
+
+        #region PROPIEDADES
+
+        /// <summary>
+        /// Devuelve o establece el nombre o la direccion del servidor del SBGD
+        /// </summary>
+        protected string _cServidor { get; set; }
+
+        /// <summary>
+        /// Devuelve o establece el puerto de escucha del servicio
+        /// </summary>
+        protected int _nPuerto { get; set; }
+
+        /// <summary>
+        /// Devuelve o establece el nombre del servicio del SBGD
+        /// </summary>
+        protected string _cServicio { get; set; }
+
+        /// <summary>
+        /// Devuelve o establece el nombre del usuario del SBGD
+        /// </summary>
+        protected string _cUsuario { get; set; }
+
+        /// <summary>
+        /// Devuelve o establece la contraseña del usuario
+        /// </summary>
+        protected string _cContrasena { get; set; }
+
+        /// <summary>
+        /// Devuelve o establece el nombre del Catálogo/Esquema de Base de Datos
+        /// </summary>
+        protected string _cCatalogo { get; set; }
+
+        /// <summary>
+        /// Devuelve o establece el marcador de la conexión abierta
+        /// </summary>
+        protected bool _bConectado { get; set; }
+
+        /// <summary>
+        /// Devuelve o establece la cadena de conxión utilizada
+        /// </summary>
+        protected string _cCadenaConexion { get; set; }
+
+        /// <summary>
+        /// Devuelve o establece el valor de marcador para desplegar las
+        /// cadenas de los comandos ejecutados en el servidor
+        /// </summary>
+        public bool bMostrarSQL { get; set; }
+
+        /// <summary>
+        /// Devuelve o establece el tiempo de espera para ejecución de comandos
+        /// </summary>
+        public int nTiempoComandos { get; set; }
+
+
+        #endregion
+
+
+
+        #region METODOS
 
         /// <summary>
         /// Abre la conexion a la base de datos
@@ -108,52 +153,57 @@ namespace CdgNetPersistenciaV3.ClasesBases
         public abstract List<object> lConectar();
 
         /// <summary>
-        /// Cierra la conexion activa
+        /// Cierra la conexión activa
         /// </summary>
-        /// <param name="sender">Objeto que efectua la llamada al metodo</param>
+        /// <param name="sender">Objeto que efectúa la llamada al método</param>
         /// <returns>Lista de Resultados</returns>
         public abstract List<object> lDesconectar(object sender);
 
         /// <summary>
-        /// Ejecuta la sentencia sql
+        /// Ejecuta la sentencia sql parámetro
         /// </summary>
         /// <param name="cSentenciaSQL">Sentencia SQL a ejecutar</param>
-        /// <param name="dicValores">Diccionario de claves y valores parametros</param>
+        /// <param name="dicValores">Diccionario de claves y valores parámetros de la sentencia</param>
         /// <returns>Lista de Resultados</returns>
         public abstract List<object> lEjecutar_sentencia(string cSentenciaSQL, Dictionary<string, object> dicValores);
 
         /// <summary>
         /// Ejecuta la consulta sql y devuelve un DataTable como segundo elemento
+        /// de la lista de resultados
         /// </summary>
         /// <param name="cConsultaSQL">Consulta SQL a ejecutar</param>
-        /// <param name="dicValores">Diccionario de claves y valores parametros</param>
+        /// <param name="dicValores">Diccionario de claves y valores parámetros de la consulta</param>
         /// <returns>Lista de Resultados</returns>
         public abstract List<object> lEjecutar_consulta(string cConsultaSQL, Dictionary<string, object> dicValores);
 
         /// <summary>
-        /// Ejecuta la consulta sql y devuelve un unico objeto valor
+        /// Ejecuta la consulta sql y devuelve un unico objeto, que representa al valor
+        /// de la primera columna de la primera fila devuelta por la consulta
         /// </summary>
         /// <param name="cConsultaSQL">Consulta SQL a ejecutar</param>
-        /// <param name="dicValores">Diccionario de claves y valores parametros</param>
+        /// <param name="dicValores">Diccionario de claves y valores parámetros de la consulta</param>
         /// <returns>Lista de Resultados</returns>
         public abstract List<object> lEjecutar_escalar(string cConsultaSQL, Dictionary<string, object> dicValores);
 
         /// <summary>
-        /// Ejecuta el procedimiento almacenado y devuelve una lista de resultado
+        /// Ejecuta el procedimiento almacenado y devuelve una lista de resultados
         /// </summary>
-        /// <param name="cProcedimiento">Procedimiento Almacenado a ejecutar</param>
-        /// <param name="dicValores">Diccionario de claves y valores parametros</param>
+        /// <param name="cProcedimiento">Procedimiento almacenado a ejecutar</param>
+        /// <param name="dicValores">Diccionario de claves y valores parámetros del procedimiento</param>
         /// <returns>Lista de Resultados</returns>
         public abstract List<object> lEjecutar_procedimiento(string cProcedimiento, Dictionary<string, object> dicValores);
 
         /// <summary>
-        /// Establece el metodo de Autoconfirmacion de transacciones
+        /// Establece el método de Autoconfirmación de transacciones
         /// </summary>
-        /// <param name="bParam">Valor a asignar</param>
+        /// <param name="bParam">Valor a asignar
+        /// Si es {{{true}}} todos los comandos se confirmarán apenas hayan terminados su ejecución 
+        /// en forma exitosa, sino, se ejecutará un rollback automático
+        /// </param>
         public abstract void Set_autocommit(bool bParam);
 
         /// <summary>
-        /// Inicia una transaccion
+        /// Inicia una transacción de base de datos
         /// </summary>
         /// <returns>Lista de Resultados</returns>
         public abstract List<object> lIniciar_transaccion();
@@ -171,7 +221,7 @@ namespace CdgNetPersistenciaV3.ClasesBases
         public abstract List<object> lRevertir_transaccion();
 
         /// <summary>
-        /// Muestra el comando sql ejecutandose
+        /// Muestra el comando sql parámetro
         /// </summary>
         /// <param name="cSentenciaSQL">Sentencia sql a desplegar</param>
         protected void _Mostrar_SQL(string cSentenciaSQL)
@@ -189,7 +239,7 @@ namespace CdgNetPersistenciaV3.ClasesBases
         /// <summary>
         /// Muestra el comando sql ejecutandose
         /// </summary>
-        /// <param name="oComando">Instancia de Comando a ejecutar</param>
+        /// <param name="oComando">Instancia de Comando que contiene la sentencia sql a desplegar</param>
         protected void _Mostrar_SQL(System.Data.Common.DbCommand oComando)
         {
             //si no se deben mostrar los comandos, salimos
@@ -213,8 +263,30 @@ namespace CdgNetPersistenciaV3.ClasesBases
             }
         }
 
+        #endregion
+
+
+
+        #region SOBREESCRITOS
+
+        /// <summary>
+        /// Devuelve la representación de cadena de la clase
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return string.Format("<Acceso a BD: {0}@{1}:{2} >"
+                                    , this._cCatalogo
+                                    , this._cServidor
+                                    , this._nPuerto
+                                    );
+        }
+
         #region Miembros de IDisposable
 
+        /// <summary>
+        /// Ejecuta la liberación de todos los recursos recursos creados por la instancia
+        /// </summary>
         public void Dispose()
         {
             _cServidor = null;
@@ -234,6 +306,10 @@ namespace CdgNetPersistenciaV3.ClasesBases
         }
 
         #endregion
+
+        #endregion
+
+
     }
 
 }

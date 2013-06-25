@@ -25,16 +25,32 @@ namespace CdgNetPersistenciaV3.ClasesBases
 
         #region CAMPOS(Fields)
 
-        //PROPIEDADES
+        /// <summary>
+        /// Almacena el nombre de la clase
+        /// </summary>
         public static string NOMBRE_CLASE = "OTDbase";
 
+        /// <summary>
+        /// Almacena el valor del identificador de la instancia
+        /// Normalmente debería ser el valor del campo PK de la tabla
+        /// </summary>
         protected long _nId;
+
+        /// <summary>
+        /// Almacena la descripción de la instancia
+        /// </summary>
         protected string _cDescripcion;
 
-        //un dicionario para los campos de la tabla
+        /// <summary>
+        /// Dicionario para relacionar los campos de la 
+        /// instancia a los Campos de la tabla
+        /// </summary>
         Dictionary<string, Campo> __dicCampos;
 
-        //un diccionario para relacionar Campos de Tabla y Propiedades refereciando a esos Campos
+        /// <summary>
+        /// Diccionario para relacionar campos de Tabla y Propiedades
+        /// referenciando a los mismos por medio de Campos
+        /// </summary>
         Dictionary<string, PropertyInfo> __dicPropiedades;
 
 
@@ -62,10 +78,27 @@ namespace CdgNetPersistenciaV3.ClasesBases
             _cDescripcion = cDescripcionParam;    
         }
 
+        #endregion
+
+
+
+        #region GETTERS Y SETTERS
+
+
+        public virtual long Id {get; set; }
+
+        public virtual string Descripcion { get; set; }
+
+        #endregion
+
+
+
+        #region METODOS
+
         /// <summary>
         /// Crea y devuelve un clon de la instancia actual
         /// </summary>
-        /// <typeparam name="T">Instancia </typeparam>
+        /// <typeparam name="T">Clase de la instancia a crear</typeparam>
         /// <returns>Instancia Clon</returns>
         public T Get_clon<T>()
         {
@@ -92,7 +125,7 @@ namespace CdgNetPersistenciaV3.ClasesBases
                 object oValor = tTipoOTD.InvokeMember(oInfo.Name
                                                         , BindingFlags.GetProperty | BindingFlags.Instance | BindingFlags.Public
                                                         , null, this
-                                                        , new object[]{}
+                                                        , new object[] { }
                                                         );
 
                 //si no es un valor nulo
@@ -111,19 +144,10 @@ namespace CdgNetPersistenciaV3.ClasesBases
 
         }
 
-        #endregion
-
-
-
-        #region GETTERS Y SETTERS
-
-
-        public virtual long Id {get; set; }
-
-        public virtual string Descripcion { get; set; }
 
         /// <summary>
-        /// Devuelve el diccionario de pares Nombre Campo - Propiedad de la instancia
+        /// Devuelve el diccionario de pares Nombre campo 
+        /// físico - Propiedad de la instancia
         /// </summary>
         public Dictionary<string, PropertyInfo> Get_dic_propiedades()
         {
@@ -131,7 +155,8 @@ namespace CdgNetPersistenciaV3.ClasesBases
         }
 
         /// <summary>
-        /// Devuelve el diccionario de pares Nombre Campo - Campo de la instancia
+        /// Devuelve el diccionario de pares Nombre campo 
+        /// Fisico - Campo de la instancia
         /// </summary>
         public Dictionary<string, Campo> Get_dic_campos()
         {
@@ -155,7 +180,7 @@ namespace CdgNetPersistenciaV3.ClasesBases
         }
 
         /// <summary>
-        /// Metodo de comparacion de la clase
+        /// Metodo de comparacion de instancias
         /// </summary>
         /// <param name="obj">Instancia de la clase OTDbase contra la cual comparar</param>
         /// <returns>true si los objetos tienen el mismo Id</returns>
