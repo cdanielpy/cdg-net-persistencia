@@ -42,4 +42,42 @@ Esta es una clase abstracta que debe ser extendida por las clases que harán el 
   * *Insert_sql:* ({{{System.String}}}) Virtual. Devuelve o establece el comando de inserción de datos a la tabla.-
   * *Update_sql:* ({{{System.String}}}) Virtual. Devuelve o establece el comando de actualización de datos de la tabla.-
   * *Delete_sql:* ({{{System.String}}}) Virtual. Devuelve o establece el comando de aliminación de datos de la tabla
-  * *WhereSugerido:* ({{{System.String}}}) Virtual. Devuelve las condiciones de filtrado de registros sugerida en base a la estructura especificada de la tabla.-
+  * *WhereSugerido:* ({{{System.String}}}) Virtual. Devuelve la condición de filtrado de registros sugerida en base a la estructura especificada de la tabla.-
+
+=Métodos=
+==Privados==
+* *`__`SetInsertSql():* ({{{System.Void}}}) Establece la sentencia sql base de inserción de registros en la tabla administrada.-
+* *`__`SetUpdateSql():* ({{{System.Void}}}) Establece la sentencia sql base de actualización de registros en la tabla administrada.-
+* *`__`SetWhereSugerido():* ({{{System.Void}}}) Establece las condiciones de filtrado de registros para operaciones DML en base a la estructura especificada de la tabla.-
+
+
+==Protegidos==
+* *`_`lSet_registros<T>({{{aFilasParam}}}):* ({{{List<T>}}}) Ejecuta la instanciación y asignación del OTD administrado por la clase.-
+    * _T:_ ({{{Tipo}}}) Clase de OTDbase extendida a los que seran 'convertidas' las filas del _DataTable_.-
+    * _aFilasParam:_ ({{{DataRowCollection}}}) Arreglo de filas de un DataTable.-
+* *`_`Set_tabla<T>():* ({{{System.Void}}}) Establece los datos de la estructura física de la tabla en base a la instancia del OTDbase parámetro.-
+    * _T:_ ({{{Tipo}}}) Clase de OTDbase extendida que contiene los datos de la tabla física.-
+* *`_`SetListaCamposTabla():* ({{{System.Void}}}) Devuelve una cadena con los nombres de los campos con alias de la incluído.-
+* *`_`SetInsertSql<T>():* ({{{System.Void}}}) Establece la sentencia sql base de inserción de registros en la tabla administrada.-
+    * _T:_ ({{{Tipo}}}) Clase de OTDbase extendida que contiene los datos de la tabla física.-
+* *`_`SetUpdateSql():* ({{{System.Void}}}) Establece la sentencia sql base de actualización de registros en la tabla administrada.-
+    * _T:_ ({{{Tipo}}}) Clase de OTDbase extendida que contiene los datos de la tabla física.-
+* *`_`SetWhereSugerido():* ({{{System.Void}}}) Establece las condiciones de filtrado de registros para operaciones DML en base a la estructura especificada de la tabla.-
+    * _T:_ ({{{Tipo}}}) Clase de OTDbase extendida que contiene los datos de la tabla física.-
+
+
+
+==Públicos==
+  * *ToString():* ({{{System.String}}}) Sobreescrito. Devuelve la representacion de cadena de la clase.-
+* *lAgregar({{{oOTDbase}}}):* ({{{List<System.Object>}}}) Abstracto. Inserta un nuevo registro en la tabla a partir de la instancia parámetro.-
+    * _oOTDbase:_ (_[http://code.google.com/p/cdg-net-persistencia/wiki/CdgNetPersistenciaV3_ClasesBases_OTDbase OTDBase]_) Instancia de la clase extendida de OTDbase de la cual se obtienen los datos del registro a insertar.-
+* *lAgregar<T>({{{oOTDbase}}}):* ({{{List<System.Object>}}}) Virtual. Ídem a la versión abstracta, pero se debe especificar la clase extendida de OTDbase de la cual se tomarán los datos de la estructura f
+* *lActualizar({{{oOTDbase}}}):* ({{{List<System.Object>}}}) Abstracto. 
+* *lActualizar<T>({{{oOTDbase}}}):* ({{{List<System.Object>}}}) Virtual. 
+* *lEliminar({{{oOTDbase}}}):* ({{{List<System.Object>}}}) Abstracto. 
+* *lEliminar<T>({{{oOTDbase}}}):* ({{{List<System.Object>}}}) Virtual. 
+* *lGet_elemento({{{oOTDbase}}}):* ({{{List<System.Object>}}}) Abstracto. 
+* *lGet_elemento<T>({{{oOTDbase}}}):* ({{{List<System.Object>}}}) Virtual. 
+* *lGet_elementos({{{oOTDbase}}}):* ({{{List<System.Object>}}}) Abstracto. 
+* *lGet_elementos<T>({{{oOTDbase}}}):* ({{{List<System.Object>}}}) Virtual. 
+
