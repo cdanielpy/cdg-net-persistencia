@@ -54,7 +54,7 @@ Esta es una clase abstracta que debe ser extendida por las clases que harán el 
 
 
 ==Protegidos==
-* `_`lSet_registros`<`T`>`(*{{{aFilasParam}}}*):* ({{{List`<`T`>`}}}) Ejecuta la instanciación y asignación del OTD administrado por la clase.-
+* `_`lSet_registros`<T`>(*{{{aFilasParam}}}*):* ({{{List`<T`>}}}) Ejecuta la instanciación y asignación del OTD administrado por la clase.-
     * _T:_ ({{{Tipo}}}) Clase de OTDbase extendida a los que seran 'convertidas' las filas del _DataTable_.-
     * _aFilasParam:_ ({{{DataRowCollection}}}) Arreglo de filas de un DataTable.-
 * `_`Set_tabla`<`T`>`():* ({{{System.Void}}}) Establece los datos de la estructura física de la tabla en base a la instancia del OTDbase parámetro.-
