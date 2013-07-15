@@ -54,7 +54,7 @@ Esta es una clase abstracta que debe ser extendida por las clases que harán el 
 
 
 ==Protegidos==
-* `_`lSet_registros`<`T`>`(*{{{aFilasParam}}}*):* ({{{List`<T`>}}}) Ejecuta la instanciación y asignación del OTD administrado por la clase.-
+* `_`lSet_registros`<`T`>`(*{{{aFilasParam}}}*):* ({{{List<T>}}}) Ejecuta la instanciación y asignación del OTD administrado por la clase.-
     * _T:_ ({{{Tipo}}}) Clase de OTDbase extendida a los que seran 'convertidas' las filas del _DataTable_.-
     * _aFilasParam:_ ({{{DataRowCollection}}}) Arreglo de filas de un DataTable.-
 
@@ -77,24 +77,24 @@ Esta es una clase abstracta que debe ser extendida por las clases que harán el 
 ==Públicos==
 * ToString():* ({{{System.String}}}) Sobreescrito. Devuelve la representacion de cadena de la clase.-
 
-* lAgregar(*{{{oOTDbase}}}*):* ({{{List`<`System.Object`>`}}}) Abstracto. Inserta un nuevo registro en la tabla a partir de la instancia parámetro.-
+* lAgregar(*{{{oOTDbase}}}*):* ({{{List<System.Object>}}}) Abstracto. Inserta un nuevo registro en la tabla a partir de la instancia parámetro.-
 
     * _oOTDbase:_ ([http://code.google.com/p/cdg-net-persistencia/wiki/CdgNetPersistenciaV3_ClasesBases_OTDbase OTDBase]) Instancia de la clase extendida de OTDbase de la cual se obtienen los datos del registro a insertar.-
 
-* lAgregar`<`T`>`(*{{{[http://code.google.com/p/cdg-net-persistencia/wiki/CdgNetPersistenciaV3_ClasesBases_OTDbase OTDBase]}}}*):* ({{{List<System.Object>}}}) Virtual. Ídem a la versión abstracta, pero se debe especificar la clase extendida de _OTDbase_ de la cual se tomarán los datos a insertar.-
+* lAgregar`<`T`>`(*{{{OTDBase}}}*):* ({{{List<System.Object>}}}) Virtual. Ídem a la versión abstracta, pero se debe especificar la clase extendida de _OTDbase_ de la cual se tomarán los datos a insertar.-
 
-* lActualizar(*{{{[http://code.google.com/p/cdg-net-persistencia/wiki/CdgNetPersistenciaV3_ClasesBases_OTDbase OTDBase]}}}*):* ({{{List<System.Object>}}}) Abstracto. Actualiza el registro en la tabla a partir de la instancia parámetro. La instancia, a su vez, representa al registro a actualizar.-
+* lActualizar(*{{{OTDBase}}}*):* ({{{List<System.Object>}}}) Abstracto. Actualiza el registro en la tabla a partir de la instancia parámetro. La instancia, a su vez, representa al registro a actualizar.-
 
-* lActualizar`<`T`>`(*{{{_[http://code.google.com/p/cdg-net-persistencia/wiki/CdgNetPersistenciaV3_ClasesBases_OTDbase OTDBase]_}}}*):* ({{{List<System.Object>}}}) Virtual. Ídem a la versión abstracta, pero se debe especificar la clase extendida de _OTDbase_ de la cual se tomarán los datos a eliminar.-
+* lActualizar`<`T`>`(*{{{OTDBase}}}*):* ({{{List<System.Object>}}}) Virtual. Ídem a la versión abstracta, pero se debe especificar la clase extendida de _OTDbase_ de la cual se tomarán los datos a eliminar.-
 
-* lEliminar(*{{{[http://code.google.com/p/cdg-net-persistencia/wiki/CdgNetPersistenciaV3_ClasesBases_OTDbase OTDBase]}}}*):* ({{{List<System.Object>}}}) Abstracto. Elimina el registro de la tabla representado por la instancia parámetro. La instancia, a su vez, representa al registro a eliminar-
+* lEliminar(*{{{OTDBase}}}*):* ({{{List<System.Object>}}}) Abstracto. Elimina el registro de la tabla representado por la instancia parámetro. La instancia, a su vez, representa al registro a eliminar-
 
-* lEliminar`<`T`>`(*{{{[http://code.google.com/p/cdg-net-persistencia/wiki/CdgNetPersistenciaV3_ClasesBases_OTDbase OTDBase]}}}*):* ({{{List<System.Object>}}}) Virtual. Ídem a la versión abstracta, pero se debe especificar la clase extendida de _OTDbase_ de la cual se tomarán los datos a eliminar.-
+* lEliminar`<`T`>`(*{{{OTDBase}}}*):* ({{{List<System.Object>}}}) Virtual. Ídem a la versión abstracta, pero se debe especificar la clase extendida de _OTDbase_ de la cual se tomarán los datos a eliminar.-
 
-* lGet_elemento(*{{{[http://code.google.com/p/cdg-net-persistencia/wiki/CdgNetPersistenciaV3_ClasesBases_OTDbase OTDBase]}}}*):* ({{{List<System.Object>}}}) Abstracto. Obtiene una única instancia que coincide con el ID de la instancia parámetro, o, en su defecto, por los demas valores de atributos no nulos.-
+* lGet_elemento(*{{{OTDBase}}}*):* ({{{List<System.Object>}}}) Abstracto. Obtiene una única instancia que coincide con el ID de la instancia parámetro, o, en su defecto, por los demas valores de atributos no nulos.-
 
-* lGet_elemento`<`T`>`(*{{{[http://code.google.com/p/cdg-net-persistencia/wiki/CdgNetPersistenciaV3_ClasesBases_OTDbase OTDBase]}}}*):* ({{{List<System.Object>}}}) Virtual. Ídem a la versión abstracta, pero se debe especificar la clase extendida de _OTDbase_ de la cual se tomarán los datos a comparar.-
+* lGet_elemento`<`T`>`(*{{{OTDBase}}}*):* ({{{List<System.Object>}}}) Virtual. Ídem a la versión abstracta, pero se debe especificar la clase extendida de _OTDbase_ de la cual se tomarán los datos a comparar.-
 
-* lGet_elementos(*{{{[http://code.google.com/p/cdg-net-persistencia/wiki/CdgNetPersistenciaV3_ClasesBases_OTDbase OTDBase]}}}*):* ({{{List<System.Object>}}}) Abstracto. Obtiene una lista de instancias que satisfacen la condicion de filtrado desde la base de datos.-
+* lGet_elementos(*{{{OTDBase}}}*):* ({{{List<System.Object>}}}) Abstracto. Obtiene una lista de instancias que satisfacen la condicion de filtrado desde la base de datos.-
 
-* lGet_elementos`<`T`>`(*{{{[http://code.google.com/p/cdg-net-persistencia/wiki/CdgNetPersistenciaV3_ClasesBases_OTDbase OTDBase]}}}*):* ({{{List<System.Object>}}}) Virtual. Virtual. Ídem a la versión abstracta, pero se debe especificar la clase extendida de _OTDbase_ a la cual se transformarán los datos a recuperar.-
+* lGet_elementos`<`T`>`(*{{{OTDBase}}}*):* ({{{List<System.Object>}}}) Virtual. Virtual. Ídem a la versión abstracta, pero se debe especificar la clase extendida de _OTDbase_ a la cual se transformarán los datos a recuperar.-
