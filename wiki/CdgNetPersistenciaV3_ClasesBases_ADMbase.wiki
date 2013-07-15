@@ -4,29 +4,29 @@
 
 Esta es una clase abstracta que debe ser extendida por las clases que harán el trabajo de centralizar las acciones de manipulación de datos de cada tabla física del SGBD, es decir, un _DAO_. Se encarga de establecer las operaciones básicas de tipo _CRUD_, así como administrar los nombres de campos, las sentencias a ejecutar y los métodos de paso de valores de resultados a propiedades de instancias de sus _VOs_ (o _DTOs_).-
 
-`  `*Ésta es la clase central de toda la librería ya que aquí es donde se centran los métodos de 'automatización' de comandos DML y el tratamiento de los resultados*.
+*Ésta es la clase central de toda la librería ya que aquí es donde se centran los métodos de 'automatización' de comandos DML y el tratamiento de los resultados*.
 
 
 = Constructores =
-`  `*ADMbase(*{{{oConectorBase}}}*):* 
+*ADMbase(*{{{oConectorBase}}}*):* 
   * _oConectorBase:_ (_[http://code.google.com/p/cdg-net-persistencia/wiki/CdgNetPersistenciaV3_ClasesBases_ConectorBase ConectorBase]_) Instancia de extendida de _ConectorBase_, que sería la útileria de interacción con el SGBD espécifico.-
 
 = Campos =
 == Privados ==
-  * *__SELECT_SQL:* ({{{System.String}}}) Constante. Contiene la cadena base de selección de registros.-
-  * *__INSERT_SQL:* ({{{System.String}}}) Constante. Contiene la cadena base de inserción de registros.-
-  * *__UPDATE_SQL:* ({{{System.String}}}) Constante. Contiene la cadena base de actualización de registros.-
-  * *__DELETE_SQL:* ({{{System.String}}}) Constante. Contiene la cadena base de eliminación de registros.-
-  * *__cSelect_sql:* ({{{System.String}}}) Almacena la cadena de selección de registros de la tabla.-
-  * *__cInsert_sql:* ({{{System.String}}}) Almacena la cadena de inserción de registros de la tabla.- 
-  * *__cUpdate_sql:* ({{{System.String}}}) Almacena la cadena de actualizacion de registros de la tabla.-
-  * *__cDelete_sql:* ({{{System.String}}}) Almacena la cadena de eliminación de registros de la tabla.-
-  * *__cWhereSugerido:* ({{{System.String}}}) Almacena la cadena base sugerida para filtrado de registros de la tabla.-
-  * *__cNombreTabla:* ({{{System.String}}}) Almacena el nombre físico de la tabla.-
+  * * `__`SELECT_SQL:* ({{{System.String}}}) Constante. Contiene la cadena base de selección de registros.-
+  * * `__`INSERT_SQL:* ({{{System.String}}}) Constante. Contiene la cadena base de inserción de registros.-
+  * * `__`UPDATE_SQL:* ({{{System.String}}}) Constante. Contiene la cadena base de actualización de registros.-
+  * * `__`DELETE_SQL:* ({{{System.String}}}) Constante. Contiene la cadena base de eliminación de registros.-
+  * * `__`cSelect_sql:* ({{{System.String}}}) Almacena la cadena de selección de registros de la tabla.-
+  * * `__`cInsert_sql:* ({{{System.String}}}) Almacena la cadena de inserción de registros de la tabla.- 
+  * * `__`cUpdate_sql:* ({{{System.String}}}) Almacena la cadena de actualizacion de registros de la tabla.-
+  * * `__`cDelete_sql:* ({{{System.String}}}) Almacena la cadena de eliminación de registros de la tabla.-
+  * * `__`cWhereSugerido:* ({{{System.String}}}) Almacena la cadena base sugerida para filtrado de registros de la tabla.-
+  * * `__`cNombreTabla:* ({{{System.String}}}) Almacena el nombre físico de la tabla.-
 
 
 == Protegidos ==
-  * *__tTipoOTD:* ({{{System.Type}}}) Almacena el tipo de de la clase extendida de OTDbase.-
+  * *`_`tTipoOTD:* ({{{System.Type}}}) Almacena el tipo de de la clase extendida de OTDbase.-
   * *`_`cListaCamposTabla:* ({{{System.String}}}) Almacena la lista de nombres de campos físicos de la tabla en una lista separada por comas.-
 
 == Públicos ==
@@ -46,9 +46,9 @@ Esta es una clase abstracta que debe ser extendida por las clases que harán el 
 
 =Métodos=
 ==Privados==
-* *`__`SetInsertSql():* ({{{System.Void}}}) Establece la sentencia sql base de inserción de registros en la tabla administrada.-
-* *`__`SetUpdateSql():* ({{{System.Void}}}) Establece la sentencia sql base de actualización de registros en la tabla administrada.-
-* *`__`SetWhereSugerido():* ({{{System.Void}}}) Establece las condiciones de filtrado de registros para operaciones DML en base a la estructura especificada de la tabla.-
+* `__`SetInsertSql():* ({{{System.Void}}}) Establece la sentencia sql base de inserción de registros en la tabla administrada.-
+* `__`SetUpdateSql():* ({{{System.Void}}}) Establece la sentencia sql base de actualización de registros en la tabla administrada.-
+* `__`SetWhereSugerido():* ({{{System.Void}}}) Establece las condiciones de filtrado de registros para operaciones DML en base a la estructura especificada de la tabla.-
 
 
 ==Protegidos==
