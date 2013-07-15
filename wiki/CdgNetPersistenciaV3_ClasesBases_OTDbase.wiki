@@ -14,7 +14,7 @@ Esta es una clase abstracta que debe ser extendida por los _VOs_ (o _DTOs_). Se 
 
 = Campos =
 == Privados ==
-  * *__dicCampos:* ({{{Dictionary<System.String, Campo>}}}) Dicionario para relacionar los campos de la instancia a los Campos de la tabla.-
+  * *`__`dicCampos:* ({{{Dictionary<System.String, Campo>}}}) Dicionario para relacionar los campos de la instancia a los Campos de la tabla.-
   * *__dicPropiedades:* ({{{Dictionary<System.String, PropertyInfo>}}}) Diccionario para relacionar campos de tabla física y las Propiedades referenciando a los mismos por medio de Campos.-
 
 == Públicos ==
