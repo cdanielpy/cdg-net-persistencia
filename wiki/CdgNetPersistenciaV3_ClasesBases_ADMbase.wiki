@@ -54,17 +54,17 @@ Esta es una clase abstracta que debe ser extendida por las clases que harán el 
 
 
 ==Protegidos==
-* *`_`lSet_registros<T>({{{aFilasParam}}}):* ({{{List<T>}}}) Ejecuta la instanciación y asignación del OTD administrado por la clase.-
+* `_`lSet_registros<T>({{{aFilasParam}}}):* ({{{List<T>}}}) Ejecuta la instanciación y asignación del OTD administrado por la clase.-
     * _T:_ ({{{Tipo}}}) Clase de OTDbase extendida a los que seran 'convertidas' las filas del _DataTable_.-
     * _aFilasParam:_ ({{{DataRowCollection}}}) Arreglo de filas de un DataTable.-
-* *`_`Set_tabla<T>():* ({{{System.Void}}}) Establece los datos de la estructura física de la tabla en base a la instancia del OTDbase parámetro.-
+* `_`Set_tabla<T>():* ({{{System.Void}}}) Establece los datos de la estructura física de la tabla en base a la instancia del OTDbase parámetro.-
     * _T:_ ({{{Tipo}}}) Clase de OTDbase extendida que contiene los datos de la tabla física.-
-* *`_`SetListaCamposTabla():* ({{{System.Void}}}) Devuelve una cadena con los nombres de los campos con alias de la incluído.-
-* *`_`SetInsertSql<T>():* ({{{System.Void}}}) Establece la sentencia sql base de inserción de registros en la tabla administrada.-
+* `_`SetListaCamposTabla():* ({{{System.Void}}}) Devuelve una cadena con los nombres de los campos con alias de la incluído.-
+* `_`SetInsertSql<T>():* ({{{System.Void}}}) Establece la sentencia sql base de inserción de registros en la tabla administrada.-
     * _T:_ ({{{Tipo}}}) Clase de OTDbase extendida que contiene los datos de la tabla física.-
-* *`_`SetUpdateSql():* ({{{System.Void}}}) Establece la sentencia sql base de actualización de registros en la tabla administrada.-
+* `_`SetUpdateSql():* ({{{System.Void}}}) Establece la sentencia sql base de actualización de registros en la tabla administrada.-
     * _T:_ ({{{Tipo}}}) Clase de OTDbase extendida que contiene los datos de la tabla física.-
-* *`_`SetWhereSugerido():* ({{{System.Void}}}) Establece las condiciones de filtrado de registros para operaciones DML en base a la estructura especificada de la tabla.-
+* `_`SetWhereSugerido():* ({{{System.Void}}}) Establece las condiciones de filtrado de registros para operaciones DML en base a la estructura especificada de la tabla.-
     * _T:_ ({{{Tipo}}}) Clase de OTDbase extendida que contiene los datos de la tabla física.-
 
 
