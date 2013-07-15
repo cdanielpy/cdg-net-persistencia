@@ -46,9 +46,9 @@ Esta es una clase abstracta que debe ser extendida por las clases que harán el 
 
 =Métodos=
 ==Privados==
-* * __SetInsertSql():* ({{{System.Void}}}) Establece la sentencia sql base de inserción de registros en la tabla administrada.-
-* *__SetUpdateSql():* ({{{System.Void}}}) Establece la sentencia sql base de actualización de registros en la tabla administrada.-
-* *__SetWhereSugerido():* ({{{System.Void}}}) Establece las condiciones de filtrado de registros para operaciones DML en base a la estructura especificada de la tabla.-
+* *`__`SetInsertSql():* ({{{System.Void}}}) Establece la sentencia sql base de inserción de registros en la tabla administrada.-
+* *`__`SetUpdateSql():* ({{{System.Void}}}) Establece la sentencia sql base de actualización de registros en la tabla administrada.-
+* *`__`SetWhereSugerido():* ({{{System.Void}}}) Establece las condiciones de filtrado de registros para operaciones DML en base a la estructura especificada de la tabla.-
 
 
 ==Protegidos==
