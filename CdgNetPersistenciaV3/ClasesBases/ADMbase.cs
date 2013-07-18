@@ -197,14 +197,15 @@ namespace CdgNetPersistenciaV3.ClasesBases
         #region METODOS DML
 
         /// <summary>
-        /// Inserta un nuevo registro en la tabla a partir de la instancia
+        /// Inserta un nuevo registro en la tabla a partir de la instancia parámetro
         /// </summary>
-        /// <param name="oOTDbase">Instancia de la clase que representa a un registro</param>
+        /// <param name="oOTDbase">Instancia de la clase extendida de OTDbase de la cual se obtienen los datos
+        /// del registro a insertar</param>
         /// <returns>Lista [entero, resultado]</returns>
         public abstract List<object> lAgregar(OTDbase oOTDbase);
 
         /// <summary>
-        /// Inserta un nuevo registro en la tabla a partir de la instancia parametro
+        /// Inserta un nuevo registro en la tabla a partir de la instancia parámetro
         /// </summary>
         /// <typeparam name="T">Clase extendida de OTDbase de la cual se obtienen los datos
         /// del registro a insertar</typeparam>
@@ -251,14 +252,16 @@ namespace CdgNetPersistenciaV3.ClasesBases
         }
 
         /// <summary>
-        /// Actualiza el registro en la tabla a partir de la instancia parametro
+        /// Actualiza el registro en la tabla a partir de la instancia parámetro.
+        /// La instancia, a su vez, representa al registro a actualizar
         /// </summary>
         /// <param name="oOTDbase">Instancia de la clase que representa a un registro</param>
         /// <returns>Lista [entero, resultado]</returns>
         public abstract List<object> lActualizar(OTDbase oOTDbase);
 
         /// <summary>
-        /// Actualiza el registro en la tabla a partir de la instancia parametro
+        /// Actualiza el registro en la tabla a partir de la instancia parámetro.
+        /// La instancia, a su vez, representa al registro a actualizar
         /// </summary>
         /// <typeparam name="T">Clase extendida de OTDbase de la cual se obtienen los datos
         /// del registro a actualizar y sus nuevos valores</typeparam>
@@ -305,14 +308,14 @@ namespace CdgNetPersistenciaV3.ClasesBases
         }
 
         /// <summary>
-        /// Elimina el registro de la tabla representado por la instancia parametro
+        /// Elimina el registro de la tabla representado por la instancia parámetro
         /// </summary>
         /// <param name="oOTDbase">Instancia de la clase que representa a un registro</param>
         /// <returns>Lista [entero, resultado]</returns>
         public abstract List<object> lEliminar(OTDbase oOTDbase);
 
         /// <summary>
-        /// Elimina el registro de la tabla representado por la instancia parametro
+        /// Elimina el registro de la tabla representado por la instancia parámetro
         /// </summary>
         /// <typeparam name="T">Clase extendida de OTDbase de la cual se obtienen los datos
         /// del registro a eliminar</typeparam>
@@ -354,14 +357,16 @@ namespace CdgNetPersistenciaV3.ClasesBases
         }
 
         /// <summary>
-        /// Obtiene una unica instancia que coincide con el Id buscado
+        /// Obtiene una única instancia que coincide con el ID de la instancia parámetro
+        /// , o, en su defecto, por los demas valores de atributos no nulos
         /// </summary>
         /// <param name="oOTDbase">Instancia de la clase que representa a un registro</param>
         /// <returns>Lista [entero, resultado]</returns>
         public abstract List<object> lGet_elemento(OTDbase oOTDbase);
 
         /// <summary>
-        /// Obtiene una unica instancia que coincide con el Id buscado
+        /// Obtiene una única instancia que coincide con el ID de la instancia parámetro
+        /// , o, en su defecto, por los demas valores de atributos no nulos
         /// </summary>
         /// <typeparam name="T">Clase extendida de OTDbase a la cual se transfieren los datos
         /// del registro</typeparam>
@@ -611,10 +616,9 @@ namespace CdgNetPersistenciaV3.ClasesBases
         #region METODOS DE PASO OTD -> DATOS - DATOS -> OTD
 
         /// <summary>
-        /// Ejecuta la instanciacion y asignacion de los OTDs 
+        /// Ejecuta la instanciación y asignación del OTD administrado por la clase
         /// </summary>
         /// <typeparam name="T">Clase de OTDbase extendida a los que seran 'convertidas' las filas</typeparam>
-        // <param name="lInstancias">Lista de OTDs a cargar con las instancias generadas</param>
         /// <param name="aFilasParam">Arreglo de filas de un DataTable</param>
         /// <see cref="http://www.csharp-examples.net/reflection-examples/" />
         protected List<T> _lSet_registros<T>(DataRowCollection aFilasParam)
@@ -674,8 +678,10 @@ namespace CdgNetPersistenciaV3.ClasesBases
         #region GENERADORES DE CODIGO DML
 
         /// <summary>
-        /// Instancia relacionada de la clase TBLbase
+        /// Establece los datos de la estructura física de la tabla en base 
+        /// a la instancia del OTDbase parámetro
         /// </summary>
+        /// <typeparam name="T">Clase de OTDbase extendida que contiene los datos de la tabla física</typeparam>
         protected void _Set_tabla<T>()
         {
             //si aun no esta instanciado
@@ -694,7 +700,7 @@ namespace CdgNetPersistenciaV3.ClasesBases
                         //tomamos el nombre de la tabla asignada
                         __cNombreTabla = (oAtributo as Tabla).Nombre;
 
-                        //evaluamos el tipo de marcador de parametro segun el SGBD
+                        //evaluamos el tipo de marcador de parámetro segun el SGBD
                         switch ((oAtributo as Tabla).TipoSGBD)
                         {
                             case Tabla.SGBD.SQL_SERVER:
@@ -744,10 +750,9 @@ namespace CdgNetPersistenciaV3.ClasesBases
          * **/
 
         /// <summary>
-        ///  Devuelve una cadena con los nombres de los campos con alias de la incluido
+        /// Devuelve una cadena con los nombres de los campos con alias de la incluído
         /// TABLA.CAMPO0, TABLA.CAMPO1, TABLA.CAMPO2, ...
         /// </summary>
-        /// <typeparam name="T">Clase de OTDbase extendida a los que representan a las filas de la tabla</typeparam>
         protected void _SetListaCamposTabla()
         {
             //la escribimos
@@ -766,9 +771,9 @@ namespace CdgNetPersistenciaV3.ClasesBases
         }
 
         /// <summary>
-        /// Establece la sentencia base de insercion de registros en la tabla administrada
+        /// Establece la sentencia sql base de inserción de registros en la tabla administrada
         /// </summary>
-        /// <typeparam name="T">Clase de OTDbase extendida a los que representan a las filas de la tabla</typeparam>
+        /// <typeparam name="T">Clase de OTDbase extendida que contiene los datos de la tabla física</typeparam>
         protected void _SetInsertSql<T>()
         {
             //creamos una instancia
@@ -827,9 +832,9 @@ namespace CdgNetPersistenciaV3.ClasesBases
         }
 
         /// <summary>
-        /// Establece la sentencia base de actualizacion de registros en la tabla administrada
+        /// Establece la sentencia sql base de actualización de registros en la tabla administrada
         /// </summary>
-        /// <typeparam name="T">Clase de OTDbase extendida a los que representan a las filas de la tabla</typeparam>
+        /// <typeparam name="T">Clase de OTDbase extendida que contiene los datos de la tabla física</typeparam>
         protected void _SetUpdateSql<T>()
         {
             //creamos una instancia
@@ -887,7 +892,7 @@ namespace CdgNetPersistenciaV3.ClasesBases
         /// Establece las condiciones de filtrado de registros para operaciones
         /// DML en base a la estructura especificada de la tabla
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="T">Clase de OTDbase extendida que contiene los datos de la tabla física</typeparam>
         protected void _SetWhereSugerido<T>()
         {
             //creamos una instancia
@@ -983,7 +988,7 @@ namespace CdgNetPersistenciaV3.ClasesBases
          * **/
 
         /// <summary>
-        /// Establece la sentencia base de insercion de registros en la tabla administrada
+        /// Establece la sentencia sql base de inserción de registros en la tabla administrada
         /// </summary>
         private void __SetInsertSql()
         {
@@ -1040,7 +1045,7 @@ namespace CdgNetPersistenciaV3.ClasesBases
         }
 
         /// <summary>
-        /// Establece la sentencia base de actualizacion de registros en la tabla administrada
+        /// Establece la sentencia sql base de actualización de registros en la tabla administrada
         /// </summary>
         private void __SetUpdateSql()
         {
@@ -1191,7 +1196,7 @@ namespace CdgNetPersistenciaV3.ClasesBases
         #region SOBREESCRITOS
 
         /// <summary>
-        /// Devuelve la representacion de la clase
+        /// Devuelve la representacion de cadena de la clase
         /// </summary>
         /// <returns>Representacion de cadena de la clase</returns>
         public override string ToString()
