@@ -216,18 +216,22 @@ namespace CdgNetPersistenciaV3
 
             try
             {
-                //recorremos el diccionario de parametros
-                foreach (string cNombre in dicParametros.Keys)
+                //si se recibe el diccionario de parametros 
+                if (dicParametros != null)
                 {
-                    //si es nulo el valor
-                    if (dicParametros[cNombre] == null)
-                        //lo reemplazamos en la sentencia y lo eliminamos del diccionario de parametros
-                        if (cSentenciaSQL.IndexOf(MARCADOR_PARAMETRO + cNombre + ",") > -1)
-                            cSentenciaSQL = cSentenciaSQL.Replace(MARCADOR_PARAMETRO + cNombre + ",", "NULL,");
-                        else if (cSentenciaSQL.IndexOf(MARCADOR_PARAMETRO + cNombre + " ") > -1)
-                            cSentenciaSQL = cSentenciaSQL.Replace(MARCADOR_PARAMETRO + cNombre + " ", "NULL ");
-                        else if (cSentenciaSQL.IndexOf(MARCADOR_PARAMETRO + cNombre) > -1)
-                            cSentenciaSQL = cSentenciaSQL.Replace(MARCADOR_PARAMETRO + cNombre, "NULL");
+                    //lo recorremos
+                    foreach (string cNombre in dicParametros.Keys)
+                    {
+                        //si es nulo el valor
+                        if (dicParametros[cNombre] == null)
+                            //lo reemplazamos en la sentencia y lo eliminamos del diccionario de parametros
+                            if (cSentenciaSQL.IndexOf(MARCADOR_PARAMETRO + cNombre + ",") > -1)
+                                cSentenciaSQL = cSentenciaSQL.Replace(MARCADOR_PARAMETRO + cNombre + ",", "NULL,");
+                            else if (cSentenciaSQL.IndexOf(MARCADOR_PARAMETRO + cNombre + " ") > -1)
+                                cSentenciaSQL = cSentenciaSQL.Replace(MARCADOR_PARAMETRO + cNombre + " ", "NULL ");
+                            else if (cSentenciaSQL.IndexOf(MARCADOR_PARAMETRO + cNombre) > -1)
+                                cSentenciaSQL = cSentenciaSQL.Replace(MARCADOR_PARAMETRO + cNombre, "NULL");
+                    }
                 }
 
                 //creamos una instancia de comando
@@ -254,13 +258,17 @@ namespace CdgNetPersistenciaV3
                 //configuramos el comando
                 oComandoSQL.CommandTimeout = nTiempoComandos;
 
-                //recorremos el diccionario de parametros
-                foreach (string cNombre in dicParametros.Keys)
+                //si se recibe el diccionario de parametros 
+                if (dicParametros != null)
                 {
-                    //si el valor NO es nulo
-                    if (dicParametros[cNombre] != null)
-                        //lo agregamos al comando los parametros y sus valores
-                        oComandoSQL.Parameters.AddWithValue(cNombre, dicParametros[cNombre]);
+                    //lo recorremos
+                    foreach (string cNombre in dicParametros.Keys)
+                    {
+                        //si el valor NO es nulo
+                        if (dicParametros[cNombre] != null)
+                            //lo agregamos al comando los parametros y sus valores
+                            oComandoSQL.Parameters.AddWithValue(cNombre, dicParametros[cNombre]);
+                    }
                 }
 
                 _Mostrar_SQL(oComandoSQL.CommandText);
@@ -296,18 +304,22 @@ namespace CdgNetPersistenciaV3
 
             try
             {
-                //recorremos el diccionario de parametros
-                foreach (string cNombre in dicParametros.Keys)
+                //si se recibe el diccionario de parametros 
+                if (dicParametros != null)
                 {
-                    //si es nulo el valor
-                    if (dicParametros[cNombre] == null)
-                        //lo reemplazamos en la sentencia y lo eliminamos del diccionario de parametros
-                        if (cConsultaSQL.IndexOf(MARCADOR_PARAMETRO + cNombre + ",") > -1)
-                            cConsultaSQL = cConsultaSQL.Replace(MARCADOR_PARAMETRO + cNombre + ",", "NULL,");
-                        else if (cConsultaSQL.IndexOf(MARCADOR_PARAMETRO + cNombre + " ") > -1)
-                            cConsultaSQL = cConsultaSQL.Replace(MARCADOR_PARAMETRO + cNombre + " ", "NULL ");
-                        else if (cConsultaSQL.IndexOf(MARCADOR_PARAMETRO + cNombre) > -1)
-                            cConsultaSQL = cConsultaSQL.Replace(MARCADOR_PARAMETRO + cNombre, "NULL");
+                    //lo recorremos
+                    foreach (string cNombre in dicParametros.Keys)
+                    {
+                        //si es nulo el valor
+                        if (dicParametros[cNombre] == null)
+                            //lo reemplazamos en la sentencia y lo eliminamos del diccionario de parametros
+                            if (cConsultaSQL.IndexOf(MARCADOR_PARAMETRO + cNombre + ",") > -1)
+                                cConsultaSQL = cConsultaSQL.Replace(MARCADOR_PARAMETRO + cNombre + ",", "NULL,");
+                            else if (cConsultaSQL.IndexOf(MARCADOR_PARAMETRO + cNombre + " ") > -1)
+                                cConsultaSQL = cConsultaSQL.Replace(MARCADOR_PARAMETRO + cNombre + " ", "NULL ");
+                            else if (cConsultaSQL.IndexOf(MARCADOR_PARAMETRO + cNombre) > -1)
+                                cConsultaSQL = cConsultaSQL.Replace(MARCADOR_PARAMETRO + cNombre, "NULL");
+                    }
                 }
 
                 //creamos una instancia de comando
@@ -334,13 +346,17 @@ namespace CdgNetPersistenciaV3
                 //configuramos el comando
                 oComandoSQL.CommandTimeout = nTiempoComandos;
 
-                //recorremos el diccionario de parametros
-                foreach (string cNombre in dicParametros.Keys)
+                //si se recibe el diccionario de parametros 
+                if (dicParametros != null)
                 {
-                    //si el valor NO es nulo
-                    if (dicParametros[cNombre] != null)
-                        //lo agregamos al comando los parametros y sus valores
-                        oComandoSQL.Parameters.AddWithValue(cNombre, dicParametros[cNombre]);
+                    //lo recorremos
+                    foreach (string cNombre in dicParametros.Keys)
+                    {
+                        //si el valor NO es nulo
+                        if (dicParametros[cNombre] != null)
+                            //lo agregamos al comando los parametros y sus valores
+                            oComandoSQL.Parameters.AddWithValue(cNombre, dicParametros[cNombre]);
+                    }
                 }
 
                 SqlDataAdapter daAdaptador = new SqlDataAdapter(oComandoSQL);
@@ -381,18 +397,22 @@ namespace CdgNetPersistenciaV3
 
             try
             {
-                //recorremos el diccionario de parametros
-                foreach (string cNombre in dicParametros.Keys)
+                //si se recibe el diccionario de parametros 
+                if (dicParametros != null)
                 {
-                    //si es nulo el valor
-                    if (dicParametros[cNombre] == null)
-                        //lo reemplazamos en la sentencia y lo eliminamos del diccionario de parametros
-                        if (cConsultaSQL.IndexOf(MARCADOR_PARAMETRO + cNombre + ",") > -1)
-                            cConsultaSQL = cConsultaSQL.Replace(MARCADOR_PARAMETRO + cNombre + ",", "NULL,");
-                        else if (cConsultaSQL.IndexOf(MARCADOR_PARAMETRO + cNombre + " ") > -1)
-                            cConsultaSQL = cConsultaSQL.Replace(MARCADOR_PARAMETRO + cNombre + " ", "NULL ");
-                        else if (cConsultaSQL.IndexOf(MARCADOR_PARAMETRO + cNombre) > -1)
-                            cConsultaSQL = cConsultaSQL.Replace(MARCADOR_PARAMETRO + cNombre, "NULL");
+                    //lo recorremos
+                    foreach (string cNombre in dicParametros.Keys)
+                    {
+                        //si es nulo el valor
+                        if (dicParametros[cNombre] == null)
+                            //lo reemplazamos en la sentencia y lo eliminamos del diccionario de parametros
+                            if (cConsultaSQL.IndexOf(MARCADOR_PARAMETRO + cNombre + ",") > -1)
+                                cConsultaSQL = cConsultaSQL.Replace(MARCADOR_PARAMETRO + cNombre + ",", "NULL,");
+                            else if (cConsultaSQL.IndexOf(MARCADOR_PARAMETRO + cNombre + " ") > -1)
+                                cConsultaSQL = cConsultaSQL.Replace(MARCADOR_PARAMETRO + cNombre + " ", "NULL ");
+                            else if (cConsultaSQL.IndexOf(MARCADOR_PARAMETRO + cNombre) > -1)
+                                cConsultaSQL = cConsultaSQL.Replace(MARCADOR_PARAMETRO + cNombre, "NULL");
+                    }
                 }
 
                 //creamos una instancia de comando
@@ -421,13 +441,17 @@ namespace CdgNetPersistenciaV3
 
                 _Mostrar_SQL(oComandoSQL.CommandText);
 
-                //recorremos el diccionario de parametros
-                foreach (string cNombre in dicParametros.Keys)
+                //si se recibe el diccionario de parametros 
+                if (dicParametros != null)
                 {
-                    //si el valor NO es nulo
-                    if (dicParametros[cNombre] != null)
-                        //lo agregamos al comando los parametros y sus valores
-                        oComandoSQL.Parameters.AddWithValue(cNombre, dicParametros[cNombre]);
+                    //lo recorremos
+                    foreach (string cNombre in dicParametros.Keys)
+                    {
+                        //si el valor NO es nulo
+                        if (dicParametros[cNombre] != null)
+                            //lo agregamos al comando los parametros y sus valores
+                            oComandoSQL.Parameters.AddWithValue(cNombre, dicParametros[cNombre]);
+                    }
                 }
 
                 //ejecutamos la consulta
@@ -461,18 +485,22 @@ namespace CdgNetPersistenciaV3
 
             try
             {
-                //recorremos el diccionario de parametros
-                foreach (string cNombre in dicParametros.Keys)
+                //si se recibe el diccionario de parametros 
+                if (dicParametros != null)
                 {
-                    //si es nulo el valor
-                    if (dicParametros[cNombre] == null)
-                        //lo reemplazamos en la sentencia y lo eliminamos del diccionario de parametros
-                        if (cProcedimiento.IndexOf(MARCADOR_PARAMETRO + cNombre + ",") > -1)
-                            cProcedimiento = cProcedimiento.Replace(MARCADOR_PARAMETRO + cNombre + ",", "NULL,");
-                        else if (cProcedimiento.IndexOf(MARCADOR_PARAMETRO + cNombre + " ") > -1)
-                            cProcedimiento = cProcedimiento.Replace(MARCADOR_PARAMETRO + cNombre + " ", "NULL ");
-                        else if (cProcedimiento.IndexOf(MARCADOR_PARAMETRO + cNombre) > -1)
-                            cProcedimiento = cProcedimiento.Replace(MARCADOR_PARAMETRO + cNombre, "NULL");
+                    //lo recorremos
+                    foreach (string cNombre in dicParametros.Keys)
+                    {
+                        //si es nulo el valor
+                        if (dicParametros[cNombre] == null)
+                            //lo reemplazamos en la sentencia y lo eliminamos del diccionario de parametros
+                            if (cProcedimiento.IndexOf(MARCADOR_PARAMETRO + cNombre + ",") > -1)
+                                cProcedimiento = cProcedimiento.Replace(MARCADOR_PARAMETRO + cNombre + ",", "NULL,");
+                            else if (cProcedimiento.IndexOf(MARCADOR_PARAMETRO + cNombre + " ") > -1)
+                                cProcedimiento = cProcedimiento.Replace(MARCADOR_PARAMETRO + cNombre + " ", "NULL ");
+                            else if (cProcedimiento.IndexOf(MARCADOR_PARAMETRO + cNombre) > -1)
+                                cProcedimiento = cProcedimiento.Replace(MARCADOR_PARAMETRO + cNombre, "NULL");
+                    }
                 }
 
                 //creamos una instancia de comando
@@ -501,13 +529,17 @@ namespace CdgNetPersistenciaV3
 
                 _Mostrar_SQL(oComandoSQL.CommandText);
 
-                //recorremos el diccionario de parametros
-                foreach (string cNombre in dicParametros.Keys)
+                //si se recibe el diccionario de parametros 
+                if (dicParametros != null)
                 {
-                    //si el valor NO es nulo
-                    if (dicParametros[cNombre] != null)
-                        //lo agregamos al comando los parametros y sus valores
-                        oComandoSQL.Parameters.AddWithValue(cNombre, dicParametros[cNombre]);
+                    //lo recorremos
+                    foreach (string cNombre in dicParametros.Keys)
+                    {
+                        //si el valor NO es nulo
+                        if (dicParametros[cNombre] != null)
+                            //lo agregamos al comando los parametros y sus valores
+                            oComandoSQL.Parameters.AddWithValue(cNombre, dicParametros[cNombre]);
+                    }
                 }
 
                 //ejecutamos la consulta
