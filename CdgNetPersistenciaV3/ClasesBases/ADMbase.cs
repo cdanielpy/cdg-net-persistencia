@@ -83,7 +83,9 @@ namespace CdgNetPersistenciaV3.ClasesBases
         /// </summary>
         private string __cNombreTabla;
 
-
+        //diccionarios para datos de campos de los OTD
+       Dictionary<string, Campo> __dicCampos;
+       Dictionary<string, PropertyInfo> __dicPropiedades;
 
         #endregion
 
@@ -95,9 +97,21 @@ namespace CdgNetPersistenciaV3.ClasesBases
         /// Contructor de la clase
         /// </summary>
         /// <param name="oConectorBase">Instancia de utilería de interacción con la base de datos</param>
-        public ADMbase(ConectorBase oConectorBase)
+        /// <param name="oOTDextendido">Instancia de la clase heredada de OTDbase que sera administrada por esta</param>
+        protected ADMbase(ConectorBase oConectorBase, OTDbase oOTDextendido)
         {
+            //tomamos las instancias parametro
             _oConector = oConectorBase;
+            __oInstanciaOTD = oOTDextendido;
+            __tTipoOTD = oOTDextendido.GetType();
+
+            //instanciamos los nuevos diccionarios
+            __dicCampos = new Dictionary<string, Campo>();
+            __dicPropiedades = new Dictionary<string, PropertyInfo>();
+
+            //tomamos los datos de la tabla que representa el OTD administrado
+            _Set_tabla();
+
         }
 
 
@@ -225,10 +239,10 @@ namespace CdgNetPersistenciaV3.ClasesBases
                 if (__tTipoOTD == typeof(T))
                 {
                     //ejecutamos la sentencia de actualizacion
-                    lResultado = _oConector.lEjecutar_sentencia(Insert_sql, oOTDbase.ParametrosDML(true));
+                    lResultado = _oConector.lEjecutar_sentencia(Insert_sql, this.ParametrosDML(oOTDbase, true));
 
                     //si se inserto correctamente, recuperamos la misma instancia desde la base de datos
-                    if ((int)lResultado[0] == 1) return this.lGet_elemento(oOTDbase);
+                    if ((int)lResultado[0] == 1) return this.lGet_elemento<T>(oOTDbase);
 
                 }
                 else
@@ -266,6 +280,7 @@ namespace CdgNetPersistenciaV3.ClasesBases
         /// <typeparam name="T">Clase extendida de OTDbase de la cual se obtienen los datos
         /// del registro a actualizar y sus nuevos valores</typeparam>
         /// <param name="oOTDbase">Instancia de la clase que representa a un registro</param>
+        /// <remarks>Para utilizar este metodo la instancia debe tener al menos un campo Identificador</remarks>
         /// <returns>Lista [entero, resultado]</returns>
         public virtual List<object> lActualizar<T>(OTDbase oOTDbase)
         {
@@ -280,10 +295,10 @@ namespace CdgNetPersistenciaV3.ClasesBases
                 if (__tTipoOTD == typeof(T))
                 {
                     //ejecutamos la sentencia de actualizacion
-                    lResultado = _oConector.lEjecutar_sentencia(Update_sql, oOTDbase.ParametrosDML(true));
+                    lResultado = _oConector.lEjecutar_sentencia(Update_sql, this.ParametrosDML(oOTDbase, true));
 
                     //si se inserto correctamente, recuperamos la misma instancia desde la base de datos
-                    if ((int)lResultado[0] == 1) return this.lGet_elemento(oOTDbase);
+                    if ((int)lResultado[0] == 1) return this.lGet_elemento<T>(oOTDbase);
 
                 }
                 else
@@ -320,6 +335,7 @@ namespace CdgNetPersistenciaV3.ClasesBases
         /// <typeparam name="T">Clase extendida de OTDbase de la cual se obtienen los datos
         /// del registro a eliminar</typeparam>
         /// <param name="oOTDbase">Instancia de la clase que representa al registro a eliminar</param>
+        /// <remarks>Para utilizar este metodo la instancia debe tener al menos un campo Identificador</remarks>
         /// <returns>Lista [entero, resultado]</returns>
         public virtual List<object> lEliminar<T>(OTDbase oOTDbase)
         {
@@ -334,7 +350,7 @@ namespace CdgNetPersistenciaV3.ClasesBases
                 if (__tTipoOTD == typeof(T))
                 {
                     //ejecutamos la sentencia de actualizacion
-                    return _oConector.lEjecutar_sentencia(Delete_sql, oOTDbase.ParametrosDML(true));
+                    return _oConector.lEjecutar_sentencia(Delete_sql, this.ParametrosDML(oOTDbase, true));
                 }
                 else
                 {
@@ -387,14 +403,11 @@ namespace CdgNetPersistenciaV3.ClasesBases
                     // variable para el filtrado
                     string cFiltroWhere = string.Empty;
 
-                    //tomamos el diccionario de propiedades de la instancia
-                    var dicPropiedades = oOTDbuscado.Get_dic_propiedades();
-
                     //recorremos los campos de la tabla referenciada
-                    foreach (string cNombreCampo in dicPropiedades.Keys)
+                    foreach (string cNombreCampo in __dicPropiedades.Keys)
                     {
                         //llamamos al metodo getter de la propiedad actual
-                        var oValor = __tTipoOTD.InvokeMember(dicPropiedades[cNombreCampo].Name
+                        var oValor = __tTipoOTD.InvokeMember(__dicPropiedades[cNombreCampo].Name
                                                             , BindingFlags.GetProperty | BindingFlags.Instance | BindingFlags.Public
                                                             , null, oOTDbuscado
                                                             , new object[] { }
@@ -404,7 +417,7 @@ namespace CdgNetPersistenciaV3.ClasesBases
                         if (oValor != null)
                         {
                             //si es un identificador y no esta vacio
-                            if (oOTDbuscado.Get_dic_campos()[cNombreCampo].Identificador
+                            if (__dicCampos[cNombreCampo].Identificador
                                     && oValor.ToString() != "0"
                                     && oValor.ToString() != string.Empty
                                 )
@@ -414,72 +427,69 @@ namespace CdgNetPersistenciaV3.ClasesBases
                                     cFiltroWhere = string.Format(" WHERE {0} = {1}{2} "
                                                                 , cNombreCampo
                                                                 , this.cMarcaParametro
-                                                                , oOTDbuscado.Get_dic_campos()[cNombreCampo].Nombre.ToLower()
+                                                                , __dicCampos[cNombreCampo].Nombre.ToLower()
                                                                 );
                                 else
                                     //sino, es un AND
                                     cFiltroWhere += string.Format(" AND {0} = {1}{2} "
                                                                 , cNombreCampo
                                                                 , this.cMarcaParametro
-                                                                , oOTDbuscado.Get_dic_campos()[cNombreCampo].Nombre.ToLower()
+                                                                , __dicCampos[cNombreCampo].Nombre.ToLower()
                                                                 );
                             }
-                            else if (!oOTDbuscado.Get_dic_campos()[cNombreCampo].Identificador)
+                            else if (!__dicCampos[cNombreCampo].Identificador)
                             {
                                 //si es de tipo DateTime
                                 if (oValor.GetType() == typeof(DateTime))
                                     //si es igual al valor minimo de este tipo, lo saltamos
-                                    if (((DateTime)oValor).Date == ADMbase.FECHA_MARCA_NULA) goto salto;
+                                    if (((DateTime)oValor).Date == ADMbase.FECHA_MARCA_NULA) continue;
 
                                 //si es de tipo long
                                 if (oValor.GetType() == typeof(long))
                                     //si es igual al valor minimo de este tipo, lo saltamos
-                                    if (((long)oValor) == long.MinValue) goto salto;
+                                    if (((long)oValor) == long.MinValue) continue;
 
                                 //si es de tipo int
                                 if (oValor.GetType() == typeof(int))
                                     //si es igual al valor minimo de este tipo, lo saltamos
-                                    if (((int)oValor) == int.MinValue) goto salto;
+                                    if (((int)oValor) == int.MinValue) continue;
 
                                 //si es de tipo double
                                 if (oValor.GetType() == typeof(double))
                                     //si es igual al valor minimo de este tipo, lo saltamos
-                                    if (((double)oValor) == double.MinValue) goto salto;
+                                    if (((double)oValor) == double.MinValue) continue;
 
                                 //si es de tipo decimal
                                 if (oValor.GetType() == typeof(decimal))
                                     //si es igual al valor minimo de este tipo, lo saltamos
-                                    if (((decimal)oValor) == decimal.MinValue) goto salto;
+                                    if (((decimal)oValor) == decimal.MinValue) continue;
 
                                 //si es de tipo float
                                 if (oValor.GetType() == typeof(float))
                                     //si es igual al valor minimo de este tipo, lo saltamos
-                                    if (((float)oValor) == float.MinValue) goto salto;
+                                    if (((float)oValor) == float.MinValue) continue;
 
                                 //lo agregamos a la condicion de filtrado
                                 if (cFiltroWhere == string.Empty)
                                     cFiltroWhere = string.Format(" WHERE {0} = {1}{2} "
                                                                 , cNombreCampo
                                                                 , this.cMarcaParametro
-                                                                , oOTDbuscado.Get_dic_campos()[cNombreCampo].Nombre.ToLower()
+                                                                , __dicCampos[cNombreCampo].Nombre.ToLower()
                                                                 );
                                 else
                                     //sino, es un AND
                                     cFiltroWhere += string.Format(" AND {0} = {1}{2} "
                                                                 , cNombreCampo
                                                                 , this.cMarcaParametro
-                                                                , oOTDbuscado.Get_dic_campos()[cNombreCampo].Nombre.ToLower()
+                                                                , __dicCampos[cNombreCampo].Nombre.ToLower()
                                                                 );
                             }
 
-                        //etiqueta para saltarse la adicion de elementos a la condicion de filtrado
-                        salto:
-                            var i = 0;
                         }
                     }
 
                     //invocamos al metodo de recuperacion de registros desde la tabla
-                    lResultado = this.lGet_elementos(cFiltroWhere, oOTDbuscado.ParametrosDML(false));
+                    lResultado = this.lGet_elementos(cFiltroWhere, this.ParametrosDML(oOTDbuscado, false));
 
                     //si se ejecuto correctamente, devolvemos solo el primer elemento de la lista de instancias devueltas
                     if ((int)lResultado[0] == 1) return new List<object>() { 1, (lResultado[1] as List<T>)[0] };
@@ -537,7 +547,7 @@ namespace CdgNetPersistenciaV3.ClasesBases
                 lResultado = _oConector.lEjecutar_consulta(Select_sql + cFiltroWhere, dicParametros);
 
                 //si se ejecuto correctamente,invocamos al metodo de conversion a coleccion de OTDs y establecemos el resultado
-                if ((int)lResultado[0] == 1) return new List<object>() { 1, _lSet_registros<T>((lResultado[1] as DataTable).Rows) };
+                if ((int)lResultado[0] == 1) return new List<object>() { 1, lSet_registros<T>((lResultado[1] as DataTable).Rows) };
 
             }
             catch (Exception ex)
@@ -621,7 +631,7 @@ namespace CdgNetPersistenciaV3.ClasesBases
         /// <typeparam name="T">Clase de OTDbase extendida a los que seran 'convertidas' las filas</typeparam>
         /// <param name="aFilasParam">Arreglo de filas de un DataTable</param>
         /// <see cref="http://www.csharp-examples.net/reflection-examples/" />
-        protected List<T> _lSet_registros<T>(DataRowCollection aFilasParam)
+        public List<T> lSet_registros<T>(DataRowCollection aFilasParam)
         {
             //reinstanciamos la lista a cargar
             List<T> lInstancias = new List<T>();
@@ -635,16 +645,13 @@ namespace CdgNetPersistenciaV3.ClasesBases
                     //creamos una instancia del OTD extendido
                     object oInstanciaOTD = Activator.CreateInstance<T>();
 
-                    //tomamos el diccionario de propiedades de la instancia
-                    var dicPropiedades = (oInstanciaOTD as OTDbase).Get_dic_propiedades();
-
-                    //recorremos los campos de la tabla referenciada
-                    foreach (string cNombreCampo in dicPropiedades.Keys)
+                    //recorremos las propiedades a asignar
+                    foreach (string cNombreCampo in __dicPropiedades.Keys)
                     {
                         //si no es un valor nulo
                         if (dr[cNombreCampo].GetType() != typeof(DBNull))
                             //llamamos al metodo setter actual
-                            __tTipoOTD.InvokeMember(dicPropiedades[cNombreCampo].Name
+                            __tTipoOTD.InvokeMember(__dicPropiedades[cNombreCampo].Name
                                                     , BindingFlags.SetProperty | BindingFlags.Instance | BindingFlags.Public
                                                     , null, oInstanciaOTD
                                                     , new object[] { dr[cNombreCampo] }
@@ -681,15 +688,11 @@ namespace CdgNetPersistenciaV3.ClasesBases
         /// Establece los datos de la estructura física de la tabla en base 
         /// a la instancia del OTDbase parámetro
         /// </summary>
-        /// <typeparam name="T">Clase de OTDbase extendida que contiene los datos de la tabla física</typeparam>
-        protected void _Set_tabla<T>()
+        protected void _Set_tabla()
         {
             //si aun no esta instanciado
             if (__cNombreTabla == null)
             {
-                //tomamos el tipo de la instancia
-                __tTipoOTD = typeof(T);
-
                 //recorremos sus atributos
                 //http://msdn.microsoft.com/es-es/library/z919e8tw%28v=vs.80%29.aspx
                 foreach (var oAtributo in __tTipoOTD.GetCustomAttributes(true))
@@ -723,264 +726,86 @@ namespace CdgNetPersistenciaV3.ClasesBases
                     }
                 }
 
-                //creamos una instancia
-                __oInstanciaOTD = (Activator.CreateInstance<T>() as OTDbase);
+                //tomamos los nombres datos de campos
+                _Set_campos();
 
                 //invocamos a los metodos generadores de DML
                 _SetListaCamposTabla();
 
-                /**
-                 * comentado para posponer la generacion de codigos DML hasta que sean solicitados
-                 * **/
-
-                /*
-                _SetWhereSugerido<T>();
-                _SetInsertSql<T>();
-                _SetUpdateSql<T>();
-                */
-
-
             }
 
         }
+
 
 
         /**
          * GENERADORES PARA SOBREESCRIBIR LOS ACTUALES DESDE LA CLASE EXTENDIDA
          * **/
 
+
+        /// <summary>
+        /// Establece los datos de la tabla fisica administrada
+        /// </summary>
+        protected void _Set_campos() {
+            
+            //tomamos los campos de la clase
+            PropertyInfo[] aPropiedades = __tTipoOTD.GetProperties(BindingFlags.GetProperty
+                                                                    | BindingFlags.Instance
+                                                                    | BindingFlags.Public
+                                                                    );
+
+            //una variable para el indice de campos
+            var nIdx = 0;
+
+            //recorremos los metodos de la clase actual
+            foreach (var oPropiedad in aPropiedades)
+            {
+                //http://msdn.microsoft.com/es-es/library/z919e8tw%28v=vs.80%29.aspx
+                //recorremos sus atributos
+                foreach (object atributo in oPropiedad.GetCustomAttributes(true))
+                {
+                    //si es del tipo Campo
+                    if (atributo is Campo)
+                    {
+                        //lo tomamos 
+                        Campo oCampo = (Campo)atributo;
+
+                        //agregamos la propiedad al diccionario
+                        __dicPropiedades.Add(oCampo.Nombre, oPropiedad);
+
+                        //le asignamos su posicion si no lo tiene aun
+                        if (oCampo.Indice == 0) oCampo.Indice = nIdx;
+
+                        //le asignamos su tipo
+                        oCampo.Tipo = oPropiedad.PropertyType;
+
+                        //si el campo NO esta en en el dicionario ya
+                        if (!__dicCampos.ContainsKey(oCampo.Nombre))
+                            //tomamos la instancia correspondiente y la agregamos al diccionario
+                            __dicCampos.Add(oCampo.Nombre, oCampo);
+
+                        //incrementamos el contador
+                        nIdx++;
+                    }
+                }
+            }
+        
+        }
+        
         /// <summary>
         /// Devuelve una cadena con los nombres de los campos con alias de la incluído
         /// TABLA.CAMPO0, TABLA.CAMPO1, TABLA.CAMPO2, ...
         /// </summary>
         protected void _SetListaCamposTabla()
         {
-            //la escribimos
-            StringBuilder sbLista = new StringBuilder();
+            //pasamos los nombres de campos a una lista auxiliar
+            var lCampos = new List<string>();
+            foreach(string cCampo in __dicCampos.Keys) lCampos.Add(cCampo);
 
-            //recorremos los campos
-            foreach (Campo oCampo in __oInstanciaOTD.Get_dic_campos().Values)
-            {
-                if (sbLista.Length.Equals(0)) sbLista.Append(__cNombreTabla).Append(".").Append(oCampo.Nombre);
-                else sbLista.Append(", ").Append(__cNombreTabla).Append(".").Append(oCampo.Nombre);
-            }
-
-            //tomamos la cadena
-            this._cListaCamposTabla = sbLista.ToString();
-
-        }
-
-        /// <summary>
-        /// Establece la sentencia sql base de inserción de registros en la tabla administrada
-        /// </summary>
-        /// <typeparam name="T">Clase de OTDbase extendida que contiene los datos de la tabla física</typeparam>
-        protected void _SetInsertSql<T>()
-        {
-            //creamos una instancia
-            OTDbase oInstanciaOTD = (Activator.CreateInstance<T>() as OTDbase);
-
-            //concatenamos la lista de campos NO autogenerados
-            StringBuilder sbCampos = new StringBuilder();
-            StringBuilder sbValores = new StringBuilder();
-            int c = 1;
-
-            //recorremos los campos de la tabla
-            foreach (Campo oCampo in oInstanciaOTD.Get_dic_campos().Values)
-            {
-                //si no es generado por el propio SGBD
-                if (!oCampo.AutoGenerado)
-                {
-                    if (sbCampos.ToString().Equals(string.Empty)) sbCampos.Append(oCampo.Nombre.ToUpper());
-                    else sbCampos.Append(", ").Append(oCampo.Nombre.ToUpper());
-
-                    //si la marca es SQLite
-                    if (this.cMarcaParametro == SQLiteUtiles.MARCADOR_PARAMETRO)
-                        //utilizamos nros. en lugar de nombres de campos
-                        if (sbValores.ToString().Equals(string.Empty))
-                            sbValores.Append(":" + c.ToString());
-                        else
-                            sbValores.Append(", :" + c.ToString());
-
-                    //sino, si la marca es estandar
-                    else if (this.cMarcaParametro == MARCADOR_PARAMETRO_ESTANDAR)
-                        //utilizamos solo el marcador sin los campos
-                        if (sbValores.ToString().Equals(string.Empty))
-                            sbValores.Append(this.cMarcaParametro);
-                        else
-                            sbValores.Append(", " + this.cMarcaParametro);
-
-                    else
-                        //sino, la correspondiente al SGBD
-                        if (sbValores.ToString().Equals(string.Empty))
-                            sbValores.Append(this.cMarcaParametro + oCampo.Nombre.ToLower());
-                        else
-                            sbValores.Append(", " + this.cMarcaParametro + oCampo.Nombre.ToLower());
-
-
-                    //incrementamos el contador
-                    c += 1;
-                }
-            }
-
-            //formateamos el comando y lo pasamos a donde corresponde
-            Insert_sql = string.Format(__INSERT_SQL
-                                        , __cNombreTabla
-                                        , sbCampos.ToString()
-                                        , sbValores.ToString()
-                                        );
-
-        }
-
-        /// <summary>
-        /// Establece la sentencia sql base de actualización de registros en la tabla administrada
-        /// </summary>
-        /// <typeparam name="T">Clase de OTDbase extendida que contiene los datos de la tabla física</typeparam>
-        protected void _SetUpdateSql<T>()
-        {
-            //creamos una instancia
-            OTDbase oInstanciaOTD = (Activator.CreateInstance<T>() as OTDbase);
-
-            //concatenamos la lista de campos NO autogenerados
-            StringBuilder sbComando = new StringBuilder();
-            int c = 1;
-
-            //recorremos los campos de la tabla
-            foreach (Campo oCampo in oInstanciaOTD.Get_dic_campos().Values)
-            {
-                //si no es generado por el propio SGBD
-                if (!oCampo.AutoGenerado)
-                {
-                    //si la marca es SQLite
-                    if (this.cMarcaParametro == SQLiteUtiles.MARCADOR_PARAMETRO)
-                        //utilizamos nros. en lugar de nombres de campos
-                        if (sbComando.ToString().Equals(string.Empty))
-                            sbComando.Append(oCampo.Nombre.ToUpper()).Append(" = :").Append(c.ToString());
-                        else
-                            sbComando.Append(", ").Append(oCampo.Nombre.ToUpper()).Append(" = :").Append(c.ToString());
-
-                    //sino, si la marca es estandar
-                    else if (this.cMarcaParametro == MARCADOR_PARAMETRO_ESTANDAR)
-                        //utilizamos solo el marcador sin los campos
-                        if (sbComando.ToString().Equals(string.Empty))
-                            sbComando.Append(oCampo.Nombre.ToUpper()).Append(" = ").Append(this.cMarcaParametro);
-                        else
-                            sbComando.Append(", ").Append(oCampo.Nombre.ToUpper()).Append(" = ").Append(this.cMarcaParametro);
-
-                    else
-                        //sino, la correspondiente al SGBD
-                        if (sbComando.ToString().Equals(string.Empty))
-                            sbComando.Append(oCampo.Nombre.ToUpper()).Append(" = ").Append(this.cMarcaParametro + oCampo.Nombre.ToLower());
-                        else
-                            sbComando.Append(", ").Append(oCampo.Nombre.ToUpper()).Append(" = ").Append(this.cMarcaParametro + oCampo.Nombre.ToLower());
-
-                    //incrementamos el contador
-                    c += 1;
-
-                }
-            }
-
-            //formateamos el comando y lo pasamos a donde corresponde
-            Update_sql = string.Format(__UPDATE_SQL
-                                        , __cNombreTabla
-                                        , sbComando.ToString()
-                                        , this.WhereSugerido
-                                        );
-
-        }
-
-        /// <summary>
-        /// Establece las condiciones de filtrado de registros para operaciones
-        /// DML en base a la estructura especificada de la tabla
-        /// </summary>
-        /// <typeparam name="T">Clase de OTDbase extendida que contiene los datos de la tabla física</typeparam>
-        protected void _SetWhereSugerido<T>()
-        {
-            //creamos una instancia
-            OTDbase oInstanciaOTD = (Activator.CreateInstance<T>() as OTDbase);
-
-            //concatenamos la lista de condiciones de filtrado de registros a eliminar
-            StringBuilder sbCondiciones = new StringBuilder();
-            int c = 1;
-
-            //recorremos los campos de la tabla
-            foreach (Campo oCampo in oInstanciaOTD.Get_dic_campos().Values)
-            {
-                //si es PK
-                if (oCampo.Identificador)
-                {
-                    //si la marca es SQLite
-                    if (this.cMarcaParametro == SQLiteUtiles.MARCADOR_PARAMETRO)
-                        //utilizamos nros. en lugar de nombres de campos
-                        if (sbCondiciones.ToString().Equals(string.Empty))
-                            sbCondiciones.Append(oCampo.Nombre.ToUpper()).Append(" = :").Append(c.ToString());
-                        else
-                            sbCondiciones.Append(", ").Append(oCampo.Nombre.ToUpper()).Append(" = :").Append(c.ToString());
-
-                    //sino, si la marca es estandar
-                    else if (this.cMarcaParametro == MARCADOR_PARAMETRO_ESTANDAR)
-                        //utilizamos solo el marcador sin los campos
-                        if (sbCondiciones.ToString().Equals(string.Empty))
-                            sbCondiciones.Append(oCampo.Nombre.ToUpper()).Append(" = ").Append(this.cMarcaParametro);
-                        else
-                            sbCondiciones.Append(", ").Append(oCampo.Nombre.ToUpper()).Append(" = ").Append(this.cMarcaParametro);
-
-                    else
-                        //sino, la correspondiente al SGBD
-                        if (sbCondiciones.ToString().Equals(string.Empty))
-                            //sbCondiciones.Append(oCampo.Nombre.ToUpper()).Append(" = ").Append(this.cMarcaParametro + oInstanciaOTD.Get_dic_propiedades()[oCampo.Nombre].Name.ToLower());
-                            sbCondiciones.Append(oCampo.Nombre.ToUpper()).Append(" = ").Append(this.cMarcaParametro + oCampo.Nombre.ToLower());
-                        else
-                            //sbCondiciones.Append(", ").Append(oCampo.Nombre.ToUpper()).Append(" = ").Append(this.cMarcaParametro + oInstanciaOTD.Get_dic_propiedades()[oCampo.Nombre].Name.ToLower());
-                            sbCondiciones.Append(", ").Append(oCampo.Nombre.ToUpper()).Append(" = ").Append(this.cMarcaParametro + oCampo.Nombre.ToLower());
-
-                    //incrementamos el contador
-                    c += 1;
-
-                }
-            }
-
-            //si no hubo campos PK, entonces nos basamos en los campos AUTOGENERADOS como ultimo recurso
-            if (c == 1)
-            {
-                //recorremos los campos de la tabla
-                foreach (Campo oCampo in oInstanciaOTD.Get_dic_campos().Values)
-                {
-                    //si es autogenerado
-                    if (oCampo.AutoGenerado)
-                    {
-                        //si la marca es SQLite
-                        if (this.cMarcaParametro == SQLiteUtiles.MARCADOR_PARAMETRO)
-                            //utilizamos nros. en lugar de nombres de campos
-                            if (sbCondiciones.ToString().Equals(string.Empty))
-                                sbCondiciones.Append(oCampo.Nombre.ToUpper()).Append(" = :").Append(c.ToString());
-                            else
-                                sbCondiciones.Append(", ").Append(oCampo.Nombre.ToUpper()).Append(" = :").Append(c.ToString());
-
-                        //sino, si la marca es estandar
-                        else if (this.cMarcaParametro == MARCADOR_PARAMETRO_ESTANDAR)
-                            //utilizamos solo el marcador sin los campos
-                            if (sbCondiciones.ToString().Equals(string.Empty))
-                                sbCondiciones.Append(oCampo.Nombre.ToUpper()).Append(" = ").Append(this.cMarcaParametro);
-                            else
-                                sbCondiciones.Append(", ").Append(oCampo.Nombre.ToUpper()).Append(" = ").Append(this.cMarcaParametro);
-
-                        else
-                            //sino, la correspondiente al SGBD
-                            if (sbCondiciones.ToString().Equals(string.Empty))
-                                sbCondiciones.Append(oCampo.Nombre.ToUpper()).Append(" = ").Append(this.cMarcaParametro + oCampo.Nombre.ToLower());
-                            else
-                                sbCondiciones.Append(", ").Append(oCampo.Nombre.ToUpper()).Append(" = ").Append(this.cMarcaParametro + oCampo.Nombre.ToLower());
-
-                        //incrementamos el contador
-                        c += 1;
-
-                    }
-                }
-            }
-
-            //formateamos el comando y lo pasamos a donde corresponde
-            this.WhereSugerido = sbCondiciones.ToString();
-
+            //formamos la cadena correspondiente
+            this._cListaCamposTabla = this.NombreTabla + "." + string.Join(", " + this.NombreTabla
+                                                                + ".", lCampos.ToArray()
+                                                                );
         }
 
         /**
@@ -998,7 +823,7 @@ namespace CdgNetPersistenciaV3.ClasesBases
             int c = 1;
 
             //recorremos los campos de la tabla
-            foreach (Campo oCampo in __oInstanciaOTD.Get_dic_campos().Values)
+            foreach (Campo oCampo in __dicCampos.Values)
             {
                 //si no es generado por el propio SGBD
                 if (!oCampo.AutoGenerado)
@@ -1031,7 +856,7 @@ namespace CdgNetPersistenciaV3.ClasesBases
 
 
                     //incrementamos el contador
-                    c += 1;
+                    c++;
                 }
             }
 
@@ -1054,7 +879,7 @@ namespace CdgNetPersistenciaV3.ClasesBases
             int c = 1;
 
             //recorremos los campos de la tabla
-            foreach (Campo oCampo in __oInstanciaOTD.Get_dic_campos().Values)
+            foreach (Campo oCampo in __dicCampos.Values)
             {
                 //si no es generado por el propio SGBD
                 if (!oCampo.AutoGenerado)
@@ -1083,7 +908,7 @@ namespace CdgNetPersistenciaV3.ClasesBases
                             sbComando.Append(", ").Append(oCampo.Nombre.ToUpper()).Append(" = ").Append(this.cMarcaParametro + oCampo.Nombre.ToLower());
 
                     //incrementamos el contador
-                    c += 1;
+                    c++;
 
                 }
             }
@@ -1108,7 +933,7 @@ namespace CdgNetPersistenciaV3.ClasesBases
             int c = 1;
 
             //recorremos los campos de la tabla
-            foreach (Campo oCampo in __oInstanciaOTD.Get_dic_campos().Values)
+            foreach (Campo oCampo in __dicCampos.Values)
             {
                 //si es PK
                 if (oCampo.Identificador)
@@ -1132,14 +957,12 @@ namespace CdgNetPersistenciaV3.ClasesBases
                     else
                         //sino, la correspondiente al SGBD
                         if (sbCondiciones.ToString().Equals(string.Empty))
-                            //sbCondiciones.Append(oCampo.Nombre.ToUpper()).Append(" = ").Append(this.cMarcaParametro + oInstanciaOTD.Get_dic_propiedades()[oCampo.Nombre].Name.ToLower());
                             sbCondiciones.Append(oCampo.Nombre.ToUpper()).Append(" = ").Append(this.cMarcaParametro + oCampo.Nombre.ToLower());
                         else
-                            //sbCondiciones.Append(", ").Append(oCampo.Nombre.ToUpper()).Append(" = ").Append(this.cMarcaParametro + oInstanciaOTD.Get_dic_propiedades()[oCampo.Nombre].Name.ToLower());
                             sbCondiciones.Append(", ").Append(oCampo.Nombre.ToUpper()).Append(" = ").Append(this.cMarcaParametro + oCampo.Nombre.ToLower());
 
                     //incrementamos el contador
-                    c += 1;
+                    c++;
 
                 }
             }
@@ -1148,7 +971,7 @@ namespace CdgNetPersistenciaV3.ClasesBases
             if (c == 1)
             {
                 //recorremos los campos de la tabla
-                foreach (Campo oCampo in __oInstanciaOTD.Get_dic_campos().Values)
+                foreach (Campo oCampo in __dicCampos.Values)
                 {
                     //si es autogenerado
                     if (oCampo.AutoGenerado)
@@ -1177,7 +1000,7 @@ namespace CdgNetPersistenciaV3.ClasesBases
                                 sbCondiciones.Append(", ").Append(oCampo.Nombre.ToUpper()).Append(" = ").Append(this.cMarcaParametro + oCampo.Nombre.ToLower());
 
                         //incrementamos el contador
-                        c += 1;
+                        c++;
 
                     }
                 }
@@ -1188,6 +1011,41 @@ namespace CdgNetPersistenciaV3.ClasesBases
 
         }
 
+
+        /// <summary>
+        /// Devuelve el diccionario de pares Parametro-Valor para las operaciones
+        /// DML
+        /// </summary>
+        /// <param name="oOTDbase">Instancia de la cual se tomaran los valores de parametros</param>
+        /// <param name="bIncluirNulos">Si se incluyen o no los pares con valores nulos</param>
+        /// <returns>Diccionario de pares [NombrePropiedad, oValor]</returns>
+        public Dictionary<string, object> ParametrosDML(OTDbase oOTDbase, bool bIncluirNulos)
+        {
+            var dicParametros = new Dictionary<string, object>();
+
+            //recorremos los metodos de la clase actual
+            foreach (var cCampo in __dicPropiedades.Keys)
+            {
+                //llamamos al metodo setter actual
+                var oValor = __tTipoOTD.InvokeMember(__dicPropiedades[cCampo].Name
+                                                    , BindingFlags.GetProperty | BindingFlags.Instance | BindingFlags.Public
+                                                    , null, oOTDbase, new object[] { }
+                                                    );
+
+                //si elvalor no es nulo
+                if (oValor != null)
+                    //recuperamos el valor de la propiedad y agregamos el par de parametros
+                    dicParametros.Add(__dicCampos[cCampo].Nombre.ToLower(), oValor);
+                //sino, si el valor es nulo Y se requieren
+                else if (bIncluirNulos)
+                    //recuperamos el valor de la propiedad y agregamos el par de parametros
+                    dicParametros.Add(__dicCampos[cCampo].Nombre.ToLower(), oValor);
+
+            }
+
+            //devolvemos el diccionario
+            return dicParametros;
+        }
 
         #endregion
 

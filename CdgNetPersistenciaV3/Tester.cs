@@ -61,7 +61,7 @@ namespace CdgNetPersistenciaV3
         public OTDTester(long nId, string cDescripcion)
             :base(nId, cDescripcion)
         {
-            _Set_campos<OTDTester>();
+            //_Set_campos<OTDTester>();
         }
     }
 
