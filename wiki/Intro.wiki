@@ -1,7 +1,7 @@
 #summary Presentacion.
 
 = Componentes Principales =
-Si bien ya existen demasiadas librerias e implementaciones propias por parte la misma MS. para la API de persistencia de datos, con este proyecto se intenta:
+Si bien ya existen demasiadas librerias e implementaciones propias por parte de la misma MS. para la API de persistencia de datos, con este proyecto se intenta:
   # unificar la interaccion con distintos SGBD, y tambien
   # ser totalmente manipulable y adaptable por cualquier persona con conocimientos basicos de programacion en .NET.-
 
