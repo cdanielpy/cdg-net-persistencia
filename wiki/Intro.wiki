@@ -1,4 +1,4 @@
-#summary One-sentence summary of this page.
+#summary Presentacion.
 
 = Componentes Principales =
 Si bien ya existen demasiadas librerias e implementaciones propias por parte la misma MS. para la API de persistencia de datos, con este proyecto se intenta:
