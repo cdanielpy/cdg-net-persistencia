@@ -9,7 +9,7 @@ Esta es una clase abstracta que debe ser extendida por los _VOs_ (o _DTOs_). Se 
   * Constructor por defecto.-
 *OTDbase(*{{{nIdParam, cDescripcionParam}}}*):*
   * _nIdParam:_ ({{{System.Int64}}}) Identificador de la instancia. Normalmente este es el valor del campo _PK_ del registro.-
-  * _cDescripcionParam:_ ({{{Syste.String}}}) Descripción de la instancia. Puede ser cualquier valor de cadena, puede ser muy útil para realizar consultas cuando no se tiene el valor del identificador de la instacia.-
+  * _cDescripcionParam:_ ({{{System.String}}}) Descripción de la instancia. Puede ser cualquier valor de cadena, puede ser muy útil para realizar consultas cuando no se tiene el valor del identificador de la instacia.-
 
 
 = Campos =
