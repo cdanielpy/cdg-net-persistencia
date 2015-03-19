@@ -1,0 +1,42 @@
+# La clase OTDbase #
+
+Esta es una clase abstracta que debe ser extendida por los _VOs_ (o _DTOs_). Se encarga de encapsular todas las operaciones que permiten que las instancias operen de un modo parecido a los _Java Beans_.-
+
+# Constructores #
+**OTDbase():**
+  * Constructor por defecto.-
+**OTDbase(**`nIdParam, cDescripcionParam`**):**
+  * _nIdParam:_ (`System.Int64`) Identificador de la instancia. Normalmente este es el valor del campo _PK_ del registro.-
+  * _cDescripcionParam:_ (`System.String`) Descripción de la instancia. Puede ser cualquier valor de cadena, puede ser muy útil para realizar consultas cuando no se tiene el valor del identificador de la instacia.-
+
+
+# Campos #
+## Privados ##
+  * **`__`dicCampos:** (`Dictionary<System.String, Campo>`) Dicionario para relacionar los campos de la instancia a los Campos de la tabla.-
+  * **`__`dicPropiedades:** (`Dictionary<System.String, PropertyInfo>`) Diccionario para relacionar campos de tabla física y las Propiedades referenciando a los mismos por medio de Campos.-
+
+## Públicos ##
+  * **NOMBRE\_CLASE:** (`System.String`) Estático. Almacena el nombre de la clase en forma de simple cadena.-
+
+## Protegigas ##
+  * **`_`nId:** (`System.Int64`) Almacena el valor del identificador de la instancia. Normalmente debería ser el valor del campo PK de la tabla.-
+  * **`_`cDescripcion:** (`System.String`) Almacena la descripción de la instancia.-
+
+# Propiedades #
+## Públicas ##
+  * **Id:** (`System.Int64`) Devuelve o establece el valor del identificador de la clase.-
+  * **Descripcion:** (`System.String`) Devuelve o establece la descripción de la instancia.-
+
+
+# Métodos #
+## Públicos ##
+  * **Get\_clon`<`T`>`():** (`T`) Crea y devuelve un clon de la instancia actual. _T_ es la clase destino de la instancia creada.-
+`  ` **Obs:** _T_ siempre debería ser del mismo tipo que la clase del _VO_ (o _DTO_) porque sino sólo se clonarán los valores de prodiedades que sean comunes a ambas clases.-
+  * **ToString():** (`System.String`) Sobreescrito. Devuelve la representación de de cadena de la instancia.-
+  * **Get\_dic\_propiedades():** (`Dictionary<System.String, PropertyInfo>`) Devuelve el diccionario de pares Nombre campo físico - Propiedad de la instancia.-
+  * **Get\_dic\_campos():** (`Dictionary<System.String, Campo>`) Devuelve el diccionario de pares Nombre campo físico - Campo de la instancia.-
+  * **Equals(**`obj`**):** (`System.Boolean`) Sobreescrito. Metodo de comparacion de instancias. En este caso evalúa si son iguales por el valor del campo _Id_.-
+    * _obj_: (`System.Object`) Instancia contra la cual se desea realizar la comparación.-
+
+# Ejemplos #
+Ver definición de _VO_ de [Personas](http://code.google.com/p/cdg-net-persistencia/wiki/CdgNetPersistenciaV3_Atributos_Campo):

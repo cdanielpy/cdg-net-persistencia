@@ -1,0 +1,1 @@
+Proyecto de libreria de clases para administrar interaccion de bases de datos con aplicaciones .NET, implementando los patrones de diseño VO (o DTO) y DAO.-

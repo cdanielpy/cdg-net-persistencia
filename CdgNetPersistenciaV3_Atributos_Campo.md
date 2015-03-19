@@ -1,0 +1,82 @@
+# La clase Campo #
+Esta clase extiende de la clase _System.Attribute_ y mediante su uso lo que se hace es enlazar un metodo _accesor_, de cualquier instancia de la clase _OTDbase_, a un campo fisico de una tabla.-
+
+> _**Obs.:**_ Todos los accesores de una instancia de _OTDbase_ deben hacer referencia sólo a los campos de la misma tabla que representa el OTD donde se aplica.-
+
+# Constructores #
+`  `**Campo(**_`cNombreCampo`_**):**
+  * _cNombreCampo:_ (`System.String`) nombre del campo físico de la tabla al cual hace referencia el accesor al que se aplica.-
+> _**Obs:**_ Dependiendo del SGBD y el SO, los nombres deben respetar mayúsculas y minúsculas_.-_
+
+
+# Campos #
+## Privados ##
+
+  * **`__`cNombre:** (`System.String`) Almacena el nombre del Campo fisico de la tabla.-
+
+## Públicos ##
+  * **NOMBRE\_CLASE:** (`System.String`) Estático. Almacena el nombre de la clase en forma de simple cadena.-
+  * **Identificador:** (`System.Boolean`) Devuelve o establece el marcador de campo _PK_ o _Clave Primaria_ . Valor por defecto: ` false`.-
+  * **Indice:** (`System.Int32`) Devuelve o establece la posición del campo respecto de los demas campos. Si no se indica, se considera la posición de declaración del accesor dentro del _OTD_. Valor por defecto: `0`.-
+  * **Nulable:** (`System.Boolean`) Devuelve o establece el marcador de permisión de valores _NULL_ para el campo. Valor por defecto: `true`.-
+> _**Obs:**_ Si se establece la propiedad _Identificador_ como `true`, se asume que no acepta valores nulos.-
+  * **Tipo:** (`System.Type`) Devuelve o establece el marcador de permisión de valores _NULL_ para el campo. Valor por defecto: `true`.-
+  * **AutoGenerado:** (`System.Boolean`) Devuelve o establece el marcador de campo _autogenerado_ por el SGBD, es decir, valores de campo autoincrementales o calculados y que no aceptan valores asignados. Valor por defecto: `false`.-
+
+
+# Propiedades #
+## Públicas ##
+  * **Nombre:** (`System.String`) Devuelve el nombre del campo físico de la tabla.-
+
+# Métodos #
+## Públicos ##
+  * **ToString():** (`System.String`) Sobreescrito. Devuelve la representacion de de cadena de la instancia.-
+
+# Ejemplos #
+Tomando como ejemplo la tabla de ejemplo [Personas](https://code.google.com/p/cdg-net-persistencia/wiki/TablaPersonas), su declaracion del _VO_ (o DTO) que lo representará sería como sigue:
+
+```
+[CdgNetPersistenciaV3.Atributos.Tabla("PERSONAS", CdgNetPersistenciaV3.Atributos.Tabla.SGBD.SQL_SERVER)]
+public class PersonaOTD : CdgNetPersistenciaV3.ClasesBases.OTDbase
+{
+
+    public PersonaOTD()
+        : base(0, string.Empty)
+    {
+        _Set_campos<PersonaOTD>();
+    }
+
+    public PersonaOTD(long nId, string cNombreCompleto)
+        : base(nId, cNombreCompleto)
+    {
+        _Set_campos<PersonaOTD>();
+    }
+
+    [CdgNetPersistenciaV3.Atributos.Campo("ID", AutoGenerado=true)]
+    public override long Id
+    {
+        get { return _nId;  }
+        set { _nId = value; }
+    }
+
+    [CdgNetPersistenciaV3.Atributos.Campo("NOMBRE_COMPLETO", Nulable=false)]
+    public string NombreCompleto
+    {
+        get { return _cDescripcion; }
+        set { _cDescripcion = value; }
+    }
+
+    [CdgNetPersistenciaV3.Atributos.Campo("EDAD")]
+    public int Edad
+    {
+        get; set;
+    }
+
+    [CdgNetPersistenciaV3.Atributos.Campo("ACTIVO")]
+    public bool Activo
+    {
+        get; set;
+    }
+
+}
+```

@@ -1,0 +1,894 @@
+# La clase ConectorBase #
+
+Esta es una clase abstracta que debe ser extendida por las clases de _Utilerias_ de conexiones a los SGBD. Se encarga de establecer las operaciones básicas que deben ser implementadas, así como administrar los parámetros de conexión al SGBD y la instancia de conexión creada.-
+
+Implementa la interfaz System.IDisposable, lo que permite que la instancia creada pueda ser utilizada en un ámbito de comando _using_.-
+
+# Constructores #
+
+`  `**ConectorBase(**`cCadenaConexionParam`**):**
+  * _cCadenaConexionParam:_ (`System.String`) Cadena de conexión para acceder a la base de datos. Ver [ejemplos](http://www.connectionstrings.com/) de cadenas.-
+`  `**ConectorBase(**`cUsuarioParam, cContrasenaParam, cServidorParam, cCatalogoParam, nPuertoParam, cServicioParam`**):**
+  * _cUsuarioParam:_ (`System.String`) Id de Usuario de SGBD.-
+  * _cContrasenaParam:_ (`System.String`) Contrasena del Usuario.-
+  * _cServidorParam:_ (`System.String`) Nombre o direccion del Servidor SGBD.-
+  * _cCatalogoParam:_ (`System.String`) Nombre del Catalogo/Esquema de BDD.-
+  * _nPuertoParam:_ (`System.Int32`) Puerto de escucha del servicio SGBD.-
+  * _cServicioParam:_ (`System.String`) Nombre del Servicio de SGBD.-
+
+# Campos #
+## Públicos ##
+  * **NOMBRE\_CLASE:** (`System.String`) Estático. Almacena el nombre de la clase en forma de simple cadena.-
+  * **ERROR\_NO\_HAY\_FILAS:** (`System.String`) Constante de mensaje de consulta sin filas devueltas como resultado.-
+  * **MARCADOR\_PARAMETRO:** (`System.Char`) Estatico. Marca de nombre de parametros de comandos SQL. Valor por defecto '_:_' (dos puntos).-
+  * **oConexion:** (`System.Data.Common.DbConnection`) Almacena la instancia de la conexión establecida hacia el SGBD.-
+  * **FECHA\_MARCA\_NULA:** (`System.DateTime`) Estatico. Fecha de marca para valores de campos nulos del tipo _DateTime_.-
+
+
+# Propiedades #
+## Protegidas ##
+  * **`_`cServidor:** (`System.String`) Devuelve o establece el nombre o la direccion del servidor del SBGD.-
+  * **`_`nPuerto:** (`System.Int32`) Devuelve o establece el puerto de escucha del servicio.-
+  * **`_`cServicio:** (`System.String`) Devuelve o establece el nombre del servicio del SBGD.-
+  * **`_`cUsuario:** (`System.String`) Devuelve o establece el nombre del usuario del SBGD.-
+  * **`_`cContrasena:** (`System.String`) Devuelve o establece la contraseña del usuario.-
+  * **`_`cCatalogo:** (`System.String`) Devuelve o establece el nombre del Catálogo/Esquema de Base de Datos.-
+  * **`_`bConectado:** (`System.Boolean`) Devuelve o establece el marcador de la conexión abierta.-
+  * **`_`cCadenaConexion:** (`System.String`) Devuelve o establece la cadena de conxión utilizada.-
+
+## Públicas ##
+  * **bMostrarSQL:** (`System.Boolean`) Devuelve o establece el valor de marcador para desplegar las cadenas de los comandos ejecutados en el servidor.-
+  * **nTiempoComandos:** (`System.Int32`) Devuelve o establece el tiempo de espera para ejecución de comandos.-
+
+
+# Métodos #
+## Protegidos ##
+  * **`_`Mostrar\_SQL(**`cSentenciaSQL`**):** (`System.Void`) Muestra la cadena parametro en la consola. Sólo si `bMostrarSQL = true`.-
+    * _cSentenciaSQL_: (`System.String`) Sentencia sql a desplegar.-
+  * **`_`Mostrar\_SQL(**`oComando`**):** (`System.Void`) Muestra la cadena del comando sql parametro. Sólo si `bMostrarSQL = true`.-
+    * _oComando_: (`System.Data.Common.DbCommand`) Instancia de _DbCommand_ que contiene la sentencia sql a desplegar.-
+
+
+## Públicos ##
+  * **lConectar():** (`List<System.Object>`) Abstracto. Abre la conexion a la base de datos y devuelve el resultado de la operacion en una lista de objetos.-
+  * **lDesconectar(**`sender`**):** (`List<System.Object>`) Abstracto. Cierra la conexión activa y devuelve el resultado de la operacion en una lista de objetos.-
+    * _sender_: (`System.Object`) Objeto que efectúa la llamada al metodo.-
+  * **lEjecutar\_sentencia(**`cSentenciaSQL, dicValores`**):** (`List<System.Object>`) Abstracto. Ejecuta la sentencia sql parámetro y devuelve el resultado de la operacion en una lista de objetos.-
+    * _cSentenciaSQL_: (`System.String`) Sentencia SQL a ejecutar.-
+    * _dicValores_:  (`Dictionary<string, object>`) Diccionario de claves y valores parametros de la sentencia.-
+  * **lEjecutar\_consulta(**`cConsultaSQL, dicValores`**):** (`List<System.Object>`) Abstracto. Ejecuta la consulta sql y devuelve un DataTable como segundo elemento de la lista de resultados.-
+    * _cConsultaSQL_: (`System.String`) Consulta SQL a ejecutar.-
+    * _dicValores_:  (`Dictionary<string, object>`) Diccionario de claves y valores parametros de la consulta.-
+  * **lEjecutar\_escalar(**`cConsultaSQL, dicValores`**):** (`List<System.Object>`) Abstracto. Ejecuta la consulta sql y devuelve un unico objeto, que representa al valor de la primera columna de la primera fila devuelta por la consulta, como segundo elemento de la lista de resultados.-
+    * _cConsultaSQL_: (`System.String`) Consulta SQL a ejecutar.-
+    * _dicValores_:  (`Dictionary<string, object>`) Diccionario de claves y valores parametros de la consulta.-
+  * **lEjecutar\_procedimiento(**`cProcedimiento, dicValores`**):** (`List<System.Object>`) Abstracto. Ejecuta el procedimiento almacenado y devuelve el resultado de la operacion en una lista de objetos.-
+    * _cProcedimiento_: (`System.String`) Procedimiento almacenado a ejecutar.-
+    * _dicValores_:  (`Dictionary<string, object>`) Diccionario de claves y valores parámetros del procedimiento.-
+  * **Set\_autocommit(**`bParam`**):** (`System.Void`) Abstracto. Establece el método de Autoconfirmación de transacciones.-
+    * _bParam_: (`System.Boolean`) Valor a asignar. Si es `true` todos los comandos se confirmarán apenas hayan terminados su ejecución en forma exitosa, sino, se ejecutará un _rollback_ automático.-
+  * **lIniciar\_transaccion():** (`List<System.Object>`) Abstracto. Inicia una transacción de base de datos y devuelve el resultado de la operacion en una lista de objetos.-
+  * **lConfirmar\_transaccion():** (`List<System.Object>`) Abstracto. Confirma una transaccion activa y devuelve el resultado de la operacion en una lista de objetos.-
+  * **lRevertir\_transaccion():** (`List<System.Object>`) Abstracto. Revierte una transaccion activa y devuelve el resultado de la operacion en una lista de objetos.-
+  * **ToString():** (`System.String`) Sobreescrito. Devuelve la representación de de cadena de la instancia.-
+  * **Dispose():** (`System.Void`) Sobreescrito. Ejecuta la liberación de todos los recursos creados por la instancia.-
+
+# Ejemplo #
+
+El siguiente ejemplo es la definición de la utilería de conexion desarrollada para interactuar con **_SQL Server_**:
+
+```
+/// <summary>
+/// Utileria para interaccion con Base de datos MS SQL Server
+/// </summary>
+public class SQLServerUtiles : ConectorBase
+{
+
+    #region CAMPOS(Fields) DE LA CLASE
+
+    /// <summary>
+    /// Nombre de la clase
+    /// </summary>
+    public const string NOMBRE_CLASE = "SQLServerUtiles";
+
+    /// <summary>
+    /// Modo de Autenticacion por Usuario del SO
+    /// </summary>
+    public const string AUTENTICACION_WINDOWS = "Autenticacion de Windows";
+
+    /// <summary>
+    /// Modo de Autenticacion por Login de la BDD
+    /// </summary>
+    public const string AUTENTICACION_SQLSERVER = "Autenticacion de Sql Server";
+
+    /// <summary>
+    /// Arreglo de los Modos de Conexion Disponibles
+    /// </summary>
+    public static string[] LISTA_MODOS_AUTENTICACIONES = new String[2] { AUTENTICACION_WINDOWS, AUTENTICACION_SQLSERVER };
+
+    /// <summary>
+    /// Arreglo de Nombres Comunes de Instancias Locales
+    /// </summary>
+    public static string[] LISTA_INSTANCIAS_LOCALES = new String[2] { "SQLEXPRESS", "MSSQLSERVER" };
+
+    /// <summary>
+    /// Cadena de Conexion para Usuario de SO
+    /// </summary>
+    private const string CADENA_CONEXION_WINDOWS = "Server={0}; Database={1}; Integrated Security= yes";
+
+    /// <summary>
+    /// Cadena de Conexion para Login de SQL Server
+    /// </summary>
+    private const string CADENA_CONEXION_SQLSERVER = "Data Source={0}; Initial Catalog={1};User Id={2};Password={3}";
+
+    /// <summary>
+    /// Caracter de marca de parametros de comando T-SQL
+    /// </summary>
+    public new static char MARCADOR_PARAMETRO = '@';
+
+    private SqlConnectionStringBuilder __oCadenaConexion;
+    //public new SqlConnection oConexion;
+    private SqlTransaction __oTransaccionSQL;
+
+
+    /// <summary>
+    /// Devuelve o establece el Tipo de Conexion 
+    /// </summary>
+    public string cTipoConexion { get; set; }
+
+
+    public enum PARAM_ESPECIALES { TBL_BASE, DATASET, ADM_BASE };
+
+    #endregion
+
+
+    #region CONSTRUCTORES DE LA CLASE
+
+
+    /// <summary>
+    /// Constructor de la clase
+    /// </summary>
+    /// <param name="cCadenaConexionParam">Cadena de conexion personalizada</param>
+    public SQLServerUtiles(string cCadenaConexionParam)
+        : base(cCadenaConexionParam)
+    {
+        cTipoConexion = AUTENTICACION_SQLSERVER;
+
+        //tomamos la cadena de conexion
+        __oCadenaConexion = new SqlConnectionStringBuilder(cCadenaConexionParam);
+
+    }
+
+    /// <summary>
+    /// Constructor de la clase
+    /// </summary>
+    /// <param name="cServidorParam">Nombre del servidor de base de datos</param>
+    /// <param name="cCatalogoParam">Catalogo de base de datos</param>
+    /// <param name="cUsuarioParam">ID de Usuario</param>
+    /// <param name="cContrasenaParam">Contrasena</param>
+    /// <param name="nTiempoComandosParam">Tiempo de espera de respuesta a comandos</param>
+    public SQLServerUtiles(string cServidorParam, string cCatalogoParam
+                            , string cUsuarioParam, string cContrasenaParam
+                            , int nTiempoComandosParam)
+        : base(cUsuarioParam, cContrasenaParam, cServidorParam, cCatalogoParam, 1433, string.Empty)
+    {
+        cTipoConexion = AUTENTICACION_SQLSERVER;
+
+        //formateamos la cadena de conexion
+        __oCadenaConexion = new SqlConnectionStringBuilder(string.Format(CADENA_CONEXION_SQLSERVER
+                                                                        , _cServidor
+                                                                        , _cCatalogo
+                                                                        , _cUsuario
+                                                                        , _cContrasena)
+                                                            );
+        nTiempoComandos = nTiempoComandos;
+
+    }
+
+    /// <summary>
+    /// Constructor de la clase
+    /// </summary>
+    /// <param name="cServidorParam">Nombre del servidor de base de datos</param>
+    /// <param name="cCatalogoParam">Catalogo de base de datos</param>
+    /// <param name="nTiempoComandosParam">Tiempo de espera de respuesta a comandos</param>
+    public SQLServerUtiles(string cServidorParam, string cCatalogoParam, int nTiempoComandosParam)
+        : base(string.Empty, string.Empty, cServidorParam, cCatalogoParam, 1433, string.Empty)
+    {
+        cTipoConexion = AUTENTICACION_WINDOWS;
+
+        //formateamos la cadena de conexion
+        __oCadenaConexion = new SqlConnectionStringBuilder(string.Format(CADENA_CONEXION_WINDOWS
+                                                            , _cServidor
+                                                            , _cCatalogo)
+                                                        );
+
+        nTiempoComandos = nTiempoComandos;
+
+    }
+
+
+    #endregion
+
+
+    #region Miembros de ConectorBase
+
+    /// <summary>
+    /// Abre la conexion a la base de datos
+    /// </summary>
+    /// <returns>Lista de Resultados</returns>
+    public override List<object> lConectar()
+    {
+        string NOMBRE_METODO = NOMBRE_CLASE + ".lConectar()";
+        List<object> lResultado = new List<object>() { 0, NOMBRE_METODO + " No Ejecutado." };
+
+        try
+        {
+            //intentamos abrir la conexion a la base de datos
+            oConexion = new SqlConnection(__oCadenaConexion.ConnectionString);
+
+            oConexion.Open();
+
+            lResultado = new List<object>() { 1, "Ok" };
+
+        }
+        catch (Exception ex)
+        {
+            //en caso de error
+            lResultado = new List<object>() { -1, NOMBRE_METODO + ": " + ex.Message };
+        }
+
+        //devolvemos el resultado del metodo
+        return lResultado;
+
+    }
+
+    /// <summary>
+    /// Cierra la conexion activa
+    /// </summary>
+    /// <param name="sender">Objeto que efectua la llamada al metodo</param>
+    /// <returns>Lista de Resultados</returns>
+    public override List<object> lDesconectar(object sender)
+    {
+        string NOMBRE_METODO = NOMBRE_CLASE + ".lDesconectar()";
+        List<object> lResultado = new List<object>() { 0, NOMBRE_METODO + " No Ejecutado." };
+
+        try
+        {
+            //si la conexion esta abierta, la intentamos cerrar la conexion a la base de datos
+            if (oConexion.State == System.Data.ConnectionState.Open) this.Conexion.Close();
+            GC.Collect();
+            _bConectado = false;
+
+            lResultado = new List<object>() { 1, "Ok" };
+        }
+        catch (Exception ex)
+        {
+            //en caso de error
+            lResultado = new List<object>() { -1, NOMBRE_METODO + ": " + ex.Message };
+        }
+
+        //devolvemos el resultado del metodo
+        return lResultado;
+    }
+
+    /// <summary>
+    /// Ejecuta la sentencia sql
+    /// </summary>
+    /// <param name="cSentenciaSQL">Sentencia SQL a ejecutar</param>
+    /// <param name="dicParametros">Diccionario de parametros a combinar con la sentencia</param>
+    /// <returns>Lista de Resultado[int, object]</returns>
+    public override List<object> lEjecutar_sentencia(string cSentenciaSQL, Dictionary<string, object> dicParametros)
+    {
+        string NOMBRE_METODO = NOMBRE_CLASE + ".lEjecutar_sentencia()";
+
+        List<object> lResultado = new List<object>() { 0, NOMBRE_METODO + " No Ejecutado." };
+
+        try
+        {
+            //recorremos el diccionario de parametros
+            foreach (string cNombre in dicParametros.Keys)
+            {
+                //si es nulo el valor
+                if (dicParametros[cNombre] == null)
+                    //lo reemplazamos en la sentencia y lo eliminamos del diccionario de parametros
+                    if (cSentenciaSQL.IndexOf(MARCADOR_PARAMETRO + cNombre + ",") > -1)
+                        cSentenciaSQL = cSentenciaSQL.Replace(MARCADOR_PARAMETRO + cNombre + ",", "NULL,");
+                    else if (cSentenciaSQL.IndexOf(MARCADOR_PARAMETRO + cNombre + " ") > -1)
+                        cSentenciaSQL = cSentenciaSQL.Replace(MARCADOR_PARAMETRO + cNombre + " ", "NULL ");
+                    else if (cSentenciaSQL.IndexOf(MARCADOR_PARAMETRO + cNombre) > -1)
+                        cSentenciaSQL = cSentenciaSQL.Replace(MARCADOR_PARAMETRO + cNombre, "NULL");
+            }
+
+            //creamos una instancia de comando
+            SqlCommand oComandoSQL;
+
+            //si hay una transaccion activa
+            if (__oTransaccionSQL != null)
+            {
+                //asignamos el comando como parte de la misma
+                oComandoSQL = __oTransaccionSQL.Connection.CreateCommand();
+                oComandoSQL.CommandText = cSentenciaSQL;
+                oComandoSQL.Transaction = __oTransaccionSQL;
+            }
+            else
+            {
+                //sino, la conexion actual de la clase
+                oComandoSQL = new SqlCommand(cSentenciaSQL);
+                oComandoSQL.Connection = this.Conexion;
+            }
+
+            //preparamos la sentencia a ejecutar
+            oComandoSQL.Prepare();
+
+            //configuramos el comando
+            oComandoSQL.CommandTimeout = nTiempoComandos;
+
+            //recorremos el diccionario de parametros
+            foreach (string cNombre in dicParametros.Keys)
+            {
+                //si el valor NO es nulo
+                if (dicParametros[cNombre] != null)
+                    //lo agregamos al comando los parametros y sus valores
+                    oComandoSQL.Parameters.AddWithValue(cNombre, dicParametros[cNombre]);
+            }
+
+            _Mostrar_SQL(oComandoSQL.CommandText);
+
+            //ejecutamos el comando
+            oComandoSQL.ExecuteNonQuery();
+
+            //establecemos el resultado
+            lResultado = new List<object>() { 1, "Ok" };
+
+        }
+        catch (Exception ex)
+        {
+            //en caso de error
+            lResultado = new List<object>() { -1, NOMBRE_METODO + ": " + ex.Message + (char)13 + "Sentencia -> " + cSentenciaSQL };
+        }
+
+        //devolvemos el resultado del metodo
+        return lResultado;
+
+    }
+
+    /// <summary>
+    /// Ejecuta la consulta sql y devuelve un DataTable como segundo elemento
+    /// </summary>
+    /// <param name="cConsultaSQL">Consulta SQL a ejecutar</param>
+    /// <param name="dicParametros">Diccionario de parametros a combinar con la consulta</param>
+    /// <returns>Lista de Resultado[int, object]</returns>
+    public override List<object> lEjecutar_consulta(string cConsultaSQL, Dictionary<string, object> dicParametros)
+    {
+        string NOMBRE_METODO = NOMBRE_CLASE + ".lEjecutar_consulta()";
+        List<object> lResultado = new List<object>() { 0, NOMBRE_METODO + " No Ejecutado." };
+
+        try
+        {
+            //recorremos el diccionario de parametros
+            foreach (string cNombre in dicParametros.Keys)
+            {
+                //si es nulo el valor
+                if (dicParametros[cNombre] == null)
+                    //lo reemplazamos en la sentencia y lo eliminamos del diccionario de parametros
+                    if (cConsultaSQL.IndexOf(MARCADOR_PARAMETRO + cNombre + ",") > -1)
+                        cConsultaSQL = cConsultaSQL.Replace(MARCADOR_PARAMETRO + cNombre + ",", "NULL,");
+                    else if (cConsultaSQL.IndexOf(MARCADOR_PARAMETRO + cNombre + " ") > -1)
+                        cConsultaSQL = cConsultaSQL.Replace(MARCADOR_PARAMETRO + cNombre + " ", "NULL ");
+                    else if (cConsultaSQL.IndexOf(MARCADOR_PARAMETRO + cNombre) > -1)
+                        cConsultaSQL = cConsultaSQL.Replace(MARCADOR_PARAMETRO + cNombre, "NULL");
+            }
+
+            //creamos una instancia de comando
+            SqlCommand oComandoSQL;
+
+            //si hay una transaccion activa
+            if (__oTransaccionSQL != null)
+            {
+                //asignamos el comando como parte de la misma
+                oComandoSQL = __oTransaccionSQL.Connection.CreateCommand();
+                oComandoSQL.CommandText = cConsultaSQL;
+                oComandoSQL.Transaction = __oTransaccionSQL;
+            }
+            else
+            {
+                //sino, la conexion actual de la clase
+                oComandoSQL = new SqlCommand(cConsultaSQL);
+                oComandoSQL.Connection = this.Conexion;
+            }
+
+            //preparamos la sentencia a ejecutar
+            oComandoSQL.Prepare();
+
+            //configuramos el comando
+            oComandoSQL.CommandTimeout = nTiempoComandos;
+
+            //recorremos el diccionario de parametros
+            foreach (string cNombre in dicParametros.Keys)
+            {
+                //si el valor NO es nulo
+                if (dicParametros[cNombre] != null)
+                    //lo agregamos al comando los parametros y sus valores
+                    oComandoSQL.Parameters.AddWithValue(cNombre, dicParametros[cNombre]);
+            }
+
+            SqlDataAdapter daAdaptador = new SqlDataAdapter(oComandoSQL);
+            DataTable dtTabla = new DataTable();
+
+            _Mostrar_SQL(oComandoSQL.CommandText);
+
+            //el resultado a la tabla
+            daAdaptador.Fill(dtTabla);
+
+            //si hay filas devueltas
+            if (dtTabla.Rows.Count > 0) lResultado = new List<object>() { 1, dtTabla, daAdaptador };
+            else lResultado = new List<object>() { 0, ConectorBase.ERROR_NO_HAY_FILAS, oComandoSQL.CommandText };
+
+        }
+        catch (Exception ex)
+        {
+            //en caso de error
+            lResultado = new List<object>() { -1, NOMBRE_METODO + ": " + ex.Message + (char)13 + "Sentencia -> " + cConsultaSQL };
+        }
+
+        //devolvemos el resultado del metodo
+        return lResultado;
+
+    }
+
+    /// <summary>
+    /// Ejecuta la consulta sql y devuelve un unico objeto valor
+    /// </summary>
+    /// <param name="cConsultaSQL">Consulta SQL a ejecutar</param>
+    /// <param name="cConsultaSQL">Consulta a ejecutar</param>
+    /// <param name="dicParametros">Diccionario de parametros a combinar con la consulta</param>
+    /// <returns>Lista de Resultado[int, object]</returns>
+    public override List<object> lEjecutar_escalar(string cConsultaSQL, Dictionary<string, object> dicParametros)
+    {
+        string NOMBRE_METODO = NOMBRE_CLASE + ".lEjecutar_escalar()";
+        List<object> lResultado = new List<object>() { 0, NOMBRE_METODO + " No Ejecutado." };
+
+        try
+        {
+            //recorremos el diccionario de parametros
+            foreach (string cNombre in dicParametros.Keys)
+            {
+                //si es nulo el valor
+                if (dicParametros[cNombre] == null)
+                    //lo reemplazamos en la sentencia y lo eliminamos del diccionario de parametros
+                    if (cConsultaSQL.IndexOf(MARCADOR_PARAMETRO + cNombre + ",") > -1)
+                        cConsultaSQL = cConsultaSQL.Replace(MARCADOR_PARAMETRO + cNombre + ",", "NULL,");
+                    else if (cConsultaSQL.IndexOf(MARCADOR_PARAMETRO + cNombre + " ") > -1)
+                        cConsultaSQL = cConsultaSQL.Replace(MARCADOR_PARAMETRO + cNombre + " ", "NULL ");
+                    else if (cConsultaSQL.IndexOf(MARCADOR_PARAMETRO + cNombre) > -1)
+                        cConsultaSQL = cConsultaSQL.Replace(MARCADOR_PARAMETRO + cNombre, "NULL");
+            }
+
+            //creamos una instancia de comando
+            SqlCommand oComandoSQL;
+
+            //si hay una transaccion activa
+            if (__oTransaccionSQL != null)
+            {
+                //asignamos el comando como parte de la misma
+                oComandoSQL = __oTransaccionSQL.Connection.CreateCommand();
+                oComandoSQL.CommandText = cConsultaSQL;
+                oComandoSQL.Transaction = __oTransaccionSQL;
+            }
+            else
+            {
+                //sino, la conexion actual de la clase
+                oComandoSQL = new SqlCommand(cConsultaSQL);
+                oComandoSQL.Connection = this.Conexion;
+            }
+
+            //preparamos la sentencia a ejecutar
+            oComandoSQL.Prepare();
+
+            //configuramos el comando
+            oComandoSQL.CommandTimeout = nTiempoComandos;
+
+            _Mostrar_SQL(oComandoSQL.CommandText);
+
+            //recorremos el diccionario de parametros
+            foreach (string cNombre in dicParametros.Keys)
+            {
+                //si el valor NO es nulo
+                if (dicParametros[cNombre] != null)
+                    //lo agregamos al comando los parametros y sus valores
+                    oComandoSQL.Parameters.AddWithValue(cNombre, dicParametros[cNombre]);
+            }
+
+            //ejecutamos la consulta
+            object oValor = oComandoSQL.ExecuteScalar();
+
+            //establecemos el resultado del metodo
+            lResultado = new List<object>() { 1, oValor };
+
+        }
+        catch (Exception ex)
+        {
+            //en caso de error
+            lResultado = new List<object>() { -1, NOMBRE_METODO + ": " + ex.Message + (char)13 + "Sentencia -> " + cConsultaSQL };
+        }
+
+        //devolvemos el resultado del metodo
+        return lResultado;
+
+    }
+
+    /// <summary>
+    /// Ejecuta el procedimiento almacenado y devuelve una lista de resultado
+    /// </summary>
+    /// <param name="cProcedimiento">Procedimiento Almacenado a ejecutar</param>
+    /// <param name="dicParametros">Diccionario de parametros a combinar con la consulta</param>
+    /// <returns>Lista de Resultados</returns>
+    public override List<object> lEjecutar_procedimiento(string cProcedimiento, Dictionary<string, object> dicParametros)
+    {
+        string NOMBRE_METODO = NOMBRE_CLASE + ".lEjecutar_sp_parametros()";
+        List<object> lResultado = new List<object>() { 0, NOMBRE_METODO + " No Ejecutado." };
+
+        try
+        {
+            //recorremos el diccionario de parametros
+            foreach (string cNombre in dicParametros.Keys)
+            {
+                //si es nulo el valor
+                if (dicParametros[cNombre] == null)
+                    //lo reemplazamos en la sentencia y lo eliminamos del diccionario de parametros
+                    if (cProcedimiento.IndexOf(MARCADOR_PARAMETRO + cNombre + ",") > -1)
+                        cProcedimiento = cProcedimiento.Replace(MARCADOR_PARAMETRO + cNombre + ",", "NULL,");
+                    else if (cProcedimiento.IndexOf(MARCADOR_PARAMETRO + cNombre + " ") > -1)
+                        cProcedimiento = cProcedimiento.Replace(MARCADOR_PARAMETRO + cNombre + " ", "NULL ");
+                    else if (cProcedimiento.IndexOf(MARCADOR_PARAMETRO + cNombre) > -1)
+                        cProcedimiento = cProcedimiento.Replace(MARCADOR_PARAMETRO + cNombre, "NULL");
+            }
+
+            //creamos una instancia de comando
+            SqlCommand oComandoSQL;
+
+            //si hay una transaccion activa
+            if (__oTransaccionSQL != null)
+            {
+                //asignamos el comando como parte de la misma
+                oComandoSQL = __oTransaccionSQL.Connection.CreateCommand();
+                oComandoSQL.CommandText = cProcedimiento;
+                oComandoSQL.Transaction = __oTransaccionSQL;
+            }
+            else
+            {
+                //sino, la conexion actual de la clase
+                oComandoSQL = new SqlCommand(cProcedimiento);
+                oComandoSQL.Connection = this.Conexion;
+            }
+
+            //preparamos la sentencia a ejecutar
+            oComandoSQL.Prepare();
+
+            //configuramos el comando
+            oComandoSQL.CommandTimeout = nTiempoComandos;
+
+            _Mostrar_SQL(oComandoSQL.CommandText);
+
+            //recorremos el diccionario de parametros
+            foreach (string cNombre in dicParametros.Keys)
+            {
+                //si el valor NO es nulo
+                if (dicParametros[cNombre] != null)
+                    //lo agregamos al comando los parametros y sus valores
+                    oComandoSQL.Parameters.AddWithValue(cNombre, dicParametros[cNombre]);
+            }
+
+            //ejecutamos la consulta
+            object oValor = oComandoSQL.ExecuteNonQuery();
+
+            //establecemos el resultado del metodo
+            lResultado = new List<object>() { 1, "Ok" };
+
+        }
+        catch (Exception ex)
+        {
+            //en caso de error
+            lResultado = new List<object>() { -1, NOMBRE_METODO + ": " + ex.Message };
+        }
+
+        //devolvemos el resultado del metodo
+        return lResultado;
+    }
+
+    /// <summary>
+    /// Establece el metodo de Autoconfirmacion de transacciones
+    /// </summary>
+    /// <param name="bParam">Valor a asignar</param>
+    public override void Set_autocommit(bool bParam)
+    {
+        throw new NotImplementedException();
+    }
+
+    /// <summary>
+    /// Inicia una transaccion
+    /// </summary>
+    /// <returns>Lista de Resultados</returns>
+    public override List<object> lIniciar_transaccion()
+    {
+        string NOMBRE_METODO = NOMBRE_CLASE + ".lIniciar_transaccion()";
+        List<object> lResultado = new List<object>() { 0, NOMBRE_METODO + " No Ejecutado." };
+
+        try
+        {
+            //si hay una transaccion activa
+            if (__oTransaccionSQL != null)
+                //generamos un error
+                throw new Exception("Hay una transaccion pendiente! \n Confirmela o reviertala antes de iniciar otra...");
+
+            //iniciamos una transaccion
+            __oTransaccionSQL = (oConexion as SqlConnection).BeginTransaction();
+
+            lResultado = new List<object>() { 1, "Ok" };
+        }
+        catch (Exception ex)
+        {
+            //en caso de error
+            lResultado = new List<object>() { -1, NOMBRE_METODO + ": " + ex.Message };
+        }
+
+        //devolvemos el resultado del metodo
+        return lResultado;
+    }
+
+    /// <summary>
+    /// Confirma una transaccion activa
+    /// </summary>
+    /// <returns>Lista de Resultados</returns>
+    public override List<object> lConfirmar_transaccion()
+    {
+        string NOMBRE_METODO = NOMBRE_CLASE + ".lConfirmar_transaccion()";
+        List<object> lResultado = new List<object>() { 0, NOMBRE_METODO + " No Ejecutado." };
+
+        try
+        {
+            //confirmamos la transaccion
+            __oTransaccionSQL.Commit();
+
+            //la liberamos
+            __oTransaccionSQL.Dispose();
+            __oTransaccionSQL = null;
+
+            lResultado = new List<object>() { 1, "Ok" };
+        }
+        catch (Exception ex)
+        {
+            //en caso de error
+            lResultado = new List<object>() { -1, NOMBRE_METODO + ": " + ex.Message };
+        }
+
+        //devolvemos el resultado del metodo
+        return lResultado;
+    }
+
+    /// <summary>
+    /// Revierte una transaccion activa
+    /// </summary>
+    /// <returns>Lista de Resultados</returns>
+    public override List<object> lRevertir_transaccion()
+    {
+        string NOMBRE_METODO = NOMBRE_CLASE + ".lConectar()";
+        List<object> lResultado = new List<object>() { 0, NOMBRE_METODO + " No Ejecutado." };
+
+        try
+        {
+            //si existe una transaccion activa
+            if (__oTransaccionSQL != null)
+            {
+                //revertimos la transaccion
+                __oTransaccionSQL.Rollback();
+
+                //la liberamos
+                __oTransaccionSQL.Dispose();
+                __oTransaccionSQL = null;
+            }
+
+            //establecemos el resultado del metodo
+            lResultado = new List<object>() { 1, "Ok" };
+        }
+        catch (Exception ex)
+        {
+            //en caso de error
+            lResultado = new List<object>() { -1, NOMBRE_METODO + ": " + ex.Message };
+        }
+
+        //devolvemos el resultado del metodo
+        return lResultado;
+    }
+
+
+
+    #endregion
+
+
+    #region METODOS ESPECIFICOS
+
+    /// <summary>
+    /// Ejecuta una consulta y devuelve un datatable y su adaptador de datos
+    /// </summary>
+    /// <param name="cConsultaSQL">Consulta SQL a ejecutar</param>
+    /// <param name="dicParametros">Diccionario de Parametros [string, object]</param>
+    /// <returns>Lista de resultados [int, object, object]</returns>
+    public List<object> lEjecutar_consulta_especial(string cConsultaSQL, Dictionary<string, object> dicParametros)
+    {
+        string NOMBRE_METODO = NOMBRE_CLASE + ".lEjecutar_consulta()";
+        List<object> lResultado = new List<object>() { 0, NOMBRE_METODO + " No Ejecutado." };
+
+        try
+        {
+            //creamos una instancia de comando
+            SqlCommand oComandoSQL = new SqlCommand(cConsultaSQL);
+
+            //configuramos el comando
+            oComandoSQL.CommandTimeout = nTiempoComandos;
+
+            //si hay una transaccion activa
+            if (__oTransaccionSQL != null)
+            {
+                //asignamos el comando como parte de la misma
+                oComandoSQL.Connection = __oTransaccionSQL.Connection;
+                oComandoSQL.Transaction = __oTransaccionSQL;
+            }
+            else
+            {
+                //sino, la conexion actual de la clase
+                oComandoSQL.Connection = this.Conexion;
+            }
+
+            SqlDataAdapter daAdaptador = new SqlDataAdapter(oComandoSQL);
+            DataTable dtTabla = new DataTable();
+
+            _Mostrar_SQL(oComandoSQL.CommandText);
+
+            //si se paso la instancia de la tabla y su dataset
+            if (dicParametros.ContainsKey(PARAM_ESPECIALES.ADM_BASE.ToString())
+                    && dicParametros.ContainsKey(PARAM_ESPECIALES.DATASET.ToString()))
+            {
+                //tomamos la instancia TBL parametro
+                ADMbase oADMbase = (ADMbase)dicParametros[PARAM_ESPECIALES.ADM_BASE.ToString()];
+
+                //nombre del mapeo
+                //string cNombreMap = string.Format("map{0}", oTBLbase.Get_nombre_tabla());
+                string cNombreMap = oADMbase.NombreTabla;
+
+                //creamos una instancia de mapeo de tablas
+                System.Data.Common.DataTableMapping tmMapeo = new System.Data.Common.DataTableMapping(
+                                                                oADMbase.NombreTabla
+                                                                , cNombreMap
+                                                                );
+
+                //lo agregamos al adaptador
+                daAdaptador.TableMappings.Add(tmMapeo);
+
+                //recuperamos los datos
+                daAdaptador.Fill((DataSet)dicParametros[PARAM_ESPECIALES.DATASET.ToString()], cNombreMap);
+
+            }
+            else
+            {
+                //sino, normalmente
+                daAdaptador.Fill(dtTabla);
+            }
+
+            //si hay filas devueltas
+            if (dtTabla.Rows.Count > 0) lResultado = new List<object>() { 1, dtTabla, daAdaptador };
+            else lResultado = new List<object>() { 0, ConectorBase.ERROR_NO_HAY_FILAS };
+
+        }
+        catch (Exception ex)
+        {
+            //en caso de error
+            lResultado = new List<object>() { -1, NOMBRE_METODO + ": " + ex.Message };
+        }
+
+        //devolvemos el resultado del metodo
+        return lResultado;
+
+    }
+
+    /// <summary>
+    /// Ejecuta una sentencia sql pero a partir de una instancia de Comando
+    /// </summary>
+    /// <param name="cmdComandoSQL">Instancia del Comando a ejecutar</param>
+    /// <returns>Lista de resultados List[int, object]</returns>
+    public List<object> lEjecutar_sentencia(SqlCommand cmdComandoSQL)
+    {
+        string NOMBRE_METODO = NOMBRE_CLASE + ".lEjecutar_sentencia()";
+        List<object> lResultado = new List<object>() { 0, NOMBRE_METODO + " No Ejecutado." };
+
+        try
+        {
+            //configuramos el comando
+            cmdComandoSQL.Connection = this.Conexion;
+            cmdComandoSQL.CommandTimeout = nTiempoComandos;
+
+            //si hay una transaccion activa, asignamos el comando como parte de la misma
+            //if (__oTransaccionSQL != null)
+            cmdComandoSQL.Transaction = __oTransaccionSQL;
+
+            _Mostrar_SQL(cmdComandoSQL.CommandText);
+
+            cmdComandoSQL.ExecuteNonQuery();
+
+            lResultado = new List<object>() { 1, "Ok" };
+        }
+        catch (SqlException ex)
+        {
+            //en caso de error
+            lResultado = new List<object>() { -1, NOMBRE_METODO + ": " + ex.Message, ex };
+        }
+        catch (Exception ex)
+        {
+            //en caso de error
+            lResultado = new List<object>() { -1, NOMBRE_METODO + ": " + ex.Message, ex };
+        }
+
+        //devolvemos el resultado del metodo
+        return lResultado;
+    }
+
+    /// <summary>
+    /// Ejecuta una insercion masiva desde el datatable parametro a la tabla especificada
+    /// los campos y orden de los mismos deben de coincidir
+    /// </summary>
+    /// <param name="dtDataTableParam">DataTable origen de datos</param>
+    /// <param name="cTablaDestinoParam">Nombre tabla destino</param>
+    /// <returns>Lista de resultados List[int, object]</returns>
+    public List<object> lEjecutar_bulkInsert(DataTable dtDataTableParam
+                                                , string cTablaDestinoParam)
+    {
+        string NOMBRE_METODO = NOMBRE_CLASE + ".lEjecutar_bulkInsert()";
+        List<object> lResultado = new List<object>() { 0, NOMBRE_METODO + " No Ejecutado." };
+
+        try
+        {
+            //configuramos el comando
+            SqlBulkCopy bulkCopy = new SqlBulkCopy((oConexion as SqlConnection), SqlBulkCopyOptions.CheckConstraints, __oTransaccionSQL);
+
+            bulkCopy.BulkCopyTimeout = nTiempoComandos;
+            bulkCopy.DestinationTableName = cTablaDestinoParam;
+            bulkCopy.BatchSize = 100;
+            bulkCopy.NotifyAfter = 100;
+
+            //ejecutamos el comando
+            bulkCopy.WriteToServer(dtDataTableParam);
+
+            //resultado del metodo
+            lResultado = new List<object>() { 1, "Ok" };
+
+        }
+        catch (Exception ex)
+        {
+            //en caso de error
+            lResultado = new List<object>() { -1, NOMBRE_METODO + ": " + ex.Message, ex };
+        }
+
+        //devolvemos el resultado del metodo
+        return lResultado;
+
+    }
+
+    /// <summary>
+    /// Devuelve una referencia a la conexion misma a la base de datos
+    /// </summary>
+    public SqlConnection Conexion
+    {
+        get
+        {
+            //si la conexion no esta abierta actualmente, la intentamos abrir
+            if (oConexion.State != ConnectionState.Open) lConectar();
+
+            //devolvemos la conexion
+            return oConexion as SqlConnection;
+        }
+    }
+
+    #endregion
+
+}
+```

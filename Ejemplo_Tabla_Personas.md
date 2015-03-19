@@ -1,0 +1,21 @@
+# Personas #
+
+Tabla de ejemplo de aplicación.-
+**Obs:** los tipos de datos se corresponden con los de _SQL Server©_
+
+# Campos #
+
+Estos son los datos de campos de esta tabla:
+  * _**ID:**_ Campo _PK_ de la tabla, de tipo `ENTERO` y _autonumérico_.-
+  * _**NOMBRE\_COMPLETO:**_ Campo de tipo `VARCHAR`, no nulable. Almacena el nombre completo de una persona.-
+  * _**EDAD:**_ Campo de tipo `ENTERO`, nulable. Almacena la edad de la persona en años.-
+  * _**ACTIVO:**_ Campo de tipo `BIT`, no nulable. Indica si la persona a la que corresponde el registro esta activa o no.-
+
+| **ID** | **NOMBRE\_COMPLETO** | **EDAD** | **ACTIVO** |
+|:-------|:---------------------|:---------|:-----------|
+| 1 | Víctor Loaiziga | _NULL_ | 1 |
+| 2 | Lourdes Fernández| 33 | 1 |
+| 3 | Mauricio Duarte | 30 | 0 |
+| 4 | Soledad Baéz | 26 | 1 |
+| 5 | Celia Florentín | 25 | 0 |
+| 6 | Pedro Cardozo | _NULL_ | 1 |
