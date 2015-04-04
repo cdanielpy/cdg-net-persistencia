@@ -12,7 +12,7 @@ using System.Text;
  * 
  * */
 
-namespace CdgNetPersistenciaV3.Atributos
+namespace CdgNetPersistenciaV3_5.Atributos
 {
     /// <summary>
     /// Atributo de relacion OTD extendido - TABLA de SGBD
@@ -37,7 +37,7 @@ namespace CdgNetPersistenciaV3.Atributos
         /// Enumerador que almacena los identificadores de los diferentes
         /// SGBD a con los que se puede implementar la libreria proyecto
         /// </summary>
-        public enum SGBD { SQL_SERVER = 0, ORACLE, SQLITE };
+        public enum SGBD { SQL_SERVER = 0, ORACLE, SQLITE, MYSQL };
 
         /// <summary>
         /// Almacena el enumerador que identifica al SGBD

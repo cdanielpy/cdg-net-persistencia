@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-
-using System.Text;
 using Microsoft.SqlServer.Server;
 
-namespace CdgNetPersistenciaV3.ClasesBases
+namespace CdgNetPersistenciaV3_5.ClasesBases
 {
     // <summary>
     /// Clase base para utilerias de interaccion con ConectorBase de datos relacionales
@@ -126,7 +124,11 @@ namespace CdgNetPersistenciaV3.ClasesBases
         /// <summary>
         /// Devuelve o establece el marcador de la conexión abierta
         /// </summary>
-        protected bool _bConectado { get; set; }
+        protected bool _bConectado {
+            get {
+                return (oConexion.State == System.Data.ConnectionState.Open);
+            }
+        }
 
         /// <summary>
         /// Devuelve o establece la cadena de conxión utilizada
@@ -154,23 +156,44 @@ namespace CdgNetPersistenciaV3.ClasesBases
         /// <summary>
         /// Abre la conexion a la base de datos
         /// </summary>
-        /// <returns>Lista de Resultados</returns>
-        public abstract List<object> lConectar();
+        /// <returns>Arreglo de Resultados [int, object]</returns>
+        public abstract object[] aConectar();
 
         /// <summary>
         /// Cierra la conexión activa
         /// </summary>
         /// <param name="sender">Objeto que efectúa la llamada al método</param>
-        /// <returns>Lista de Resultados</returns>
-        public abstract List<object> lDesconectar(object sender);
+        /// <returns>Arreglo de Resultados [int, object]</returns>
+        public abstract object[] aDesconectar(object sender);
+
+        /// <summary>
+        /// Ejecuta la sentencia sql parámetro
+        /// </summary>
+        /// <param name="cSentenciaSQL">Sentencia SQL a ejecutar</param>
+        /// <returns>Arreglo de Resultados [int, object]</returns>
+        public virtual object[] aEjecutar_sentencia(string cSentenciaSQL)
+        {
+            return this.aEjecutar_sentencia(cSentenciaSQL, new Dictionary<string, object>());
+        }
 
         /// <summary>
         /// Ejecuta la sentencia sql parámetro
         /// </summary>
         /// <param name="cSentenciaSQL">Sentencia SQL a ejecutar</param>
         /// <param name="dicValores">Diccionario de claves y valores parámetros de la sentencia</param>
-        /// <returns>Lista de Resultados</returns>
-        public abstract List<object> lEjecutar_sentencia(string cSentenciaSQL, Dictionary<string, object> dicValores);
+        /// <returns>Arreglo de Resultados [int, object]</returns>
+        public abstract object[] aEjecutar_sentencia(string cSentenciaSQL, Dictionary<string, object> dicValores);
+
+        /// <summary>
+        /// Ejecuta la consulta sql y devuelve un DataTable como segundo elemento
+        /// de la lista de resultados
+        /// </summary>
+        /// <param name="cConsultaSQL">Consulta SQL a ejecutar</param>
+        /// <returns>Arreglo de Resultados [int, object]</returns>
+        public virtual object[] aEjecutar_consulta(string cConsultaSQL) 
+        { 
+            return this.aEjecutar_consulta(cConsultaSQL, new Dictionary<string, object>());
+        }
 
         /// <summary>
         /// Ejecuta la consulta sql y devuelve un DataTable como segundo elemento
@@ -178,8 +201,19 @@ namespace CdgNetPersistenciaV3.ClasesBases
         /// </summary>
         /// <param name="cConsultaSQL">Consulta SQL a ejecutar</param>
         /// <param name="dicValores">Diccionario de claves y valores parámetros de la consulta</param>
-        /// <returns>Lista de Resultados</returns>
-        public abstract List<object> lEjecutar_consulta(string cConsultaSQL, Dictionary<string, object> dicValores);
+        /// <returns>Arreglo de Resultados [int, object]</returns>
+        public abstract object[] aEjecutar_consulta(string cConsultaSQL, Dictionary<string, object> dicValores);
+
+        /// <summary>
+        /// Ejecuta la consulta sql y devuelve un unico objeto, que representa al valor
+        /// de la primera columna de la primera fila devuelta por la consulta
+        /// </summary>
+        /// <param name="cConsultaSQL">Consulta SQL a ejecutar</param>
+        /// <returns>Arreglo de Resultados [int, object]</returns>
+        public virtual object[] aEjecutar_escalar(string cConsultaSQL)
+        {
+            return aEjecutar_escalar(cConsultaSQL, new Dictionary<string, object>());
+        }
 
         /// <summary>
         /// Ejecuta la consulta sql y devuelve un unico objeto, que representa al valor
@@ -187,16 +221,26 @@ namespace CdgNetPersistenciaV3.ClasesBases
         /// </summary>
         /// <param name="cConsultaSQL">Consulta SQL a ejecutar</param>
         /// <param name="dicValores">Diccionario de claves y valores parámetros de la consulta</param>
-        /// <returns>Lista de Resultados</returns>
-        public abstract List<object> lEjecutar_escalar(string cConsultaSQL, Dictionary<string, object> dicValores);
+        /// <returns>Arreglo de Resultados [int, object]</returns>
+        public abstract object[] aEjecutar_escalar(string cConsultaSQL, Dictionary<string, object> dicValores);
+
+        /// <summary>
+        /// Ejecuta el procedimiento almacenado y devuelve una lista de resultados
+        /// </summary>
+        /// <param name="cProcedimiento">Procedimiento almacenado a ejecutar</param>
+        /// <returns>Arreglo de Resultados [int, object]</returns>
+        public virtual object[] aEjecutar_procedimiento(string cProcedimiento)
+        {
+            return aEjecutar_procedimiento(cProcedimiento, new Dictionary<string, object>());
+        }
 
         /// <summary>
         /// Ejecuta el procedimiento almacenado y devuelve una lista de resultados
         /// </summary>
         /// <param name="cProcedimiento">Procedimiento almacenado a ejecutar</param>
         /// <param name="dicValores">Diccionario de claves y valores parámetros del procedimiento</param>
-        /// <returns>Lista de Resultados</returns>
-        public abstract List<object> lEjecutar_procedimiento(string cProcedimiento, Dictionary<string, object> dicValores);
+        /// <returns>Arreglo de Resultados [int, object]</returns>
+        public abstract object[] aEjecutar_procedimiento(string cProcedimiento, Dictionary<string, object> dicValores);
 
         /// <summary>
         /// Establece el método de Autoconfirmación de transacciones
@@ -210,20 +254,20 @@ namespace CdgNetPersistenciaV3.ClasesBases
         /// <summary>
         /// Inicia una transacción de base de datos
         /// </summary>
-        /// <returns>Lista de Resultados</returns>
-        public abstract List<object> lIniciar_transaccion();
+        /// <returns>Arreglo de Resultados [int, object]</returns>
+        public abstract object[] aIniciar_transaccion();
 
         /// <summary>
         /// Confirma una transaccion activa
         /// </summary>
-        /// <returns>Lista de Resultados</returns>
-        public abstract List<object> lConfirmar_transaccion();
+        /// <returns>Arreglo de Resultados [int, object]</returns>
+        public abstract object[] aConfirmar_transaccion();
 
         /// <summary>
         /// Revierte una transaccion activa
         /// </summary>
-        /// <returns>Lista de Resultados</returns>
-        public abstract List<object> lRevertir_transaccion();
+        /// <returns>Arreglo de Resultados [int, object]</returns>
+        public abstract object[] aRevertir_transaccion();
 
         /// <summary>
         /// Muestra el comando sql parámetro
@@ -277,13 +321,13 @@ namespace CdgNetPersistenciaV3.ClasesBases
         /// <summary>
         /// Devuelve la representación de cadena de la clase
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Representacion de cadena de la instancia actual</returns>
         public override string ToString()
         {
-            return string.Format("<Acceso a BD: {0}@{1}:{2} >"
+            return string.Format("<Acceso a BD: {0}@{1}:{2}>"
                                     , this._cCatalogo
                                     , this._cServidor
-                                    , this._nPuerto
+                                    , this._nPuerto != null ? this._nPuerto.ToString() : "default"
                                     );
         }
 
@@ -302,11 +346,11 @@ namespace CdgNetPersistenciaV3.ClasesBases
             _cContrasena = null;
             _cCatalogo = null;
 
-            _bConectado = false;
             bMostrarSQL = false;
 
             _cCadenaConexion = null;
             nTiempoComandos = 0;
+            oConexion.Dispose();
 
         }
 

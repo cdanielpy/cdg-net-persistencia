@@ -6,12 +6,12 @@ using System.Resources;
 // La información general sobre un ensamblado se controla mediante el siguiente 
 // conjunto de atributos. Cambie estos atributos para modificar la información
 // asociada con un ensamblado.
-[assembly: AssemblyTitle("CdgNetPersistenciaV3")]
+[assembly: AssemblyTitle("CdgNetPersistenciaV3_5")]
 [assembly: AssemblyDescription("Libreria de administracion de persistencia de datos")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("cdaniel.py@gmail.com")]
-[assembly: AssemblyProduct("CdgNetPersistenciaV3")]
-[assembly: AssemblyCopyright("Copyright ©  2012")]
+[assembly: AssemblyProduct("CdgNetPersistenciaV3_5")]
+[assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("CDGS")]
 [assembly: AssemblyCulture("")]
 
@@ -33,6 +33,6 @@ using System.Resources;
 // Puede especificar todos los valores o establecer como predeterminados los números de versión de compilación y de revisión 
 // mediante el asterisco ('*'), como se muestra a continuación:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.0.0")]
+[assembly: AssemblyVersion("3.5.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
 [assembly: NeutralResourcesLanguageAttribute("es")]

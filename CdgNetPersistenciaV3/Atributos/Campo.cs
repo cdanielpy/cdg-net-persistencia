@@ -12,7 +12,7 @@ using System.Text;
  * 
  * */
 
-namespace CdgNetPersistenciaV3.Atributos
+namespace CdgNetPersistenciaV3_5.Atributos
 {
     /**[System.AttributeUsage(System.AttributeTargets.Method
                             , AllowMultiple = false)

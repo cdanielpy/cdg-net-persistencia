@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-
-using System.Text;
 using System.Data;
-using CdgNetPersistenciaV3.ClasesBases;
+using CdgNetPersistenciaV3_5.ClasesBases;
 using System.Data.SqlClient;
 
-namespace CdgNetPersistenciaV3
+namespace CdgNetPersistenciaV3_5
 {
 
     /// <summary>
@@ -58,7 +56,7 @@ namespace CdgNetPersistenciaV3
         public new static char MARCADOR_PARAMETRO = '@';
 
         private SqlConnectionStringBuilder __oCadenaConexion;
-        //public new SqlConnection oConexion;
+
         private SqlTransaction __oTransaccionSQL;
 
 
@@ -71,6 +69,7 @@ namespace CdgNetPersistenciaV3
         public enum PARAM_ESPECIALES { TBL_BASE, DATASET, ADM_BASE };
 
         #endregion
+
 
 
         #region CONSTRUCTORES DE LA CLASE
@@ -141,35 +140,34 @@ namespace CdgNetPersistenciaV3
         #endregion
 
 
+
         #region Miembros de ConectorBase
 
         /// <summary>
         /// Abre la conexion a la base de datos
         /// </summary>
-        /// <returns>Lista de Resultados</returns>
-        public override List<object> lConectar()
+        /// <returns>Arreglo de Resultados [int, object]</returns>
+        public override object[] aConectar()
         {
-            string NOMBRE_METODO = NOMBRE_CLASE + ".lConectar()";
-            List<object> lResultado = new List<object>() { 0, NOMBRE_METODO + " No Ejecutado." };
+            string NOMBRE_METODO = NOMBRE_CLASE + ".aConectar()";
+
+            object[] aResultado = new object[] { 1, "Ok"};
 
             try
             {
                 //intentamos abrir la conexion a la base de datos
-                oConexion = new SqlConnection(__oCadenaConexion.ConnectionString);
-
-                oConexion.Open();
-
-                lResultado = new List<object>() { 1, "Ok" };
-
+                this.oConexion = new SqlConnection(__oCadenaConexion.ConnectionString);
+                this.oConexion.Open();
             }
             catch (Exception ex)
             {
                 //en caso de error
-                lResultado = new List<object>() { -1, NOMBRE_METODO + ": " + ex.Message };
+                aResultado[0] = -1;
+                aResultado[1] = NOMBRE_METODO + ": " + ex.Message;
             }
 
             //devolvemos el resultado del metodo
-            return lResultado;
+            return aResultado;
 
         }
 
@@ -177,29 +175,32 @@ namespace CdgNetPersistenciaV3
         /// Cierra la conexion activa
         /// </summary>
         /// <param name="sender">Objeto que efectua la llamada al metodo</param>
-        /// <returns>Lista de Resultados</returns>
-        public override List<object> lDesconectar(object sender)
+        /// <returns>Arreglo de Resultados [int, object]</returns>
+        public override object[] aDesconectar(object sender)
         {
-            string NOMBRE_METODO = NOMBRE_CLASE + ".lDesconectar()";
-            List<object> lResultado = new List<object>() { 0, NOMBRE_METODO + " No Ejecutado." };
+            string NOMBRE_METODO = NOMBRE_CLASE + ".aDesconectar()";
+
+            object[] aResultado = new object[] { 1, "Ok" };
 
             try
             {
                 //si la conexion esta abierta, la intentamos cerrar la conexion a la base de datos
-                if (oConexion.State == System.Data.ConnectionState.Open) this.Conexion.Close();
+                if (oConexion.State == System.Data.ConnectionState.Open)
+                {
+                    this.oConexion.Close();
+                    this.Conexion.Dispose();
+                } 
                 GC.Collect();
-                _bConectado = false;
-
-                lResultado = new List<object>() { 1, "Ok" };
             }
             catch (Exception ex)
             {
                 //en caso de error
-                lResultado = new List<object>() { -1, NOMBRE_METODO + ": " + ex.Message };
+                aResultado[0] = -1;
+                aResultado[1] = NOMBRE_METODO + ": " + ex.Message;
             }
 
             //devolvemos el resultado del metodo
-            return lResultado;
+            return aResultado;
         }
 
         /// <summary>
@@ -207,12 +208,12 @@ namespace CdgNetPersistenciaV3
         /// </summary>
         /// <param name="cSentenciaSQL">Sentencia SQL a ejecutar</param>
         /// <param name="dicParametros">Diccionario de parametros a combinar con la sentencia</param>
-        /// <returns>Lista de Resultado[int, object]</returns>
-        public override List<object> lEjecutar_sentencia(string cSentenciaSQL, Dictionary<string, object> dicParametros)
+        /// <returns>Arreglo de Resultados[int, object]</returns>
+        public override object[] aEjecutar_sentencia(string cSentenciaSQL, Dictionary<string, object> dicParametros)
         {
-            string NOMBRE_METODO = NOMBRE_CLASE + ".lEjecutar_sentencia()";
+            string NOMBRE_METODO = NOMBRE_CLASE + ".aEjecutar_sentencia()";
 
-            List<object> lResultado = new List<object>() { 0, NOMBRE_METODO + " No Ejecutado." };
+            object[] aResultado = new object[] { 1, "Ok" };
 
             try
             {
@@ -276,18 +277,16 @@ namespace CdgNetPersistenciaV3
                 //ejecutamos el comando
                 oComandoSQL.ExecuteNonQuery();
 
-                //establecemos el resultado
-                lResultado = new List<object>() { 1, "Ok" };
-
             }
             catch (Exception ex)
             {
                 //en caso de error
-                lResultado = new List<object>() { -1, NOMBRE_METODO + ": " + ex.Message + (char)13 + "Sentencia -> " + cSentenciaSQL };
+                aResultado[0] = -1;
+                aResultado[1] = NOMBRE_METODO + ": " + ex.Message + (char)13 + "Sentencia -> " + cSentenciaSQL;
             }
 
             //devolvemos el resultado del metodo
-            return lResultado;
+            return aResultado;
 
         }
 
@@ -296,11 +295,12 @@ namespace CdgNetPersistenciaV3
         /// </summary>
         /// <param name="cConsultaSQL">Consulta SQL a ejecutar</param>
         /// <param name="dicParametros">Diccionario de parametros a combinar con la consulta</param>
-        /// <returns>Lista de Resultado[int, object]</returns>
-        public override List<object> lEjecutar_consulta(string cConsultaSQL, Dictionary<string, object> dicParametros)
+        /// <returns>Arreglo de Resultados[int, object]</returns>
+        public override object[] aEjecutar_consulta(string cConsultaSQL, Dictionary<string, object> dicParametros)
         {
-            string NOMBRE_METODO = NOMBRE_CLASE + ".lEjecutar_consulta()";
-            List<object> lResultado = new List<object>() { 0, NOMBRE_METODO + " No Ejecutado." };
+            string NOMBRE_METODO = NOMBRE_CLASE + ".aEjecutar_consulta()";
+            
+            object[] aResultado = new object[] { 0, NOMBRE_METODO + " No Ejecutado." };
 
             try
             {
@@ -368,18 +368,26 @@ namespace CdgNetPersistenciaV3
                 daAdaptador.Fill(dtTabla);
 
                 //si hay filas devueltas
-                if (dtTabla.Rows.Count > 0) lResultado = new List<object>() { 1, dtTabla, daAdaptador };
-                else lResultado = new List<object>() { 0, ConectorBase.ERROR_NO_HAY_FILAS, oComandoSQL.CommandText };
+                if (dtTabla.Rows.Count > 0)
+                {
+                    aResultado = new object[] { 1, dtTabla, daAdaptador };
+                }
+                else //sino
+                {
+                    aResultado[0] = 0;
+                    aResultado[1] = ConectorBase.ERROR_NO_HAY_FILAS;
+                }
 
             }
             catch (Exception ex)
             {
                 //en caso de error
-                lResultado = new List<object>() { -1, NOMBRE_METODO + ": " + ex.Message + (char)13 + "Sentencia -> " + cConsultaSQL };
+                aResultado[0] = -1;
+                aResultado[1] = NOMBRE_METODO + ": " + ex.Message + (char)13 + "Sentencia -> " + cConsultaSQL;
             }
 
             //devolvemos el resultado del metodo
-            return lResultado;
+            return aResultado;
 
         }
 
@@ -389,11 +397,12 @@ namespace CdgNetPersistenciaV3
         /// <param name="cConsultaSQL">Consulta SQL a ejecutar</param>
         /// <param name="cConsultaSQL">Consulta a ejecutar</param>
         /// <param name="dicParametros">Diccionario de parametros a combinar con la consulta</param>
-        /// <returns>Lista de Resultado[int, object]</returns>
-        public override List<object> lEjecutar_escalar(string cConsultaSQL, Dictionary<string, object> dicParametros)
+        /// <returns>Arreglo de Resultados[int, object]</returns>
+        public override object[] aEjecutar_escalar(string cConsultaSQL, Dictionary<string, object> dicParametros)
         {
-            string NOMBRE_METODO = NOMBRE_CLASE + ".lEjecutar_escalar()";
-            List<object> lResultado = new List<object>() { 0, NOMBRE_METODO + " No Ejecutado." };
+            string NOMBRE_METODO = NOMBRE_CLASE + ".aEjecutar_escalar()";
+
+            object[] aResultado = new object[] { 0, NOMBRE_METODO + " No Ejecutado." };
 
             try
             {
@@ -454,21 +463,20 @@ namespace CdgNetPersistenciaV3
                     }
                 }
 
-                //ejecutamos la consulta
-                object oValor = oComandoSQL.ExecuteScalar();
-
-                //establecemos el resultado del metodo
-                lResultado = new List<object>() { 1, oValor };
+                //ejecutamos la consulta y establecemos el resultado del metodo
+                aResultado[0] = 1;
+                aResultado[1] = oComandoSQL.ExecuteScalar();
 
             }
             catch (Exception ex)
             {
                 //en caso de error
-                lResultado = new List<object>() { -1, NOMBRE_METODO + ": " + ex.Message + (char)13 + "Sentencia -> " + cConsultaSQL };
+                aResultado[0] = -1;
+                aResultado[1] = NOMBRE_METODO + ": " + ex.Message + (char)13 + "Sentencia -> " + cConsultaSQL;
             }
 
             //devolvemos el resultado del metodo
-            return lResultado;
+            return aResultado;
 
         }
 
@@ -477,11 +485,12 @@ namespace CdgNetPersistenciaV3
         /// </summary>
         /// <param name="cProcedimiento">Procedimiento Almacenado a ejecutar</param>
         /// <param name="dicParametros">Diccionario de parametros a combinar con la consulta</param>
-        /// <returns>Lista de Resultados</returns>
-        public override List<object> lEjecutar_procedimiento(string cProcedimiento, Dictionary<string, object> dicParametros)
+        /// <returns>Arreglo de Resultados [int, object]</returns>
+        public override object[] aEjecutar_procedimiento(string cProcedimiento, Dictionary<string, object> dicParametros)
         {
-            string NOMBRE_METODO = NOMBRE_CLASE + ".lEjecutar_sp_parametros()";
-            List<object> lResultado = new List<object>() { 0, NOMBRE_METODO + " No Ejecutado." };
+            string NOMBRE_METODO = NOMBRE_CLASE + ".aEjecutar_procedimiento()";
+
+            object[] aResultado = new object[] { 1, "Ok" };
 
             try
             {
@@ -543,20 +552,19 @@ namespace CdgNetPersistenciaV3
                 }
 
                 //ejecutamos la consulta
-                object oValor = oComandoSQL.ExecuteNonQuery();
-
-                //establecemos el resultado del metodo
-                lResultado = new List<object>() { 1, "Ok" };
+                oComandoSQL.ExecuteNonQuery();
 
             }
             catch (Exception ex)
             {
                 //en caso de error
-                lResultado = new List<object>() { -1, NOMBRE_METODO + ": " + ex.Message };
+                aResultado[0] = -1;
+                aResultado[1] = NOMBRE_METODO + ": " + ex.Message + (char)13 + "Sentencia -> " + cProcedimiento;
             }
 
             //devolvemos el resultado del metodo
-            return lResultado;
+            return aResultado;
+
         }
 
         /// <summary>
@@ -571,11 +579,12 @@ namespace CdgNetPersistenciaV3
         /// <summary>
         /// Inicia una transaccion
         /// </summary>
-        /// <returns>Lista de Resultados</returns>
-        public override List<object> lIniciar_transaccion()
+        /// <returns>Arreglo de Resultados [int, object]</returns>
+        public override object[] aIniciar_transaccion()
         {
-            string NOMBRE_METODO = NOMBRE_CLASE + ".lIniciar_transaccion()";
-            List<object> lResultado = new List<object>() { 0, NOMBRE_METODO + " No Ejecutado." };
+            string NOMBRE_METODO = NOMBRE_CLASE + ".aIniciar_transaccion()";
+
+            object[] aResultado = new object[] { 1, "Ok" };
 
             try
             {
@@ -587,26 +596,28 @@ namespace CdgNetPersistenciaV3
                 //iniciamos una transaccion
                 __oTransaccionSQL = (oConexion as SqlConnection).BeginTransaction();
 
-                lResultado = new List<object>() { 1, "Ok" };
             }
             catch (Exception ex)
             {
                 //en caso de error
-                lResultado = new List<object>() { -1, NOMBRE_METODO + ": " + ex.Message };
+                aResultado[0] = -1;
+                aResultado[1] = NOMBRE_METODO + ": " + ex.Message;
             }
 
             //devolvemos el resultado del metodo
-            return lResultado;
+            return aResultado;
+
         }
 
         /// <summary>
         /// Confirma una transaccion activa
         /// </summary>
-        /// <returns>Lista de Resultados</returns>
-        public override List<object> lConfirmar_transaccion()
+        /// <returns>Arreglo de Resultados [int, object]</returns>
+        public override object[] aConfirmar_transaccion()
         {
-            string NOMBRE_METODO = NOMBRE_CLASE + ".lConfirmar_transaccion()";
-            List<object> lResultado = new List<object>() { 0, NOMBRE_METODO + " No Ejecutado." };
+            string NOMBRE_METODO = NOMBRE_CLASE + ".aConfirmar_transaccion()";
+
+            object[] aResultado = new object[] { 1, "Ok" };
 
             try
             {
@@ -616,27 +627,28 @@ namespace CdgNetPersistenciaV3
                 //la liberamos
                 __oTransaccionSQL.Dispose();
                 __oTransaccionSQL = null;
-
-                lResultado = new List<object>() { 1, "Ok" };
             }
             catch (Exception ex)
             {
                 //en caso de error
-                lResultado = new List<object>() { -1, NOMBRE_METODO + ": " + ex.Message };
+                aResultado[0] = -1;
+                aResultado[1] = NOMBRE_METODO + ": " + ex.Message;
             }
 
             //devolvemos el resultado del metodo
-            return lResultado;
+            return aResultado;
+
         }
 
         /// <summary>
         /// Revierte una transaccion activa
         /// </summary>
-        /// <returns>Lista de Resultados</returns>
-        public override List<object> lRevertir_transaccion()
+        /// <returns>Arreglo de Resultados [int, object]</returns>
+        public override object[] aRevertir_transaccion()
         {
-            string NOMBRE_METODO = NOMBRE_CLASE + ".lConectar()";
-            List<object> lResultado = new List<object>() { 0, NOMBRE_METODO + " No Ejecutado." };
+            string NOMBRE_METODO = NOMBRE_CLASE + ".aRevertir_transaccion()";
+
+            object[] aResultado = new object[] { 1, "Ok"};
 
             try
             {
@@ -650,18 +662,17 @@ namespace CdgNetPersistenciaV3
                     __oTransaccionSQL.Dispose();
                     __oTransaccionSQL = null;
                 }
-
-                //establecemos el resultado del metodo
-                lResultado = new List<object>() { 1, "Ok" };
             }
             catch (Exception ex)
             {
                 //en caso de error
-                lResultado = new List<object>() { -1, NOMBRE_METODO + ": " + ex.Message };
+                aResultado[0] = -1;
+                aResultado[1] = NOMBRE_METODO + ": " + ex.Message;
             }
 
             //devolvemos el resultado del metodo
-            return lResultado;
+            return aResultado;
+
         }
 
 
@@ -675,12 +686,22 @@ namespace CdgNetPersistenciaV3
         /// Ejecuta una consulta y devuelve un datatable y su adaptador de datos
         /// </summary>
         /// <param name="cConsultaSQL">Consulta SQL a ejecutar</param>
+        /// <returns>Arreglo de resultados [int, object, object]</returns>
+        public object[] aEjecutar_consulta_especial(string cConsultaSQL) {
+            return this.aEjecutar_consulta_especial(cConsultaSQL, new Dictionary<string, object>());
+        }
+
+        /// <summary>
+        /// Ejecuta una consulta y devuelve un datatable y su adaptador de datos
+        /// </summary>
+        /// <param name="cConsultaSQL">Consulta SQL a ejecutar</param>
         /// <param name="dicParametros">Diccionario de Parametros [string, object]</param>
-        /// <returns>Lista de resultados [int, object, object]</returns>
-        public List<object> lEjecutar_consulta_especial(string cConsultaSQL, Dictionary<string, object> dicParametros)
+        /// <returns>Arreglo de resultados [int, object, object]</returns>
+        public object[] aEjecutar_consulta_especial(string cConsultaSQL, Dictionary<string, object> dicParametros)
         {
             string NOMBRE_METODO = NOMBRE_CLASE + ".lEjecutar_consulta()";
-            List<object> lResultado = new List<object>() { 0, NOMBRE_METODO + " No Ejecutado." };
+
+            object[] aResultado = new object[] { 0, NOMBRE_METODO + " No Ejecutado." };
 
             try
             {
@@ -739,18 +760,24 @@ namespace CdgNetPersistenciaV3
                 }
 
                 //si hay filas devueltas
-                if (dtTabla.Rows.Count > 0) lResultado = new List<object>() { 1, dtTabla, daAdaptador };
-                else lResultado = new List<object>() { 0, ConectorBase.ERROR_NO_HAY_FILAS };
-
+                if (dtTabla.Rows.Count > 0){
+                    aResultado = new object[] { 1, dtTabla, daAdaptador };
+                }
+                else //sino
+                {
+                    aResultado[0] = 0;
+                    aResultado[1] = ConectorBase.ERROR_NO_HAY_FILAS;
+                }
             }
             catch (Exception ex)
             {
                 //en caso de error
-                lResultado = new List<object>() { -1, NOMBRE_METODO + ": " + ex.Message };
+                aResultado[0] = -1;
+                aResultado[1] = NOMBRE_METODO + ": " + ex.Message;
             }
 
             //devolvemos el resultado del metodo
-            return lResultado;
+            return aResultado;
 
         }
 
@@ -759,10 +786,10 @@ namespace CdgNetPersistenciaV3
         /// </summary>
         /// <param name="cmdComandoSQL">Instancia del Comando a ejecutar</param>
         /// <returns>Lista de resultados List[int, object]</returns>
-        public List<object> lEjecutar_sentencia(SqlCommand cmdComandoSQL)
+        public object[] aEjecutar_sentencia(SqlCommand cmdComandoSQL)
         {
             string NOMBRE_METODO = NOMBRE_CLASE + ".lEjecutar_sentencia()";
-            List<object> lResultado = new List<object>() { 0, NOMBRE_METODO + " No Ejecutado." };
+            object[] aResultado = new object[] { 0, NOMBRE_METODO + " No Ejecutado." };
 
             try
             {
@@ -778,21 +805,21 @@ namespace CdgNetPersistenciaV3
 
                 cmdComandoSQL.ExecuteNonQuery();
 
-                lResultado = new List<object>() { 1, "Ok" };
+                aResultado = new object[] { 1, "Ok" };
             }
             catch (SqlException ex)
             {
                 //en caso de error
-                lResultado = new List<object>() { -1, NOMBRE_METODO + ": " + ex.Message, ex };
+                aResultado = new object[] { -1, NOMBRE_METODO + ": " + ex.Message, ex };
             }
             catch (Exception ex)
             {
                 //en caso de error
-                lResultado = new List<object>() { -1, NOMBRE_METODO + ": " + ex.Message, ex };
+                aResultado = new object[] { -1, NOMBRE_METODO + ": " + ex.Message, ex };
             }
 
             //devolvemos el resultado del metodo
-            return lResultado;
+            return aResultado;
         }
 
         /// <summary>
@@ -802,11 +829,11 @@ namespace CdgNetPersistenciaV3
         /// <param name="dtDataTableParam">DataTable origen de datos</param>
         /// <param name="cTablaDestinoParam">Nombre tabla destino</param>
         /// <returns>Lista de resultados List[int, object]</returns>
-        public List<object> lEjecutar_bulkInsert(DataTable dtDataTableParam
+        public object[] aEjecutar_bulkInsert(DataTable dtDataTableParam
                                                     , string cTablaDestinoParam)
         {
             string NOMBRE_METODO = NOMBRE_CLASE + ".lEjecutar_bulkInsert()";
-            List<object> lResultado = new List<object>() { 0, NOMBRE_METODO + " No Ejecutado." };
+            object[] aResultado = new object[] { 0, NOMBRE_METODO + " No Ejecutado." };
 
             try
             {
@@ -822,17 +849,17 @@ namespace CdgNetPersistenciaV3
                 bulkCopy.WriteToServer(dtDataTableParam);
 
                 //resultado del metodo
-                lResultado = new List<object>() { 1, "Ok" };
+                aResultado = new object[] { 1, "Ok" };
 
             }
             catch (Exception ex)
             {
                 //en caso de error
-                lResultado = new List<object>() { -1, NOMBRE_METODO + ": " + ex.Message, ex };
+                aResultado = new object[] { -1, NOMBRE_METODO + ": " + ex.Message, ex };
             }
 
             //devolvemos el resultado del metodo
-            return lResultado;
+            return aResultado;
 
         }
 
@@ -844,7 +871,7 @@ namespace CdgNetPersistenciaV3
             get
             {
                 //si la conexion no esta abierta actualmente, la intentamos abrir
-                if (oConexion.State != ConnectionState.Open) lConectar();
+                if (oConexion.State != ConnectionState.Open) aConectar();
 
                 //devolvemos la conexion
                 return oConexion as SqlConnection;

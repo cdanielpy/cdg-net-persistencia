@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 
 using System.Text;
-using CdgNetPersistenciaV3.ClasesBases;
+using CdgNetPersistenciaV3_5.ClasesBases;
 using System.Data;
 
-namespace CdgNetPersistenciaV3.Extras
+namespace CdgNetPersistenciaV3_5.Extras
 {
     /// <summary>
     /// Clase de administracion de parametros de configuracion desde SQLite
@@ -77,22 +77,22 @@ namespace CdgNetPersistenciaV3.Extras
             string NOMBRE_METODO = NOMBRE_CLASE + ".__Cargar_parametros()";
 
             //abrimos la conexion al archivo
-            List<object> lResultado = __oConexion.lConectar();
+            object[] aResultado = __oConexion.aConectar();
 
             //si se conecto sin problemas
-            if ((int)lResultado[0] == 1)
+            if ((int)aResultado[0] == 1)
             {
                 //ejecutamos la consulta de recuperacion de parametros
-                lResultado = __oConexion.lEjecutar_consulta(string.Format(__CONSULTA_PARAMETROS
+                aResultado = __oConexion.aEjecutar_consulta(string.Format(__CONSULTA_PARAMETROS
                                                                             , __CAMPO_PARAMETROS
                                                                             , __CAMPO_VALORES
                                                                             , __NOMBRE_TABLA)
                                                             ,  new Dictionary<string,object>());
 
                 //si se ejecuto correctamente
-                if ((int)lResultado[0] == 1)
+                if ((int)aResultado[0] == 1)
                 {
-                    DataTable dtResultado = (DataTable)lResultado[1];
+                    DataTable dtResultado = (DataTable)aResultado[1];
 
                     //recorremos las filas de la tabla devuelta
                     foreach (DataRow dr in dtResultado.Rows)
@@ -107,14 +107,14 @@ namespace CdgNetPersistenciaV3.Extras
                 }
 
                 //cerramos la conexion
-                __oConexion.lDesconectar(NOMBRE_METODO);
+                __oConexion.aDesconectar(NOMBRE_METODO);
 
             }
 
             //si hubo errores
-            if((int)lResultado[0] != 1)
+            if((int)aResultado[0] != 1)
                 //sino, mensaje de notificacion
-                throw new Exception(NOMBRE_METODO + " -> " + lResultado[1].ToString());
+                throw new Exception(NOMBRE_METODO + " -> " + aResultado[1].ToString());
 
         }
 
@@ -134,38 +134,37 @@ namespace CdgNetPersistenciaV3.Extras
         /// <param name="cParametroParam">Nombre del Parametro a actualizar</param>
         /// <param name="cValorNuevoParam">Nuevo valor del parametro</param>
         /// <returns>Lista de Resultados [int, object]</returns>
-        public List<object> lSet_valor(string cParametroParam, string cValorNuevoParam)
+        public object[] aSet_valor(string cParametroParam, string cValorNuevoParam)
         {
 
             string NOMBRE_METODO = NOMBRE_CLASE + ".lSet_valor()";
 
             //abrimos la conexion al archivo
-            List<object> lResultado = __oConexion.lConectar();
+            object[] aResultado = __oConexion.aConectar();
 
             //si se conecto sin problemas
-            if ((int)lResultado[0] == 1)
+            if ((int)aResultado[0] == 1)
             {
                 //ejecutamos la consulta de recuperacion de parametros
-                lResultado = __oConexion.lEjecutar_sentencia(string.Format(__UPDATE_PARAMETRO
+                aResultado = __oConexion.aEjecutar_sentencia(string.Format(__UPDATE_PARAMETRO
                                                                             , __NOMBRE_TABLA
                                                                             , __CAMPO_VALORES
                                                                             , cValorNuevoParam
                                                                             , __CAMPO_PARAMETROS
                                                                             , cParametroParam
                                                                             )
-                                                             , new Dictionary<string,object>()
                                                              );
 
                 //acualizamos el valor del parametro en el diccionario actual
                 if (__dicParametros.ContainsKey(cParametroParam)) __dicParametros[cParametroParam] = cValorNuevoParam;
 
                 //cerramos la conexion
-                __oConexion.lDesconectar(NOMBRE_METODO);
+                __oConexion.aDesconectar(NOMBRE_METODO);
 
             }
 
             //devolvemos el resultado del metodo
-            return lResultado;
+            return aResultado;
 
         }
 

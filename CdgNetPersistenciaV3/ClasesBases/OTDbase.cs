@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Data;
 using System.Reflection;
-using CdgNetPersistenciaV3.Atributos;
+using CdgNetPersistenciaV3_5.Atributos;
 
   /**
     * Autor :  Cristian Daniel Garay Sosa
@@ -15,7 +15,7 @@ using CdgNetPersistenciaV3.Atributos;
     * 
     * **/
 
-namespace CdgNetPersistenciaV3.ClasesBases
+namespace CdgNetPersistenciaV3_5.ClasesBases
 {
     /// <summary>
     /// Clase base de Objetos Transportadores de Datos
@@ -53,6 +53,8 @@ namespace CdgNetPersistenciaV3.ClasesBases
         /// </summary>
         public OTDbase()
         {
+            _nId = long.MinValue;
+            _cDescripcion = null;    
         }
 
         /// <summary>
@@ -63,7 +65,7 @@ namespace CdgNetPersistenciaV3.ClasesBases
         public OTDbase(long nIdParam, string cDescripcionParam)
         {
             _nId = nIdParam;
-            _cDescripcion = cDescripcionParam;    
+            _cDescripcion = cDescripcionParam;
         }
 
         #endregion
