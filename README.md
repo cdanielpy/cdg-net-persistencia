@@ -17,11 +17,7 @@ conocimientos basicos de programacion en .NET.-
 Detalles
 --------
 
- 
-
 La biblioteca tiene como pilares principales los siguientes elementos:
-
- 
 
 Una clase de utilería para cada SGBD, en la que se centralizan las operaciones
 propias que se realizan contra una base de datos, las clases *\_Utiles*.-
@@ -43,12 +39,9 @@ motores de bases de datos con los que trabajamos en la empresa para la cual
 trabajo, tomando como referencias los ORM's de otros lenguajes de programacion,
 como Hibernate/JPA de Java y SQL Alchemy de Python.-
 
- 
-
 A pesar de ser 100% funcional, continúa en etapa de desarrollo de mejoras, pues
 quedan por resolver algunas cuestiones como las relaciones entre tablas por
 medio de los accesores sin necesidad de ejecutas las llamadas a los metodos de
 los administradores de las tablas relacionadas, o el hecho de poder realizar
 referencias a los campos a traves de las propiedades de las clases OTD's para
 asi poder escribir sentencias tipo Linq o HQL.
-
