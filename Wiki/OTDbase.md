@@ -35,8 +35,8 @@ mismos por medio de Campos.-
 
 ### Públicos
 
-**NOMBRE\_CLASE:** (`System.String`) Estático. Almacena el nombre de la clase en
-forma de simple cadena.-
+**NOMBRE\_CLASE:** (`System.String`) *Estático*. Almacena el nombre de la clase
+en forma de simple cadena.-
 
 ### Protegigas
 
@@ -80,6 +80,8 @@ instancias. En este caso evalúa si son iguales por el valor del campo Id.-
 
 **obj**: (`System.Object`) Instancia contra la cual se desea realizar la
 comparación.-
+
+ 
 
 Ejemplos
 --------
